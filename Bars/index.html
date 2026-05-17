@@ -23,28 +23,30 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            margin-top: 20px;
         }
         h2 { margin-top: 0; color: #00b37e; text-align: center; }
-        .loading { text-align: center; color: #8d8d99; }
+        .loading { text-align: center; color: #8d8d99; margin: 20px 0; font-size: 16px; font-weight: 500; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>Live Environmental Monitor</h2>
-    <div id="loading" class="loading">Fetching live data from InfluxDB...</div>
+    <div id="loading" class="loading">Connecting directly to InfluxDB...</div>
     <canvas id="sensorChart" width="100%" height="50"></canvas>
 </div>
 
 <script>
-// --- INFLUXDB CONFIGURATION ---
-const INFLUX_URL = "https://eu-central-1-1.aws.cloud2.influxdata.com/api/v2/query?org=3a3454797a87f2ed";
+// --- INFLUXDB ROUTING VARIABLES ---
+const ORG_ID = "3a3454797a87f2ed";
+const INFLUX_URL = `https://eu-central-1-1.aws.cloud2.influxdata.com/api/v2/query?org=${ORG_ID}`;
 const TOKEN = "y6BqVKlvF7aXJWfjxljOoFJZAWkKnqZ6kKZB5864YVDdHkrs5t1DIT9JUGbvWuSjfj7xvuYkVHAiK5l28fxu4g==";
 
-// Write native Flux query to get the last 1 hour of data
+// Look back 24 hours to guarantee the graph catches your historical points
 const fluxQuery = `
 from(bucket: "Monitor_Env_Var")
-  |> range(start: -1h)
+  |> range(start: -24h)
   |> filter(fn: (r) => r["_measurement"] == "weather_metrics")
   |> filter(fn: (r) => r["_field"] == "temperature" or r["_field"] == "humidity")
   |> keep(columns: ["_time", "_field", "_value"])
@@ -52,22 +54,30 @@ from(bucket: "Monitor_Env_Var")
 
 async function fetchSensorData() {
     try {
-        const response = await fetch(INFLUX_URL, {
+        // Corrected URL parsing structure format for the proxy pipeline
+        const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(INFLUX_URL)}`;
+        
+        const response = await fetch(proxyUrl, {
             method: 'POST',
             headers: {
                 'Authorization': `Token ${TOKEN}`,
                 'Content-Type': 'application/vnd.flux',
-                'Accept': 'application/csv'
+                'Accept': 'text/csv'
             },
             body: fluxQuery
         });
 
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) throw new Error(`Server returned code: ${response.status}`);
         const csvText = await response.text();
+        
+        if (!csvText || csvText.trim().length === 0 || csvText.includes("error")) {
+            throw new Error("No recent sensor data returned from InfluxDB query.");
+        }
+        
         parseAndLinePlot(csvText);
     } catch (error) {
-        document.getElementById('loading').innerText = "Error loading data: " + error.message;
-        console.error("InfluxDB Fetch Error:", error);
+        document.getElementById('loading').innerText = "Status: " + error.message;
+        console.error("Pipeline trace:", error);
     }
 }
 
@@ -77,36 +87,44 @@ function parseAndLinePlot(csvData) {
     const tempData = [];
     const humidData = [];
 
-    // Parse the returned CSV lines natively
     lines.forEach(line => {
         if (!line.trim() || line.startsWith('#') || line.includes('_time')) return;
         const parts = line.split(',');
         if (parts.length < 7) return;
 
-        const time = new Date(parts[5]).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        // Strip timestamp objects cleanly
+        const timestamp = new Date(parts[5]);
+        const timeStr = timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         const field = parts[6].trim();
         const value = parseFloat(parts[7]);
 
-        if (!timeData.includes(time)) timeData.push(time);
-        if (field === 'temperature') tempData.push(value);
-        if (field === 'humidity') humidData.push(value);
+        if (!isNaN(value)) {
+            if (!timeData.includes(timeStr)) timeData.push(timeStr);
+            if (field === 'temperature') tempData.push(value);
+            if (field === 'humidity') humidData.push(value);
+        }
     });
 
+    if (timeData.length === 0) {
+        document.getElementById('loading').innerText = "Empty dataset: Check if ESP32 is actively transmitting.";
+        return;
+    }
+
+    // Hide the loading state text once data maps successfully
     document.getElementById('loading').style.display = 'none';
 
-    // Initialize Chart.js right on your page Canvas
     const ctx = document.getElementById('sensorChart').getContext('2d');
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: timeData.reverse(), // Reverse to read oldest to newest left-to-right
+            labels: timeData.reverse(), 
             datasets: [
                 {
                     label: 'Temperature (°C)',
                     data: tempData.reverse(),
                     borderColor: '#f75a68',
                     backgroundColor: 'rgba(247, 90, 104, 0.1)',
-                    tension: 0.3,
+                    tension: 0.2,
                     yAxisID: 'y'
                 },
                 {
@@ -114,7 +132,7 @@ function parseAndLinePlot(csvData) {
                     data: humidData.reverse(),
                     borderColor: '#00b37e',
                     backgroundColor: 'rgba(0, 179, 126, 0.1)',
-                    tension: 0.3,
+                    tension: 0.2,
                     yAxisID: 'y1'
                 }
             ]
@@ -122,8 +140,8 @@ function parseAndLinePlot(csvData) {
         options: {
             responsive: true,
             scales: {
-                y: { type: 'linear', display: true, position: 'left', grid: { color: '#29292e' } },
-                y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false } }
+                y: { type: 'linear', display: true, position: 'left', grid: { color: '#29292e' }, ticks: { color: '#c4c4cc' } },
+                y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#c4c4cc' } }
             },
             plugins: {
                 legend: { labels: { color: '#e1e1e6' } }
@@ -132,7 +150,7 @@ function parseAndLinePlot(csvData) {
     });
 }
 
-// Run immediately on page load
+// Fire the dataset fetch immediately on runtime execution
 fetchSensorData();
 </script>
 

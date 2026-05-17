@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Sensor Dashboard</title>
+    <!-- Load Chart.js library directly from an open source CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #121214;
+            color: #e1e1e6;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #202024;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        h2 { margin-top: 0; color: #00b37e; text-align: center; }
+        .loading { text-align: center; color: #8d8d99; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Live Environmental Monitor</h2>
+    <div id="loading" class="loading">Fetching live data from InfluxDB...</div>
+    <canvas id="sensorChart" width="100%" height="50"></canvas>
+</div>
+
+<script>
+// --- INFLUXDB CONFIGURATION ---
+const INFLUX_URL = "https://eu-central-1-1.aws.cloud2.influxdata.com/api/v2/query?org=3a3454797a87f2ed";
+const TOKEN = "y6BqVKlvF7aXJWfjxljOoFJZAWkKnqZ6kKZB5864YVDdHkrs5t1DIT9JUGbvWuSjfj7xvuYkVHAiK5l28fxu4g==";
+
+// Write native Flux query to get the last 1 hour of data
+const fluxQuery = `
+from(bucket: "Monitor_Env_Var")
+  |> range(start: -1h)
+  |> filter(fn: (r) => r["_measurement"] == "weather_metrics")
+  |> filter(fn: (r) => r["_field"] == "temperature" or r["_field"] == "humidity")
+  |> keep(columns: ["_time", "_field", "_value"])
+`;
+
+async function fetchSensorData() {
+    try {
+        const response = await fetch(INFLUX_URL, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Token ${TOKEN}`,
+                'Content-Type': 'application/vnd.flux',
+                'Accept': 'application/csv'
+            },
+            body: fluxQuery
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const csvText = await response.text();
+        parseAndLinePlot(csvText);
+    } catch (error) {
+        document.getElementById('loading').innerText = "Error loading data: " + error.message;
+        console.error("InfluxDB Fetch Error:", error);
+    }
+}
+
+function parseAndLinePlot(csvData) {
+    const lines = csvData.split('\n');
+    const timeData = [];
+    const tempData = [];
+    const humidData = [];
+
+    // Parse the returned CSV lines natively
+    lines.forEach(line => {
+        if (!line.trim() || line.startsWith('#') || line.includes('_time')) return;
+        const parts = line.split(',');
+        if (parts.length < 7) return;
+
+        const time = new Date(parts[5]).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        const field = parts[6].trim();
+        const value = parseFloat(parts[7]);
+
+        if (!timeData.includes(time)) timeData.push(time);
+        if (field === 'temperature') tempData.push(value);
+        if (field === 'humidity') humidData.push(value);
+    });
+
+    document.getElementById('loading').style.display = 'none';
+
+    // Initialize Chart.js right on your page Canvas
+    const ctx = document.getElementById('sensorChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: timeData.reverse(), // Reverse to read oldest to newest left-to-right
+            datasets: [
+                {
+                    label: 'Temperature (°C)',
+                    data: tempData.reverse(),
+                    borderColor: '#f75a68',
+                    backgroundColor: 'rgba(247, 90, 104, 0.1)',
+                    tension: 0.3,
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Humidity (%)',
+                    data: humidData.reverse(),
+                    borderColor: '#00b37e',
+                    backgroundColor: 'rgba(0, 179, 126, 0.1)',
+                    tension: 0.3,
+                    yAxisID: 'y1'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { type: 'linear', display: true, position: 'left', grid: { color: '#29292e' } },
+                y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false } }
+            },
+            plugins: {
+                legend: { labels: { color: '#e1e1e6' } }
+            }
+        }
+    });
+}
+
+// Run immediately on page load
+fetchSensorData();
+</script>
+
+</body>
+</html>

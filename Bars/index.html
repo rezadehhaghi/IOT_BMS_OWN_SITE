@@ -3,156 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Sensor Dashboard</title>
-    <!-- Load Chart.js library directly from an open source CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Live Sensor Analytics</title>
     <style>
+        * { box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #121214;
-            color: #e1e1e6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0b0c10;
+            color: #c5c6c7;
+            margin: 0;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
         }
-        .container {
+        .dashboard-container {
             width: 100%;
-            max-width: 800px;
-            background: #202024;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            margin-top: 20px;
+            max-width: 1000px;
+            background-color: #1f2833;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            padding: 24px;
+            margin-top: 10px;
+            border: 1px solid #45f3ff33;
         }
-        h2 { margin-top: 0; color: #00b37e; text-align: center; }
-        .loading { text-align: center; color: #8d8d99; margin: 20px 0; font-size: 16px; font-weight: 500; }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #0b0c10;
+            padding-bottom: 15px;
+        }
+        .header h1 {
+            color: #45f3ff;
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+        .header p {
+            color: #66fcf1;
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .visual-frame-wrapper {
+            position: relative;
+            width: 100%;
+            height: 550px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #121214;
+        }
+        /* Using native HTML object rendering cleanly embeds the target stream */
+        .analytics-render {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .footer-metrics {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: #8d8d99;
+        }
+        .fallback-btn {
+            display: inline-block;
+            background-color: #45f3ff;
+            color: #0b0c10;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+        .fallback-btn:hover { background-color: #66fcf1; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Live Environmental Monitor</h2>
-    <div id="loading" class="loading">Connecting directly to InfluxDB...</div>
-    <canvas id="sensorChart" width="100%" height="50"></canvas>
+<div class="dashboard-container">
+    <div class="header">
+        <h1>IoT Weather Station Monitor</h1>
+        <p>Live ESP32 Sensor Stream</p>
+    </div>
+
+    <div class="visual-frame-wrapper">
+        <!-- Object elements execute full-context page data loads seamlessly -->
+        <object 
+            class="analytics-render"
+            data="https://rezadehhaghi.grafana.net/public-dashboards/dfaecb5d0c154b94add9ce7e59b20305?from=now-1h&to=now&timezone=browser&kiosk=1"
+            type="text/html">
+            <div style="padding: 40px; text-align: center;">
+                <p>Your browser environment is restricting standard dashboard frame attachments.</p>
+                <a href="https://rezadehhaghi.grafana.net/public-dashboards/dfaecb5d0c154b94add9ce7e59b20305?from=now-1h&to=now&timezone=browser" target="_blank" class="fallback-btn">
+                    Launch Interactive Graph Dashboard
+                </a>
+            </div>
+        </object>
+    </div>
+
+    <div class="footer-metrics">
+        Data updated automatically via cloud polling • Powered by InfluxDB & GitHub Pages
+    </div>
 </div>
-
-<script>
-// --- INFLUXDB ROUTING VARIABLES ---
-const ORG_ID = "3a3454797a87f2ed";
-const INFLUX_URL = `https://eu-central-1-1.aws.cloud2.influxdata.com/api/v2/query?org=${ORG_ID}`;
-const TOKEN = "y6BqVKlvF7aXJWfjxljOoFJZAWkKnqZ6kKZB5864YVDdHkrs5t1DIT9JUGbvWuSjfj7xvuYkVHAiK5l28fxu4g==";
-
-// Look back 24 hours to guarantee the graph catches your historical points
-const fluxQuery = `
-from(bucket: "Monitor_Env_Var")
-  |> range(start: -24h)
-  |> filter(fn: (r) => r["_measurement"] == "weather_metrics")
-  |> filter(fn: (r) => r["_field"] == "temperature" or r["_field"] == "humidity")
-  |> keep(columns: ["_time", "_field", "_value"])
-`;
-
-async function fetchSensorData() {
-    try {
-        // Corrected URL parsing structure format for the proxy pipeline
-        const proxyUrl = `https://corsproxy.io/?url=${encodeURIComponent(INFLUX_URL)}`;
-        
-        const response = await fetch(proxyUrl, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Token ${TOKEN}`,
-                'Content-Type': 'application/vnd.flux',
-                'Accept': 'text/csv'
-            },
-            body: fluxQuery
-        });
-
-        if (!response.ok) throw new Error(`Server returned code: ${response.status}`);
-        const csvText = await response.text();
-        
-        if (!csvText || csvText.trim().length === 0 || csvText.includes("error")) {
-            throw new Error("No recent sensor data returned from InfluxDB query.");
-        }
-        
-        parseAndLinePlot(csvText);
-    } catch (error) {
-        document.getElementById('loading').innerText = "Status: " + error.message;
-        console.error("Pipeline trace:", error);
-    }
-}
-
-function parseAndLinePlot(csvData) {
-    const lines = csvData.split('\n');
-    const timeData = [];
-    const tempData = [];
-    const humidData = [];
-
-    lines.forEach(line => {
-        if (!line.trim() || line.startsWith('#') || line.includes('_time')) return;
-        const parts = line.split(',');
-        if (parts.length < 7) return;
-
-        // Strip timestamp objects cleanly
-        const timestamp = new Date(parts[5]);
-        const timeStr = timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        const field = parts[6].trim();
-        const value = parseFloat(parts[7]);
-
-        if (!isNaN(value)) {
-            if (!timeData.includes(timeStr)) timeData.push(timeStr);
-            if (field === 'temperature') tempData.push(value);
-            if (field === 'humidity') humidData.push(value);
-        }
-    });
-
-    if (timeData.length === 0) {
-        document.getElementById('loading').innerText = "Empty dataset: Check if ESP32 is actively transmitting.";
-        return;
-    }
-
-    // Hide the loading state text once data maps successfully
-    document.getElementById('loading').style.display = 'none';
-
-    const ctx = document.getElementById('sensorChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: timeData.reverse(), 
-            datasets: [
-                {
-                    label: 'Temperature (°C)',
-                    data: tempData.reverse(),
-                    borderColor: '#f75a68',
-                    backgroundColor: 'rgba(247, 90, 104, 0.1)',
-                    tension: 0.2,
-                    yAxisID: 'y'
-                },
-                {
-                    label: 'Humidity (%)',
-                    data: humidData.reverse(),
-                    borderColor: '#00b37e',
-                    backgroundColor: 'rgba(0, 179, 126, 0.1)',
-                    tension: 0.2,
-                    yAxisID: 'y1'
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: { type: 'linear', display: true, position: 'left', grid: { color: '#29292e' }, ticks: { color: '#c4c4cc' } },
-                y1: { type: 'linear', display: true, position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#c4c4cc' } }
-            },
-            plugins: {
-                legend: { labels: { color: '#e1e1e6' } }
-            }
-        }
-    });
-}
-
-// Fire the dataset fetch immediately on runtime execution
-fetchSensorData();
-</script>
 
 </body>
 </html>

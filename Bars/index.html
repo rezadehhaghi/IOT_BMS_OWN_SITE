@@ -1,111 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Sensor Analytics</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Sensor Analytics - Charts</title>
+
     <style>
-        * { box-sizing: border-box; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #0b0c10;
-            color: #c5c6c7;
+            font-family: 'Segoe UI',
+                         Tahoma,
+                         Geneva,
+                         Verdana,
+                         sans-serif;
+
+            background-color: #f4f7f6;
+            text-align: center;
+            padding: 40px 20px;
             margin: 0;
-            padding: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        .charts-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
         }
-        .dashboard-container {
+
+        .chart-card {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            flex: 1;
+            min-width: 320px;
+            max-width: 420px;
+        }
+
+        iframe {
+            border: 1px solid #cccccc;
+            border-radius: 10px;
             width: 100%;
-            max-width: 1000px;
-            background-color: #1f2833;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            padding: 24px;
-            margin-top: 10px;
-            border: 1px solid #45f3ff33;
+            height: 260px;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 24px;
-            border-bottom: 2px solid #0b0c10;
-            padding-bottom: 15px;
-        }
-        .header h1 {
-            color: #45f3ff;
-            margin: 0;
-            font-size: 28px;
-            letter-spacing: 1px;
-        }
-        .header p {
-            color: #66fcf1;
-            margin: 5px 0 0 0;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        .visual-frame-wrapper {
-            position: relative;
+
+        .grafana-card {
             width: 100%;
-            height: 550px;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: #121214;
-        }
-        /* Using native HTML object rendering cleanly embeds the target stream */
-        .analytics-render {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .footer-metrics {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             margin-top: 20px;
-            text-align: center;
-            font-size: 13px;
-            color: #8d8d99;
         }
-        .fallback-btn {
+
+        .back-btn {
             display: inline-block;
-            background-color: #45f3ff;
-            color: #0b0c10;
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+            margin-top: 40px;
+            padding: 12px 24px;
+            font-size: 0.9rem;
             font-weight: bold;
-            margin-top: 15px;
+            color: #7f8c8d;
+            background-color: #edeae6;
+            border-radius: 8px;
             transition: background 0.2s;
         }
-        .fallback-btn:hover { background-color: #66fcf1; }
+
+        .back-btn:hover {
+            background-color: #e2ded9;
+        }
+
     </style>
 </head>
+
 <body>
 
-<div class="dashboard-container">
-    <div class="header">
-        <h1>IoT Weather Station Monitor</h1>
-        <p>Live ESP32 Sensor Stream</p>
+    <h1>Sensor History Charts</h1>
+
+    <div class="charts-container">
+
+        <!-- ===================================================== -->
+        <!-- Temperature Chart -->
+        <!-- ===================================================== -->
+
+        <div class="chart-card">
+
+            <h3>Temperature</h3>
+
+            <iframe
+                src="https://thingspeak.mathworks.com/channels/3386022/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=1440&timescale=10&title=Temperature%C2%B0C&type=spline&yaxismax=50&yaxismin=0">
+            </iframe>
+
+        </div>
+
+        <!-- ===================================================== -->
+        <!-- Humidity Chart -->
+        <!-- ===================================================== -->
+
+        <div class="chart-card">
+
+            <h3>Humidity</h3>
+
+            <iframe
+                src="https://thingspeak.mathworks.com/channels/3386022/charts/2?bgcolor=%23ffffff&color=%232980b9&dynamic=true&results=1440&timescale=10&title=Humidity%25&type=spline&yaxismax=100&yaxismin=0">
+            </iframe>
+
+        </div>
+
+        <!-- ===================================================== -->
+        <!-- Pressure Chart -->
+        <!-- ===================================================== -->
+
+        <div class="chart-card">
+
+            <h3>Pressure</h3>
+
+            <iframe
+                src="https://thingspeak.mathworks.com/channels/3386022/charts/3?bgcolor=%23ffffff&color=%23e67e22&dynamic=true&results=1440&timescale=10&title=Pressure+hPa&type=spline&yaxismax=1100&yaxismin=900">
+            </iframe>
+
+        </div>
+
+        <!-- ===================================================== -->
+        <!-- Grafana Dashboard -->
+        <!-- ===================================================== -->
+
+        <div class="grafana-card">
+
+            <h3>Live Weather Station Metrics</h3>
+
+            <object
+                data="https://rezadehhaghi.grafana.net/public-dashboards/dfaecb5d0c154b94add9ce7e59b20305?from=now-12h&to=now&timezone=browser&kiosk=1"
+                width="100%"
+                height="600"
+                type="text/html">
+
+                <p>
+                    Your browser cannot render this embed.
+
+                    <a href="https://rezadehhaghi.grafana.net/public-dashboards/dfaecb5d0c154b94add9ce7e59b20305"
+                       target="_blank">
+
+                        Open Grafana Dashboard
+
+                    </a>
+                </p>
+
+            </object>
+
+        </div>
+
     </div>
 
-    <div class="visual-frame-wrapper">
-        <!-- Object elements execute full-context page data loads seamlessly -->
-        <object 
-            class="analytics-render"
-            data="https://rezadehhaghi.grafana.net/public-dashboards/dfaecb5d0c154b94add9ce7e59b20305?from=now-1h&to=now&timezone=browser&kiosk=1"
-            type="text/html">
-            <div style="padding: 40px; text-align: center;">
-                <p>Your browser environment is restricting standard dashboard frame attachments.</p>
-                <a href="https://rezadehhaghi.grafana.net/public-dashboards/dfaecb5d0c154b94add9ce7e59b20305?from=now-1h&to=now&timezone=browser" target="_blank" class="fallback-btn">
-                    Launch Interactive Graph Dashboard
-                </a>
-            </div>
-        </object>
-    </div>
+    <!-- ===================================================== -->
+    <!-- Back Button -->
+    <!-- ===================================================== -->
 
-    <div class="footer-metrics">
-        Data updated automatically via cloud polling • Powered by InfluxDB & GitHub Pages
-    </div>
-</div>
+    <a href="../" class="back-btn">
+        ← Back to Live Dashboard
+    </a>
 
 </body>
+
 </html>

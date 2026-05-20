@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESP32 Live Sensor Dashboard</title>
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -12,6 +13,7 @@
             padding: 50px;
             margin: 0;
         }
+
         .card {
             background: white;
             padding: 40px;
@@ -22,17 +24,20 @@
             border-top: 5px solid #2ecc71;
             margin: 10px;
         }
+
         h2 {
             color: #2c3e50;
             margin-top: 0;
             font-size: 1.5rem;
         }
+
         .value {
             font-size: 3.5rem;
             font-weight: bold;
             color: #2ecc71;
             margin: 20px 0;
         }
+
         .status {
             font-size: 0.85rem;
             color: #7f8c8d;
@@ -41,7 +46,7 @@
             border-radius: 20px;
             display: inline-block;
         }
-        /* Style for the button link */
+
         .graph-btn {
             display: inline-block;
             text-decoration: none;
@@ -56,81 +61,203 @@
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+
         .graph-btn:hover {
             background-color: #34495e;
         }
     </style>
 </head>
+
 <body>
 
-    <!-- Temperature Block (Field 1) -->
+    <!-- Temperature -->
     <div class="card">
         <h2>Temperature</h2>
-        <div class="value" id="sensor-data">Loading...</div>
-        <div class="status" id="timestamp">Connecting to server...</div>
+
+        <div class="value" id="sensor-data">
+            Loading...
+        </div>
+
+        <div class="status" id="timestamp">
+            Connecting to server...
+        </div>
     </div>
 
-    <!-- Humidity Block (Field 2) -->
+    <!-- Humidity -->
     <div class="card" style="border-top: 5px solid #3498db;">
         <h2>Humidity</h2>
-        <div class="value" id="humidity-data" style="color: #3498db;">Loading...</div>
-        <div class="status" id="humidity-timestamp">Connecting to server...</div>
+
+        <div class="value"
+             id="humidity-data"
+             style="color: #3498db;">
+            Loading...
+        </div>
+
+        <div class="status" id="humidity-timestamp">
+            Connecting to server...
+        </div>
     </div>
 
-    <!-- Button targeting Bars folder relative to your main root address -->
+    <!-- Pressure -->
+    <div class="card" style="border-top: 5px solid #e67e22;">
+        <h2>Pressure</h2>
+
+        <div class="value"
+             id="pressure-data"
+             style="color: #e67e22;">
+            Loading...
+        </div>
+
+        <div class="status" id="pressure-timestamp">
+            Connecting to server...
+        </div>
+    </div>
+
+    <!-- Charts Button -->
     <div>
-        <a href="./Bars/" class="graph-btn">bar graph</a>
+        <a href="./Bars/" class="graph-btn">
+            Charts
+        </a>
     </div>
 
     <script>
-        // Using your exact Channel Feed URL to fetch all active data fields at once
-        const straightforwardUrl = "https://api.thingspeak.com/channels/3386022/feeds.json?results=2";
+
+        // ThingSpeak JSON feed URL
+        const straightforwardUrl =
+            "https://api.thingspeak.com/channels/3386022/feeds.json?results=2";
 
         async function getLiveValue() {
-            try {
-                const response = await fetch(straightforwardUrl);
-                const data = await response.json();
-                
-                // Read from the feeds list inside your exact URL JSON output
-                const feeds = data.feeds;
-                const latestFeed = feeds[feeds.length - 1];
-                
-                // Extract general response time
-                const rawTime = new Date(latestFeed.created_at);
-                const formattedTime = rawTime.toLocaleTimeString();
 
-                // Process Field 1 (Temperature)
+            try {
+
+                const response = await fetch(straightforwardUrl);
+
+                const data = await response.json();
+
+                const feeds = data.feeds;
+
+                const latestFeed = feeds[feeds.length - 1];
+
+                // Format time
+                const rawTime = new Date(latestFeed.created_at);
+
+                const formattedTime =
+                    rawTime.toLocaleTimeString();
+
+                // =====================================================
+                // Temperature (Field 1)
+                // =====================================================
+
                 const sensorValue = latestFeed.field1;
-                if (sensorValue !== null && sensorValue !== undefined) {
-                    document.getElementById('sensor-data').innerText = sensorValue;
+
+                if (sensorValue !== null &&
+                    sensorValue !== undefined) {
+
+                    document.getElementById(
+                        'sensor-data'
+                    ).innerText = sensorValue + " °C";
+
                 } else {
-                    document.getElementById('sensor-data').innerText = "--";
+
+                    document.getElementById(
+                        'sensor-data'
+                    ).innerText = "--";
                 }
-                document.getElementById('timestamp').innerText = `Last updated at: ${formattedTime}`;
-                
-                // Process Field 2 (Humidity)
+
+                document.getElementById(
+                    'timestamp'
+                ).innerText =
+                    `Last updated at: ${formattedTime}`;
+
+                // =====================================================
+                // Humidity (Field 2)
+                // =====================================================
+
                 const humidityValue = latestFeed.field2;
-                if (humidityValue !== null && humidityValue !== undefined) {
-                    document.getElementById('humidity-data').innerText = humidityValue;
+
+                if (humidityValue !== null &&
+                    humidityValue !== undefined) {
+
+                    document.getElementById(
+                        'humidity-data'
+                    ).innerText = humidityValue + " %";
+
                 } else {
-                    document.getElementById('humidity-data').innerText = "--";
+
+                    document.getElementById(
+                        'humidity-data'
+                    ).innerText = "--";
                 }
-                document.getElementById('humidity-timestamp').innerText = `Last updated at: ${formattedTime}`;
-                
-            } catch (error) {
+
+                document.getElementById(
+                    'humidity-timestamp'
+                ).innerText =
+                    `Last updated at: ${formattedTime}`;
+
+                // =====================================================
+                // Pressure (Field 3)
+                // =====================================================
+
+                const pressureValue = latestFeed.field3;
+
+                if (pressureValue !== null &&
+                    pressureValue !== undefined) {
+
+                    document.getElementById(
+                        'pressure-data'
+                    ).innerText = pressureValue + " hPa";
+
+                } else {
+
+                    document.getElementById(
+                        'pressure-data'
+                    ).innerText = "--";
+                }
+
+                document.getElementById(
+                    'pressure-timestamp'
+                ).innerText =
+                    `Last updated at: ${formattedTime}`;
+
+            }
+
+            catch (error) {
+
                 console.error("Error:", error);
-                document.getElementById('sensor-data').innerText = "--";
-                document.getElementById('timestamp').innerText = "Connection Error";
-                document.getElementById('humidity-data').innerText = "--";
-                document.getElementById('humidity-timestamp').innerText = "Connection Error";
+
+                document.getElementById(
+                    'sensor-data'
+                ).innerText = "--";
+
+                document.getElementById(
+                    'timestamp'
+                ).innerText = "Connection Error";
+
+                document.getElementById(
+                    'humidity-data'
+                ).innerText = "--";
+
+                document.getElementById(
+                    'humidity-timestamp'
+                ).innerText = "Connection Error";
+
+                document.getElementById(
+                    'pressure-data'
+                ).innerText = "--";
+
+                document.getElementById(
+                    'pressure-timestamp'
+                ).innerText = "Connection Error";
             }
         }
 
-        // Fetch immediately on load
+        // Initial fetch
         getLiveValue();
 
         // Refresh every 15 seconds
         setInterval(getLiveValue, 15000);
+
     </script>
+
 </body>
 </html>

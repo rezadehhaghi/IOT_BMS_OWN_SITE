@@ -3,7 +3,7 @@
 
 BMS control panel for temp and humidity and not use third party website for showing my data 
 
-The parallel link to dashboard is bms.reziot.xyz
+The parallel link to dashboard is  https://bms.reziot.xyz
 
 This still use InfluxDb Cloud
 

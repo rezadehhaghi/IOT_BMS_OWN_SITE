@@ -1,259 +1,412 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESP32 Live Sensor Dashboard</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Reziot Weather Station</title>
 
     <style>
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            text-align: center;
-            padding: 50px;
+
+            font-family:
+                'Segoe UI',
+                Tahoma,
+                Geneva,
+                Verdana,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef2f7,
+                    #dbe7f1
+                );
+
             margin: 0;
+
+            padding: 40px 20px;
+
+            text-align: center;
+        }
+
+        .container {
+
+            max-width: 1200px;
+
+            margin: auto;
+        }
+
+        .main-title {
+
+            font-size: 3rem;
+
+            color: #2c3e50;
+
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+
+            color: #7f8c8d;
+
+            margin-bottom: 40px;
+
+            font-size: 1.1rem;
+        }
+
+        .cards-wrapper {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            justify-content: center;
+
+            gap: 25px;
         }
 
         .card {
+
             background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            display: inline-block;
-            min-width: 280px;
-            border-top: 5px solid #2ecc71;
-            margin: 10px;
+
+            padding: 35px;
+
+            border-radius: 24px;
+
+            box-shadow:
+                0 10px 30px rgba(0,0,0,0.08);
+
+            min-width: 260px;
+
+            transition: 0.3s ease;
+        }
+
+        .card:hover {
+
+            transform: translateY(-5px);
+        }
+
+        .temperature-card {
+
+            border-top: 6px solid #2ecc71;
+        }
+
+        .humidity-card {
+
+            border-top: 6px solid #3498db;
+        }
+
+        .pressure-card {
+
+            border-top: 6px solid #e67e22;
         }
 
         h2 {
+
             color: #2c3e50;
+
             margin-top: 0;
-            font-size: 1.5rem;
         }
 
         .value {
-            font-size: 3.5rem;
+
+            font-size: 3rem;
+
             font-weight: bold;
-            color: #2ecc71;
+
             margin: 20px 0;
         }
 
+        .temperature-value {
+
+            color: #2ecc71;
+        }
+
+        .humidity-value {
+
+            color: #3498db;
+        }
+
+        .pressure-value {
+
+            color: #e67e22;
+        }
+
         .status {
-            font-size: 0.85rem;
+
+            font-size: 0.9rem;
+
             color: #7f8c8d;
-            background: #edeae680;
-            padding: 8px 12px;
+
+            background: #f1f3f5;
+
+            padding: 10px 15px;
+
             border-radius: 20px;
+
             display: inline-block;
         }
 
-        .graph-btn {
-            display: inline-block;
+        .nav-buttons {
+
+            margin-top: 50px;
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+
             text-decoration: none;
-            margin: 30px auto 0 auto;
-            padding: 12px 24px;
-            font-size: 1rem;
+
+            padding: 14px 28px;
+
+            border-radius: 12px;
+
             font-weight: bold;
+
             color: white;
-            background-color: #2c3e50;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+            background: #2c3e50;
+
+            transition: 0.2s ease;
+
+            box-shadow:
+                0 5px 15px rgba(0,0,0,0.1);
         }
 
-        .graph-btn:hover {
-            background-color: #34495e;
+        .nav-btn:hover {
+
+            transform: translateY(-2px);
+
+            background: #34495e;
         }
+
+        .grafana-btn {
+
+            background: #e67e22;
+        }
+
+        .grafana-btn:hover {
+
+            background: #d35400;
+        }
+
+        @media (max-width: 768px) {
+
+            .main-title {
+
+                font-size: 2.2rem;
+            }
+
+            .card {
+
+                width: 100%;
+            }
+        }
+
     </style>
+
 </head>
 
 <body>
 
-    <!-- Temperature -->
-    <div class="card">
-        <h2>Temperature</h2>
+    <div class="container">
 
-        <div class="value" id="sensor-data">
-            Loading...
+        <!-- HEADER -->
+
+        <h1 class="main-title">
+            🌦️ Reziot Weather Station
+        </h1>
+
+        <p class="subtitle">
+            Live Environmental Monitoring Dashboard
+        </p>
+
+        <!-- SENSOR CARDS -->
+
+        <div class="cards-wrapper">
+
+            <!-- TEMPERATURE -->
+
+            <div class="card temperature-card">
+
+                <h2>🌡️ Temperature</h2>
+
+                <div class="value temperature-value"
+                     id="sensor-data">
+                    Loading...
+                </div>
+
+                <div class="status"
+                     id="timestamp">
+                    Connecting to server...
+                </div>
+
+            </div>
+
+            <!-- HUMIDITY -->
+
+            <div class="card humidity-card">
+
+                <h2>💧 Humidity</h2>
+
+                <div class="value humidity-value"
+                     id="humidity-data">
+                    Loading...
+                </div>
+
+                <div class="status"
+                     id="humidity-timestamp">
+                    Connecting to server...
+                </div>
+
+            </div>
+
+            <!-- PRESSURE -->
+
+            <div class="card pressure-card">
+
+                <h2>🌬️ Pressure</h2>
+
+                <div class="value pressure-value"
+                     id="pressure-data">
+                    Loading...
+                </div>
+
+                <div class="status"
+                     id="pressure-timestamp">
+                    Connecting to server...
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="status" id="timestamp">
-            Connecting to server...
-        </div>
-    </div>
+        <!-- NAVIGATION -->
 
-    <!-- Humidity -->
-    <div class="card" style="border-top: 5px solid #3498db;">
-        <h2>Humidity</h2>
+        <div class="nav-buttons">
 
-        <div class="value"
-             id="humidity-data"
-             style="color: #3498db;">
-            Loading...
-        </div>
+            <a href="./Bars/"
+               class="nav-btn">
+                📈 Charts
+            </a>
 
-        <div class="status" id="humidity-timestamp">
-            Connecting to server...
-        </div>
-    </div>
+            <a href="https://rezadehhaghi.grafana.net/public-dashboards/dfaecb5d0c154b94add9ce7e59b20305"
+               target="_blank"
+               class="nav-btn grafana-btn">
+                📊 Grafana
+            </a>
 
-    <!-- Pressure -->
-    <div class="card" style="border-top: 5px solid #e67e22;">
-        <h2>Pressure</h2>
-
-        <div class="value"
-             id="pressure-data"
-             style="color: #e67e22;">
-            Loading...
         </div>
 
-        <div class="status" id="pressure-timestamp">
-            Connecting to server...
-        </div>
-    </div>
-
-    <!-- Charts Button -->
-    <div>
-        <a href="./Bars/" class="graph-btn">
-            Charts
-        </a>
     </div>
 
     <script>
 
-        // ThingSpeak JSON feed URL
         const apiUrl =
-            "https://bms-api.rezadehhaghi-fi.workers.dev/latest";
+            "https://bms-api.reziot.xyz/latest";
 
         async function getLiveValue() {
 
             try {
 
-                const response = await fetch(apiUrl);
+                const response =
+                    await fetch(apiUrl);
 
-                const data = await response.json();
+                const data =
+                    await response.json();
 
-                // Format time
-                const rawTime = new Date(data.created_at);
+                const rawTime =
+                    new Date(data.created_at);
 
                 const formattedTime =
                     rawTime.toLocaleTimeString();
 
                 // =====================================================
-                // Temperature (Field 1)
+                // TEMPERATURE
                 // =====================================================
 
-                const sensorValue = data.temperature;
-
-                if (sensorValue !== null &&
-                    sensorValue !== undefined) {
-
-                    document.getElementById(
-                        'sensor-data'
-                    ).innerText = sensorValue + " °C";
-
-                } else {
-
-                    document.getElementById(
-                        'sensor-data'
-                    ).innerText = "--";
-                }
+                document.getElementById(
+                    'sensor-data'
+                ).innerText =
+                    data.temperature + " °C";
 
                 document.getElementById(
                     'timestamp'
                 ).innerText =
-                    `Last updated at: ${formattedTime}`;
+                    `Updated: ${formattedTime}`;
 
                 // =====================================================
-                // Humidity (Field 2)
+                // HUMIDITY
                 // =====================================================
 
-                const humidityValue = data.humidity;
-
-                if (humidityValue !== null &&
-                    humidityValue !== undefined) {
-
-                    document.getElementById(
-                        'humidity-data'
-                    ).innerText = humidityValue + " %";
-
-                } else {
-
-                    document.getElementById(
-                        'humidity-data'
-                    ).innerText = "--";
-                }
+                document.getElementById(
+                    'humidity-data'
+                ).innerText =
+                    data.humidity + " %";
 
                 document.getElementById(
                     'humidity-timestamp'
                 ).innerText =
-                    `Last updated at: ${formattedTime}`;
+                    `Updated: ${formattedTime}`;
 
                 // =====================================================
-                // Pressure (Field 3)
+                // PRESSURE
                 // =====================================================
 
-                const pressureValue = data.pressure;
-
-                if (pressureValue !== null &&
-                    pressureValue !== undefined) {
-
-                    document.getElementById(
-                        'pressure-data'
-                    ).innerText = pressureValue + " hPa";
-
-                } else {
-
-                    document.getElementById(
-                        'pressure-data'
-                    ).innerText = "--";
-                }
+                document.getElementById(
+                    'pressure-data'
+                ).innerText =
+                    data.pressure + " hPa";
 
                 document.getElementById(
                     'pressure-timestamp'
                 ).innerText =
-                    `Last updated at: ${formattedTime}`;
+                    `Updated: ${formattedTime}`;
 
             }
 
             catch (error) {
 
-                console.error("Error:", error);
+                console.error(error);
 
                 document.getElementById(
                     'sensor-data'
                 ).innerText = "--";
 
                 document.getElementById(
-                    'timestamp'
-                ).innerText = "Connection Error";
-
-                document.getElementById(
                     'humidity-data'
                 ).innerText = "--";
 
                 document.getElementById(
-                    'humidity-timestamp'
-                ).innerText = "Connection Error";
-
-                document.getElementById(
                     'pressure-data'
                 ).innerText = "--";
-
-                document.getElementById(
-                    'pressure-timestamp'
-                ).innerText = "Connection Error";
             }
         }
 
-        // Initial fetch
+        // Initial load
         getLiveValue();
 
         // Refresh every 15 seconds
-        setInterval(getLiveValue, 15000);
+        setInterval(
+            getLiveValue,
+            15000
+        );
 
     </script>
 
 </body>
+
 </html>

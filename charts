@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Reziot Analytics</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+
+        body {
+
+            font-family:
+                'Segoe UI',
+                Tahoma,
+                Geneva,
+                Verdana,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef2f7,
+                    #dbe7f1
+                );
+
+            margin: 0;
+
+            padding: 30px;
+
+            text-align: center;
+        }
+
+        h1 {
+
+            color: #2c3e50;
+
+            margin-bottom: 40px;
+        }
+
+        .chart-container {
+
+            background: white;
+
+            border-radius: 24px;
+
+            padding: 25px;
+
+            margin: 30px auto;
+
+            max-width: 1000px;
+
+            box-shadow:
+                0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        canvas {
+
+            width: 100% !important;
+
+            height: 400px !important;
+        }
+
+        .back-btn {
+
+            display: inline-block;
+
+            margin-top: 30px;
+
+            padding: 14px 28px;
+
+            border-radius: 12px;
+
+            background: #2c3e50;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+
+            background: #34495e;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>
+        📈 Reziot Weather Analytics
+    </h1>
+
+    <!-- TEMPERATURE -->
+
+    <div class="chart-container">
+
+        <h2>🌡️ Temperature</h2>
+
+        <canvas id="tempChart"></canvas>
+
+    </div>
+
+    <!-- HUMIDITY -->
+
+    <div class="chart-container">
+
+        <h2>💧 Humidity</h2>
+
+        <canvas id="humChart"></canvas>
+
+    </div>
+
+    <!-- PRESSURE -->
+
+    <div class="chart-container">
+
+        <h2>🌬️ Pressure</h2>
+
+        <canvas id="pressChart"></canvas>
+
+    </div>
+
+    <a href="./index.html"
+       class="back-btn">
+
+        ← Back to Dashboard
+
+    </a>
+
+    <script>
+
+        const apiUrl =
+            "https://bms-api.reziot.xyz/history";
+
+        async function loadCharts() {
+
+            const response =
+                await fetch(apiUrl);
+
+            const data =
+                await response.json();
+
+            // Reverse for oldest → newest
+
+            data.reverse();
+
+            const labels =
+                data.map(item => {
+
+                    return new Date(
+                        item.created_at
+                    ).toLocaleTimeString();
+                });
+
+            const temperatures =
+                data.map(item =>
+                    item.temperature
+                );
+
+            const humidities =
+                data.map(item =>
+                    item.humidity
+                );
+
+            const pressures =
+                data.map(item =>
+                    item.pressure
+                );
+
+            // =====================================================
+            // TEMPERATURE CHART
+            // =====================================================
+
+            new Chart(
+
+                document.getElementById(
+                    'tempChart'
+                ),
+
+                {
+                    type: 'line',
+
+                    data: {
+
+                        labels: labels,
+
+                        datasets: [
+
+                            {
+                                label:
+                                    'Temperature °C',
+
+                                data:
+                                    temperatures,
+
+                                borderColor:
+                                    '#2ecc71',
+
+                                backgroundColor:
+                                    'rgba(46,204,113,0.1)',
+
+                                tension: 0.4,
+
+                                fill: true
+                            }
+                        ]
+                    }
+                }
+            );
+
+            // =====================================================
+            // HUMIDITY CHART
+            // =====================================================
+
+            new Chart(
+
+                document.getElementById(
+                    'humChart'
+                ),
+
+                {
+                    type: 'line',
+
+                    data: {
+
+                        labels: labels,
+
+                        datasets: [
+
+                            {
+                                label:
+                                    'Humidity %',
+
+                                data:
+                                    humidities,
+
+                                borderColor:
+                                    '#3498db',
+
+                                backgroundColor:
+                                    'rgba(52,152,219,0.1)',
+
+                                tension: 0.4,
+
+                                fill: true
+                            }
+                        ]
+                    }
+                }
+            );
+
+            // =====================================================
+            // PRESSURE CHART
+            // =====================================================
+
+            new Chart(
+
+                document.getElementById(
+                    'pressChart'
+                ),
+
+                {
+                    type: 'line',
+
+                    data: {
+
+                        labels: labels,
+
+                        datasets: [
+
+                            {
+                                label:
+                                    'Pressure hPa',
+
+                                data:
+                                    pressures,
+
+                                borderColor:
+                                    '#e67e22',
+
+                                backgroundColor:
+                                    'rgba(230,126,34,0.1)',
+
+                                tension: 0.4,
+
+                                fill: true
+                            }
+                        ]
+                    }
+                }
+            );
+        }
+
+        loadCharts();
+
+    </script>
+
+</body>
+
+</html>

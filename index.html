@@ -123,23 +123,19 @@
     <script>
 
         // ThingSpeak JSON feed URL
-        const straightforwardUrl =
-            "https://api.thingspeak.com/channels/3386022/feeds.json?results=2";
+        const apiUrl =
+            "https://bms-api.rezadehhaghi-fi.workers.dev/latest";
 
         async function getLiveValue() {
 
             try {
 
-                const response = await fetch(straightforwardUrl);
+                const response = await fetch(apiUrl);
 
                 const data = await response.json();
 
-                const feeds = data.feeds;
-
-                const latestFeed = feeds[feeds.length - 1];
-
                 // Format time
-                const rawTime = new Date(latestFeed.created_at);
+                const rawTime = new Date(data.created_at);
 
                 const formattedTime =
                     rawTime.toLocaleTimeString();
@@ -148,7 +144,7 @@
                 // Temperature (Field 1)
                 // =====================================================
 
-                const sensorValue = latestFeed.field1;
+                const sensorValue = data.temperature;
 
                 if (sensorValue !== null &&
                     sensorValue !== undefined) {
@@ -173,7 +169,7 @@
                 // Humidity (Field 2)
                 // =====================================================
 
-                const humidityValue = latestFeed.field2;
+                const humidityValue = data.humidity;
 
                 if (humidityValue !== null &&
                     humidityValue !== undefined) {
@@ -198,7 +194,7 @@
                 // Pressure (Field 3)
                 // =====================================================
 
-                const pressureValue = latestFeed.field3;
+                const pressureValue = data.pressure;
 
                 if (pressureValue !== null &&
                     pressureValue !== undefined) {

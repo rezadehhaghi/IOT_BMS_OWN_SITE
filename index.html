@@ -277,39 +277,7 @@
 
         <div class="main-panels">
 
-            <!-- OUTDOOR WEATHER -->
-
-            <div class="panel">
-
-                <h2>
-                    ☀️ Outdoor Weather
-                </h2>
-
-                <div class="location">
-                    Vantaa, Finland
-                </div>
-
-                <img id="weather-icon"
-                     class="weather-icon"
-                     src=""
-                     alt="Weather">
-
-                <div id="weather-temp"
-                     class="weather-temp">
-
-                    Loading...
-
-                </div>
-
-                <div id="weather-desc"
-                     class="weather-desc">
-
-                    Loading weather...
-
-                </div>
-
-            </div>
-
+    
             <!-- INDOOR SENSOR -->
 
             <div class="panel">
@@ -383,6 +351,39 @@
             </div>
 
         </div>
+             <!-- OUTDOOR WEATHER -->
+
+            <div class="panel">
+
+                <h2>
+                    ☀️ Outdoor Weather
+                </h2>
+
+                <div class="location">
+                    Vantaa, Finland
+                </div>
+
+                <img id="weather-icon"
+                     class="weather-icon"
+                     src=""
+                     alt="Weather">
+
+                <div id="weather-temp"
+                     class="weather-temp">
+
+                    Loading...
+
+                </div>
+
+                <div id="weather-desc"
+                     class="weather-desc">
+
+                    Loading weather...
+
+                </div>
+
+            </div>
+   
 
         <!-- BUTTONS -->
 
@@ -479,9 +480,7 @@
             try {
 
                 const weatherUrl =
-
-                    "https://api.openweathermap.org/data/2.5/weather?q=Vantaa,FI&units=metric&appid=24c45512ac69b4d3712765109193ca0d";
-
+                    "https://bms-api.reziot.xyz/weather";
                 const response =
                     await fetch(weatherUrl);
 

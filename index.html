@@ -91,7 +91,55 @@
 
             transform: translateY(-5px);
         }
+.weather-box {
 
+    background: white;
+
+    max-width: 500px;
+
+    margin: 0 auto 40px auto;
+
+    padding: 30px;
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.08);
+}
+
+.weather-location {
+
+    color: #7f8c8d;
+
+    margin-bottom: 10px;
+
+    font-size: 1rem;
+}
+
+.weather-temp {
+
+    font-size: 4rem;
+
+    font-weight: bold;
+
+    color: #f39c12;
+}
+
+.weather-desc {
+
+    font-size: 1.2rem;
+
+    color: #2c3e50;
+
+    margin-top: 10px;
+}
+
+.weather-icon {
+
+    width: 100px;
+
+    height: 100px;
+}
         .temperature-card {
 
             border-top: 6px solid #2ecc71;
@@ -233,7 +281,41 @@
         <p class="subtitle">
             Live Environmental Monitoring Dashboard
         </p>
+<!-- OUTDOOR WEATHER -->
 
+<div class="weather-box">
+
+    <h2>
+        ☀️ Outdoor Weather
+    </h2>
+
+    <div id="weather-location"
+         class="weather-location">
+
+        Vantaa, Finland
+
+    </div>
+
+    <div id="weather-temp"
+         class="weather-temp">
+
+        Loading...
+
+    </div>
+
+    <div id="weather-desc"
+         class="weather-desc">
+
+        Loading weather...
+
+    </div>
+
+    <img id="weather-icon"
+         class="weather-icon"
+         src=""
+         alt="Weather Icon">
+
+</div>
         <!-- SENSOR CARDS -->
 
         <div class="cards-wrapper">
@@ -317,7 +399,54 @@
 
         const apiUrl =
             "https://bms-api.reziot.xyz/latest";
+async function getWeather() {
 
+    try {
+
+        const weatherUrl =
+
+            "https://api.openweathermap.org/data/2.5/weather?q=Vantaa&units=metric&appid=c5255728573583194f9ff22025ba6975";
+
+        const response =
+            await fetch(weatherUrl);
+
+        const data =
+            await response.json();
+
+        document.getElementById(
+            "weather-temp"
+        ).innerText =
+            Math.round(data.main.temp) + "°C";
+
+        document.getElementById(
+            "weather-desc"
+        ).innerText =
+            data.weather[0].description;
+
+        document.getElementById(
+            "weather-icon"
+        ).src =
+            "https://openweathermap.org/img/wn/" +
+            data.weather[0].icon +
+            "@2x.png";
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "weather-temp"
+        ).innerText =
+            "--";
+
+        document.getElementById(
+            "weather-desc"
+        ).innerText =
+            "Weather unavailable";
+    }
+}
         async function getLiveValue() {
 
             try {
@@ -398,7 +527,7 @@
 
         // Initial load
         getLiveValue();
-
+        getWeather();
         // Refresh every 15 seconds
         setInterval(
             getLiveValue,

@@ -61,7 +61,7 @@
         }
 
         /* =====================================================
-           MAIN PANELS
+           PANELS
         ===================================================== */
 
         .main-panels {
@@ -93,10 +93,17 @@
             min-width: 320px;
 
             max-width: 500px;
+
+            transition: 0.3s;
+        }
+
+        .panel:hover {
+
+            transform: translateY(-5px);
         }
 
         /* =====================================================
-           WEATHER PANEL
+           OUTDOOR WEATHER
         ===================================================== */
 
         .weather-temp {
@@ -115,6 +122,8 @@
             font-size: 1.2rem;
 
             color: #2c3e50;
+
+            text-transform: capitalize;
         }
 
         .weather-icon {
@@ -129,6 +138,8 @@
             color: #7f8c8d;
 
             margin-bottom: 10px;
+
+            font-size: 1rem;
         }
 
         /* =====================================================
@@ -270,21 +281,24 @@
         </h1>
 
         <p class="subtitle">
-            Outdoor weather + Indoor ESP32 monitoring
+            Outdoor Weather + Indoor ESP32 Monitoring
         </p>
 
         <!-- MAIN PANELS -->
 
         <div class="main-panels">
 
-    
-            <!-- INDOOR SENSOR -->
+            <!-- INDOOR ESP32 -->
 
             <div class="panel">
 
                 <h2>
                     🏠 Indoor ESP32 Sensors
                 </h2>
+
+                <div class="location">
+                    Live Room Monitoring
+                </div>
 
                 <div class="sensor-grid">
 
@@ -350,8 +364,7 @@
 
             </div>
 
-        </div>
-             <!-- OUTDOOR WEATHER -->
+            <!-- OUTDOOR WEATHER -->
 
             <div class="panel">
 
@@ -383,7 +396,8 @@
                 </div>
 
             </div>
-   
+
+        </div>
 
         <!-- BUTTONS -->
 
@@ -416,6 +430,13 @@
 
         const apiUrl =
             "https://bms-api.reziot.xyz/latest";
+
+        // =====================================================
+        // WEATHER URL
+        // =====================================================
+
+        const weatherUrl =
+            "https://bms-api.reziot.xyz/weather";
 
         // =====================================================
         // ESP32 SENSOR DATA
@@ -472,22 +493,18 @@
         }
 
         // =====================================================
-        // WEATHER
+        // OUTDOOR WEATHER
         // =====================================================
 
         async function getWeather() {
 
             try {
 
-                const weatherUrl =
-                    "https://bms-api.reziot.xyz/weather";
                 const response =
                     await fetch(weatherUrl);
 
                 const data =
                     await response.json();
-
-                console.log(data);
 
                 document.getElementById(
                     "weather-temp"

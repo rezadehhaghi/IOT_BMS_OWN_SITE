@@ -42,6 +42,8 @@
             color: #2c3e50;
 
             margin-bottom: 40px;
+
+            font-size: 2.5rem;
         }
 
         .chart-container {
@@ -54,17 +56,26 @@
 
             margin: 30px auto;
 
-            max-width: 1000px;
+            max-width: 1100px;
 
             box-shadow:
                 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+
+            color: #2c3e50;
+
+            margin-bottom: 20px;
+
+            font-size: 1.3rem;
         }
 
         canvas {
 
             width: 100% !important;
 
-            height: 400px !important;
+            height: 300px !important;
         }
 
         .back-btn {
@@ -84,11 +95,15 @@
             text-decoration: none;
 
             font-weight: bold;
+
+            transition: 0.2s;
         }
 
         .back-btn:hover {
 
             background: #34495e;
+
+            transform: translateY(-2px);
         }
 
     </style>
@@ -105,7 +120,9 @@
 
     <div class="chart-container">
 
-        <h2>🌡️ Temperature</h2>
+        <h2>
+            🌡️ Temperature
+        </h2>
 
         <canvas id="tempChart"></canvas>
 
@@ -115,7 +132,9 @@
 
     <div class="chart-container">
 
-        <h2>💧 Humidity</h2>
+        <h2>
+            💧 Humidity
+        </h2>
 
         <canvas id="humChart"></canvas>
 
@@ -125,7 +144,9 @@
 
     <div class="chart-container">
 
-        <h2>🌬️ Pressure</h2>
+        <h2>
+            🌬️ Pressure
+        </h2>
 
         <canvas id="pressChart"></canvas>
 
@@ -140,167 +161,300 @@
 
     <script>
 
+        // =====================================================
+        // API URL
+        // =====================================================
+
         const apiUrl =
             "https://bms-api.reziot.xyz/history";
 
+        // =====================================================
+        // LOAD CHARTS
+        // =====================================================
+
         async function loadCharts() {
 
-            const response =
-                await fetch(apiUrl);
+            try {
 
-            const data =
-                await response.json();
+                const response =
+                    await fetch(apiUrl);
 
-            // Reverse for oldest → newest
+                const data =
+                    await response.json();
 
-            data.reverse();
+                // =====================================================
+                // ORDER
+                // =====================================================
 
-            const labels =
-                data.map(item => {
+                data.reverse();
 
-                    return new Date(
-                        item.created_at
-                    ).toLocaleTimeString();
-                });
+                // =====================================================
+                // FINLAND LOCAL TIME
+                // =====================================================
 
-            const temperatures =
-                data.map(item =>
-                    item.temperature
+                const labels =
+
+                    data.map(item => {
+
+                        const localDate =
+
+                            new Date(
+
+                                item.created_at
+                                    .replace(
+                                        " ",
+                                        "T"
+                                    ) + "Z"
+                            );
+
+                        return localDate
+                            .toLocaleTimeString(
+                                "fi-FI",
+                                {
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                }
+                            );
+                    });
+
+                // =====================================================
+                // DATASETS
+                // =====================================================
+
+                const temperatures =
+                    data.map(item =>
+                        item.temperature
+                    );
+
+                const humidities =
+                    data.map(item =>
+                        item.humidity
+                    );
+
+                const pressures =
+                    data.map(item =>
+                        item.pressure
+                    );
+
+                // =====================================================
+                // COMMON OPTIONS
+                // =====================================================
+
+                const commonOptions = {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+
+                            labels: {
+
+                                font: {
+
+                                    size: 13
+                                }
+                            }
+                        }
+                    },
+
+                    scales: {
+
+                        x: {
+
+                            ticks: {
+
+                                font: {
+
+                                    size: 10
+                                },
+
+                                maxTicksLimit: 8
+                            }
+                        },
+
+                        y: {
+
+                            ticks: {
+
+                                font: {
+
+                                    size: 11
+                                }
+                            }
+                        }
+                    }
+                };
+
+                // =====================================================
+                // TEMPERATURE CHART
+                // =====================================================
+
+                new Chart(
+
+                    document.getElementById(
+                        'tempChart'
+                    ),
+
+                    {
+
+                        type: 'line',
+
+                        data: {
+
+                            labels: labels,
+
+                            datasets: [
+
+                                {
+
+                                    label:
+                                        'Temperature °C',
+
+                                    data:
+                                        temperatures,
+
+                                    borderColor:
+                                        '#2ecc71',
+
+                                    backgroundColor:
+                                        'rgba(46,204,113,0.08)',
+
+                                    tension: 0.35,
+
+                                    fill: true,
+
+                                    pointRadius: 2,
+
+                                    pointHoverRadius: 4,
+
+                                    borderWidth: 2
+                                }
+                            ]
+                        },
+
+                        options: commonOptions
+                    }
                 );
 
-            const humidities =
-                data.map(item =>
-                    item.humidity
+                // =====================================================
+                // HUMIDITY CHART
+                // =====================================================
+
+                new Chart(
+
+                    document.getElementById(
+                        'humChart'
+                    ),
+
+                    {
+
+                        type: 'line',
+
+                        data: {
+
+                            labels: labels,
+
+                            datasets: [
+
+                                {
+
+                                    label:
+                                        'Humidity %',
+
+                                    data:
+                                        humidities,
+
+                                    borderColor:
+                                        '#3498db',
+
+                                    backgroundColor:
+                                        'rgba(52,152,219,0.08)',
+
+                                    tension: 0.35,
+
+                                    fill: true,
+
+                                    pointRadius: 2,
+
+                                    pointHoverRadius: 4,
+
+                                    borderWidth: 2
+                                }
+                            ]
+                        },
+
+                        options: commonOptions
+                    }
                 );
 
-            const pressures =
-                data.map(item =>
-                    item.pressure
+                // =====================================================
+                // PRESSURE CHART
+                // =====================================================
+
+                new Chart(
+
+                    document.getElementById(
+                        'pressChart'
+                    ),
+
+                    {
+
+                        type: 'line',
+
+                        data: {
+
+                            labels: labels,
+
+                            datasets: [
+
+                                {
+
+                                    label:
+                                        'Pressure hPa',
+
+                                    data:
+                                        pressures,
+
+                                    borderColor:
+                                        '#e67e22',
+
+                                    backgroundColor:
+                                        'rgba(230,126,34,0.08)',
+
+                                    tension: 0.35,
+
+                                    fill: true,
+
+                                    pointRadius: 2,
+
+                                    pointHoverRadius: 4,
+
+                                    borderWidth: 2
+                                }
+                            ]
+                        },
+
+                        options: commonOptions
+                    }
                 );
+            }
 
-            // =====================================================
-            // TEMPERATURE CHART
-            // =====================================================
+            catch(error) {
 
-            new Chart(
+                console.error(error);
 
-                document.getElementById(
-                    'tempChart'
-                ),
-
-                {
-                    type: 'line',
-
-                    data: {
-
-                        labels: labels,
-
-                        datasets: [
-
-                            {
-                                label:
-                                    'Temperature °C',
-
-                                data:
-                                    temperatures,
-
-                                borderColor:
-                                    '#2ecc71',
-
-                                backgroundColor:
-                                    'rgba(46,204,113,0.1)',
-
-                                tension: 0.4,
-
-                                fill: true
-                            }
-                        ]
-                    }
-                }
-            );
-
-            // =====================================================
-            // HUMIDITY CHART
-            // =====================================================
-
-            new Chart(
-
-                document.getElementById(
-                    'humChart'
-                ),
-
-                {
-                    type: 'line',
-
-                    data: {
-
-                        labels: labels,
-
-                        datasets: [
-
-                            {
-                                label:
-                                    'Humidity %',
-
-                                data:
-                                    humidities,
-
-                                borderColor:
-                                    '#3498db',
-
-                                backgroundColor:
-                                    'rgba(52,152,219,0.1)',
-
-                                tension: 0.4,
-
-                                fill: true
-                            }
-                        ]
-                    }
-                }
-            );
-
-            // =====================================================
-            // PRESSURE CHART
-            // =====================================================
-
-            new Chart(
-
-                document.getElementById(
-                    'pressChart'
-                ),
-
-                {
-                    type: 'line',
-
-                    data: {
-
-                        labels: labels,
-
-                        datasets: [
-
-                            {
-                                label:
-                                    'Pressure hPa',
-
-                                data:
-                                    pressures,
-
-                                borderColor:
-                                    '#e67e22',
-
-                                backgroundColor:
-                                    'rgba(230,126,34,0.1)',
-
-                                tension: 0.4,
-
-                                fill: true
-                            }
-                        ]
-                    }
-                }
-            );
+                alert(
+                    "Failed to load chart data"
+                );
+            }
         }
+
+        // =====================================================
+        // START
+        // =====================================================
 
         loadCharts();
 

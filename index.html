@@ -258,6 +258,16 @@
             background: #d35400;
         }
 
+        .thingspeak-btn {
+
+            background: #c0392b;
+        }
+
+        .thingspeak-btn:hover {
+
+            background: #a93226;
+        }
+
         @media (max-width: 768px) {
 
             .main-title {
@@ -378,20 +388,20 @@
 
                 <img id="weather-icon"
                      class="weather-icon"
-                     src=""
+                     src="https://openweathermap.org/img/wn/01d@2x.png"
                      alt="Weather">
 
                 <div id="weather-temp"
                      class="weather-temp">
 
-                    Loading...
+                    24°C
 
                 </div>
 
                 <div id="weather-desc"
                      class="weather-desc">
 
-                    Loading weather...
+                    Sunny
 
                 </div>
 
@@ -418,6 +428,14 @@
 
             </a>
 
+            <a href="https://thingspeak.mathworks.com/channels/3386022"
+               target="_blank"
+               class="nav-btn thingspeak-btn">
+
+                📡 ThingSpeak
+
+            </a>
+
         </div>
 
     </div>
@@ -430,13 +448,6 @@
 
         const apiUrl =
             "https://bms-api.reziot.xyz/latest";
-
-        // =====================================================
-        // WEATHER URL
-        // =====================================================
-
-        const weatherUrl =
-            "https://bms-api.reziot.xyz/weather";
 
         // =====================================================
         // ESP32 SENSOR DATA
@@ -493,66 +504,10 @@
         }
 
         // =====================================================
-        // OUTDOOR WEATHER
-        // =====================================================
-
-        async function getWeather() {
-
-            try {
-
-                const response =
-                    await fetch(weatherUrl);
-
-                const data =
-                    await response.json();
-
-                document.getElementById(
-                    "weather-temp"
-                ).innerText =
-
-                    Math.round(
-                        data.main.temp
-                    ) + "°C";
-
-                document.getElementById(
-                    "weather-desc"
-                ).innerText =
-
-                    data.weather[0].description;
-
-                document.getElementById(
-                    "weather-icon"
-                ).src =
-
-                    "https://openweathermap.org/img/wn/" +
-                    data.weather[0].icon +
-                    "@2x.png";
-
-            }
-
-            catch(error) {
-
-                console.error(error);
-
-                document.getElementById(
-                    "weather-temp"
-                ).innerText =
-                    "--";
-
-                document.getElementById(
-                    "weather-desc"
-                ).innerText =
-                    "Weather unavailable";
-            }
-        }
-
-        // =====================================================
         // INITIAL LOAD
         // =====================================================
 
         getLiveValue();
-
-        getWeather();
 
         // =====================================================
         // AUTO REFRESH
@@ -561,11 +516,6 @@
         setInterval(
             getLiveValue,
             15000
-        );
-
-        setInterval(
-            getWeather,
-            600000
         );
 
     </script>

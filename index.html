@@ -204,7 +204,9 @@
 
             color: #7f8c8d;
 
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+
+            font-weight: 500;
         }
 
         /* =====================================================
@@ -394,14 +396,14 @@
                 <div id="weather-temp"
                      class="weather-temp">
 
-                    24°C
+                    --
 
                 </div>
 
                 <div id="weather-desc"
                      class="weather-desc">
 
-                    Sunny
+                    Weather unavailable
 
                 </div>
 
@@ -485,6 +487,27 @@
                     );
 
                 // =====================================================
+                // STOP SHOWING OLD DATA
+                // =====================================================
+
+                const now = new Date();
+
+                const diffMinutes =
+
+                    (now - rawTime) / 1000 / 60;
+
+                if (diffMinutes > 5) {
+
+                    document.getElementById(
+                        'timestamp'
+                    ).innerText =
+
+                        "⚠️ Sensor Offline / Outdated Data";
+
+                    return;
+                }
+
+                // =====================================================
                 // SENSOR VALUES
                 // =====================================================
 
@@ -522,7 +545,7 @@
                 document.getElementById(
                     'timestamp'
                 ).innerText =
-                    "Sensor connection error";
+                    "⚠️ Sensor connection error";
             }
         }
 

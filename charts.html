@@ -273,17 +273,6 @@
 
                                 maxTicksLimit: 8
                             }
-                        },
-
-                        y: {
-
-                            ticks: {
-
-                                font: {
-
-                                    size: 11
-                                }
-                            }
                         }
                     }
                 };
@@ -335,7 +324,30 @@
                             ]
                         },
 
-                        options: commonOptions
+                        options: {
+
+                            ...commonOptions,
+
+                            scales: {
+
+                                ...commonOptions.scales,
+
+                                y: {
+
+                                    min: 10,
+
+                                    max: 40,
+
+                                    ticks: {
+
+                                        font: {
+
+                                            size: 11
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 );
 
@@ -386,7 +398,30 @@
                             ]
                         },
 
-                        options: commonOptions
+                        options: {
+
+                            ...commonOptions,
+
+                            scales: {
+
+                                ...commonOptions.scales,
+
+                                y: {
+
+                                    min: 10,
+
+                                    max: 80,
+
+                                    ticks: {
+
+                                        font: {
+
+                                            size: 11
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 );
 
@@ -437,7 +472,30 @@
                             ]
                         },
 
-                        options: commonOptions
+                        options: {
+
+                            ...commonOptions,
+
+                            scales: {
+
+                                ...commonOptions.scales,
+
+                                y: {
+
+                                    min: 1010,
+
+                                    max: 1025,
+
+                                    ticks: {
+
+                                        font: {
+
+                                            size: 11
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 );
             }

@@ -463,11 +463,30 @@
                 const data =
                     await response.json();
 
+                // =====================================================
+                // FIX UTC TIMEZONE
+                // =====================================================
+
                 const rawTime =
-                    new Date(data.created_at);
+
+                    new Date(
+
+                        data.created_at
+                            .replace(
+                                " ",
+                                "T"
+                            ) + "Z"
+                    );
 
                 const formattedTime =
-                    rawTime.toLocaleTimeString();
+
+                    rawTime.toLocaleTimeString(
+                        "fi-FI"
+                    );
+
+                // =====================================================
+                // SENSOR VALUES
+                // =====================================================
 
                 document.getElementById(
                     'sensor-data'
@@ -483,6 +502,10 @@
                     'pressure-data'
                 ).innerText =
                     data.pressure + " hPa";
+
+                // =====================================================
+                // LAST UPDATE
+                // =====================================================
 
                 document.getElementById(
                     'timestamp'

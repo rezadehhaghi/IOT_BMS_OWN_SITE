@@ -2,15 +2,21 @@
 <html lang="en">
 
 <head>
-<link rel="manifest" href="manifest.json">
 
-<meta name="theme-color" content="#2c3e50">
     <meta charset="UTF-8">
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
     <title>Reziot Smart Weather Station</title>
+
+    <!-- PWA -->
+
+    <link rel="manifest"
+          href="manifest.json">
+
+    <meta name="theme-color"
+          content="#2c3e50">
 
     <style>
 
@@ -105,7 +111,7 @@
         }
 
         /* =====================================================
-           OUTDOOR WEATHER
+           WEATHER
         ===================================================== */
 
         .weather-temp {
@@ -302,7 +308,7 @@
 
         <div class="main-panels">
 
-            <!-- INDOOR ESP32 -->
+            <!-- INDOOR -->
 
             <div class="panel">
 
@@ -378,7 +384,7 @@
 
             </div>
 
-            <!-- OUTDOOR WEATHER -->
+            <!-- OUTDOOR -->
 
             <div class="panel">
 
@@ -405,7 +411,7 @@
                 <div id="weather-desc"
                      class="weather-desc">
 
-                    Weather unavailable
+                    Loading weather...
 
                 </div>
 
@@ -447,11 +453,14 @@
     <script>
 
         // =====================================================
-        // API URL
+        // API URLs
         // =====================================================
 
         const apiUrl =
             "https://bms-api.reziot.xyz/latest";
+
+        const weatherUrl =
+            "https://bms-api.reziot.xyz/weather";
 
         // =====================================================
         // ESP32 SENSOR DATA
@@ -468,7 +477,7 @@
                     await response.json();
 
                 // =====================================================
-                // FIX UTC TIMEZONE
+                // UTC → FINLAND TIME
                 // =====================================================
 
                 const rawTime =
@@ -489,7 +498,7 @@
                     );
 
                 // =====================================================
-                // STOP SHOWING OLD DATA
+                // STOP OLD DATA
                 // =====================================================
 
                 const now = new Date();
@@ -528,10 +537,6 @@
                 ).innerText =
                     data.pressure + " hPa";
 
-                // =====================================================
-                // LAST UPDATE
-                // =====================================================
-
                 document.getElementById(
                     'timestamp'
                 ).innerText =
@@ -552,10 +557,66 @@
         }
 
         // =====================================================
+        // WEATHER
+        // =====================================================
+
+        async function getWeather() {
+
+            try {
+
+                const response =
+                    await fetch(weatherUrl);
+
+                const data =
+                    await response.json();
+
+                document.getElementById(
+                    "weather-temp"
+                ).innerText =
+
+                    Math.round(
+                        data.main.temp
+                    ) + "°C";
+
+                document.getElementById(
+                    "weather-desc"
+                ).innerText =
+
+                    data.weather[0].description;
+
+                document.getElementById(
+                    "weather-icon"
+                ).src =
+
+                    "https://openweathermap.org/img/wn/" +
+                    data.weather[0].icon +
+                    "@2x.png";
+
+            }
+
+            catch(error) {
+
+                console.error(error);
+
+                document.getElementById(
+                    "weather-temp"
+                ).innerText =
+                    "--";
+
+                document.getElementById(
+                    "weather-desc"
+                ).innerText =
+                    "Weather unavailable";
+            }
+        }
+
+        // =====================================================
         // INITIAL LOAD
         // =====================================================
 
         getLiveValue();
+
+        getWeather();
 
         // =====================================================
         // AUTO REFRESH
@@ -566,24 +627,33 @@
             15000
         );
 
+        setInterval(
+            getWeather,
+            600000
+        );
+
+        // =====================================================
+        // SERVICE WORKER
+        // =====================================================
+
+        if (
+            "serviceWorker"
+            in navigator
+        ) {
+
+            navigator.serviceWorker
+                .register("./sw.js")
+
+                .then(() => {
+
+                    console.log(
+                        "Service Worker Registered"
+                    );
+                });
+        }
+
     </script>
 
-   <script>
-
-if ("serviceWorker" in navigator) {
-
-    navigator.serviceWorker
-        .register("./sw.js")
-
-        .then(() => {
-
-            console.log(
-                "Service Worker Registered"
-            );
-        });
-}
-
-</script> 
 </body>
 
 </html>

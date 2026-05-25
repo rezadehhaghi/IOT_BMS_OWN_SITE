@@ -12,3 +12,6 @@ sent from ESP32 to this address https://rezadehhaghi.github.io/IOT_BMS_OWN_SITE/
 Using https://reqbin.com/ to send data to Grafana Public shared Grafana: 
 
 https://rezadehhaghi.grafana.net/public-dashboards/dfaecb5d0c154b94add9ce7e59b20305
+
+worker address: https://bms-api.rezadehhaghi-fi.workers.dev/latest
+https://bms-api.rezadehhaghi-fi.workers.dev/history

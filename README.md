@@ -13,5 +13,10 @@ Using https://reqbin.com/ to send data to Grafana Public shared Grafana:
 
 https://rezadehhaghi.grafana.net/public-dashboards/dfaecb5d0c154b94add9ce7e59b20305
 
-worker address: https://bms-api.rezadehhaghi-fi.workers.dev/latest
+Worker address: 
+
+https://bms-api.rezadehhaghi-fi.workers.dev/latest
+
+Data History:
+
 https://bms-api.rezadehhaghi-fi.workers.dev/history

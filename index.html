@@ -388,40 +388,87 @@
 
             </div>
 
-            <!-- OUTDOOR -->
+  <!-- OUTDOOR -->
 
-            <div class="panel">
+<div class="panel">
 
-                <h2>
-                    ☀️ Outdoor
-                </h2>
+    <h2>☀️ Outdoor</h2>
 
-                <div class="location">
-                    Vantaa, Finland
-                </div>
+    <div id="location" class="location">
+        Loading...
+    </div>
 
-                <img id="weather-icon"
-                     class="weather-icon"
-                     src="https://openweathermap.org/img/wn/01d@2x.png"
-                     alt="Weather">
+    <img id="weather-icon"
+         class="weather-icon"
+         src=""
+         alt="Weather">
 
-                <div id="weather-temp"
-                     class="weather-temp">
+    <div id="weather-temp"
+         class="weather-temp">
+        --
+    </div>
 
-                    --
+    <div id="weather-desc"
+         class="weather-desc">
+        Loading...
+    </div>
 
-                </div>
+    <div class="sensor-grid">
 
-                <div id="weather-desc"
-                     class="weather-desc">
-
-                    Loading...
-
-                </div>
-
-            </div>
-
+        <div class="sensor-box">
+            <div class="sensor-title">Feels Like</div>
+            <div id="feels-like" class="sensor-value temp-color">--</div>
         </div>
+
+        <div class="sensor-box">
+            <div class="sensor-title">Humidity</div>
+            <div id="out-humidity" class="sensor-value hum-color">--</div>
+        </div>
+
+        <div class="sensor-box">
+            <div class="sensor-title">Pressure</div>
+            <div id="out-pressure" class="sensor-value press-color">--</div>
+        </div>
+
+        <div class="sensor-box">
+            <div class="sensor-title">Wind</div>
+            <div id="wind-speed" class="sensor-value">--</div>
+        </div>
+
+        <div class="sensor-box">
+            <div class="sensor-title">Wind Dir</div>
+            <div id="wind-dir" class="sensor-value">--</div>
+        </div>
+
+        <div class="sensor-box">
+            <div class="sensor-title">Clouds</div>
+            <div id="cloud-cover" class="sensor-value">--</div>
+        </div>
+
+        <div class="sensor-box">
+            <div class="sensor-title">Visibility</div>
+            <div id="visibility" class="sensor-value">--</div>
+        </div>
+
+        <div class="sensor-box">
+            <div class="sensor-title">Min Temp</div>
+            <div id="temp-min" class="sensor-value">--</div>
+        </div>
+
+        <div class="sensor-box">
+            <div class="sensor-title">Max Temp</div>
+            <div id="temp-max" class="sensor-value">--</div>
+        </div>
+
+    </div>
+
+    <div class="updated">
+        🌅 <span id="sunrise">--</span>
+        |
+        🌇 <span id="sunset">--</span>
+    </div>
+
+</div>
 
         <!-- BUTTONS -->
 
@@ -559,57 +606,121 @@
         // WEATHER
         // =====================================================
 
-        async function getWeather() {
+  async function getWeather() {
 
-            try {
+    try {
 
-                const response =
-                    await fetch(weatherUrl);
+        const response =
+            await fetch(weatherUrl);
 
-                const data =
-                    await response.json();
+        const data =
+            await response.json();
 
-                document.getElementById(
-                    "weather-temp"
-                ).innerText =
+        document.getElementById(
+            "location"
+        ).innerText =
+            `${data.name}, ${data.sys.country}`;
 
-                    Math.round(
-                        data.main.temp
-                    ) + "°C";
+        document.getElementById(
+            "weather-temp"
+        ).innerText =
+            Math.round(data.main.temp) + "°C";
 
-                document.getElementById(
-                    "weather-desc"
-                ).innerText =
+        document.getElementById(
+            "weather-desc"
+        ).innerText =
+            data.weather[0].description;
 
-                    data.weather[0]
-                        .description;
+        document.getElementById(
+            "weather-icon"
+        ).src =
+            `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
 
-                document.getElementById(
-                    "weather-icon"
-                ).src =
+        document.getElementById(
+            "feels-like"
+        ).innerText =
+            Math.round(data.main.feels_like) + "°C";
 
-                    "https://openweathermap.org/img/wn/" +
-                    data.weather[0].icon +
-                    "@2x.png";
+        document.getElementById(
+            "out-humidity"
+        ).innerText =
+            data.main.humidity + "%";
 
-            }
+        document.getElementById(
+            "out-pressure"
+        ).innerText =
+            data.main.pressure + " hPa";
 
-            catch(error) {
+        document.getElementById(
+            "wind-speed"
+        ).innerText =
+            data.wind.speed + " m/s";
 
-                console.error(error);
+        document.getElementById(
+            "wind-dir"
+        ).innerText =
+            data.wind.deg + "°";
 
-                document.getElementById(
-                    "weather-temp"
-                ).innerText =
-                    "--";
+        document.getElementById(
+            "cloud-cover"
+        ).innerText =
+            data.clouds.all + "%";
 
-                document.getElementById(
-                    "weather-desc"
-                ).innerText =
-                    "Unavailable";
-            }
-        }
+        document.getElementById(
+            "visibility"
+        ).innerText =
+            (data.visibility / 1000) + " km";
 
+        document.getElementById(
+            "temp-min"
+        ).innerText =
+            Math.round(data.main.temp_min) + "°C";
+
+        document.getElementById(
+            "temp-max"
+        ).innerText =
+            Math.round(data.main.temp_max) + "°C";
+
+        document.getElementById(
+            "sunrise"
+        ).innerText =
+            new Date(
+                data.sys.sunrise * 1000
+            ).toLocaleTimeString(
+                "fi-FI",
+                {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            );
+
+        document.getElementById(
+            "sunset"
+        ).innerText =
+            new Date(
+                data.sys.sunset * 1000
+            ).toLocaleTimeString(
+                "fi-FI",
+                {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                }
+            );
+
+    }
+    catch(error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "weather-temp"
+        ).innerText = "--";
+
+        document.getElementById(
+            "weather-desc"
+        ).innerText = "Unavailable";
+    }
+}
         // =====================================================
         // INITIAL LOAD
         // =====================================================

@@ -1,764 +1,640 @@
-<!DOCTYPE html>
-<html lang="en">
+<meta charset="UTF-8">
 
-<head>
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    <meta charset="UTF-8">
+<title>Reziot Dashboard</title>
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<!-- PWA -->
 
-    <title>Reziot Dashboard</title>
+<link rel="manifest"
+      href="manifest.json">
 
-    <!-- PWA -->
+<meta name="theme-color"
+      content="#2c3e50">
 
-    <link rel="manifest"
-          href="manifest.json">
+<style>
 
-    <meta name="theme-color"
-          content="#2c3e50">
+    * {
 
-    <style>
+        box-sizing: border-box;
+    }
 
-        * {
+    body {
 
-            box-sizing: border-box;
-        }
+        font-family:
+            'Segoe UI',
+            Tahoma,
+            Geneva,
+            Verdana,
+            sans-serif;
 
-        body {
+        background:
+            linear-gradient(
+                135deg,
+                #eef2f7,
+                #dbe7f1
+            );
 
-            font-family:
-                'Segoe UI',
-                Tahoma,
-                Geneva,
-                Verdana,
-                sans-serif;
+        margin: 0;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #eef2f7,
-                    #dbe7f1
-                );
+        padding: 15px;
 
-            margin: 0;
+        text-align: center;
 
-            padding: 15px;
+        min-height: 100vh;
+    }
 
-            text-align: center;
+    .container {
 
-            min-height: 100vh;
-        }
+        max-width: 1100px;
 
-        .container {
+        margin: auto;
+    }
 
-            max-width: 1100px;
+    /* =====================================================
+       HEADER
+    ===================================================== */
 
-            margin: auto;
-        }
+    .main-title {
 
-        /* =====================================================
-           HEADER
-        ===================================================== */
+        font-size: 2rem;
+
+        color: #2c3e50;
+
+        margin-bottom: 5px;
+    }
+
+    .subtitle {
+
+        color: #7f8c8d;
+
+        margin-bottom: 20px;
+
+        font-size: 0.95rem;
+    }
+
+    /* =====================================================
+       PANELS
+    ===================================================== */
+
+    .main-panels {
+
+        display: flex;
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+
+        gap: 18px;
+
+        margin-bottom: 20px;
+    }
+
+    .panel {
+
+        background: white;
+
+        border-radius: 22px;
+
+        padding: 20px;
+
+        box-shadow:
+            0 8px 24px rgba(0,0,0,0.08);
+
+        flex: 1;
+
+        min-width: 300px;
+
+        max-width: 480px;
+    }
+
+    /* =====================================================
+       WEATHER
+    ===================================================== */
+
+    .weather-icon {
+
+        width: 70px;
+
+        height: 70px;
+    }
+
+    .weather-temp {
+
+        font-size: 2.5rem;
+
+        font-weight: bold;
+
+        color: #f39c12;
+
+        margin: 5px 0;
+    }
+
+    .weather-desc {
+
+        color: #2c3e50;
+
+        font-size: 1rem;
+
+        text-transform: capitalize;
+    }
+
+    .location {
+
+        color: #7f8c8d;
+
+        font-size: 0.9rem;
+
+        margin-bottom: 8px;
+    }
+
+    /* =====================================================
+       SENSOR GRID
+    ===================================================== */
+
+    .sensor-grid {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap: 12px;
+
+        margin-top: 15px;
+    }
+
+    .sensor-box {
+
+        background: #f8fafc;
+
+        border-radius: 16px;
+
+        padding: 15px 10px;
+    }
+
+    .sensor-title {
+
+        color: #7f8c8d;
+
+        font-size: 0.8rem;
+
+        margin-bottom: 8px;
+    }
+
+    .sensor-value {
+
+        font-size: 1.3rem;
+
+        font-weight: bold;
+    }
+
+    .temp-color {
+
+        color: #2ecc71;
+    }
+
+    .hum-color {
+
+        color: #3498db;
+    }
+
+    .press-color {
+
+        color: #e67e22;
+    }
+
+    .updated {
+
+        margin-top: 15px;
+
+        color: #7f8c8d;
+
+        font-size: 0.85rem;
+    }
+
+    /* =====================================================
+       BUTTONS
+    ===================================================== */
+
+    .nav-buttons {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 12px;
+
+        margin-top: 10px;
+    }
+
+    .nav-btn {
+
+        text-decoration: none;
+
+        padding: 14px;
+
+        border-radius: 14px;
+
+        background: #2c3e50;
+
+        color: white;
+
+        font-weight: bold;
+
+        font-size: 0.95rem;
+
+        transition: 0.2s;
+    }
+
+    .nav-btn:hover {
+
+        transform: translateY(-2px);
+    }
+
+    .grafana-btn {
+
+        background: #e67e22;
+    }
+
+    .thingspeak-btn {
+
+        background: #c0392b;
+    }
+
+    .control-btn {
+
+        background: #16a085;
+    }
+
+    @media (max-width: 768px) {
 
         .main-title {
 
-            font-size: 2rem;
-
-            color: #2c3e50;
-
-            margin-bottom: 5px;
+            font-size: 1.7rem;
         }
-
-        .subtitle {
-
-            color: #7f8c8d;
-
-            margin-bottom: 20px;
-
-            font-size: 0.95rem;
-        }
-
-        /* =====================================================
-           PANELS
-        ===================================================== */
-
-        .main-panels {
-
-            display: flex;
-
-            flex-wrap: wrap;
-
-            justify-content: center;
-
-            gap: 18px;
-
-            margin-bottom: 20px;
-        }
-
-        .panel {
-
-            background: white;
-
-            border-radius: 22px;
-
-            padding: 20px;
-
-            box-shadow:
-                0 8px 24px rgba(0,0,0,0.08);
-
-            flex: 1;
-
-            min-width: 300px;
-
-            max-width: 480px;
-        }
-
-        /* =====================================================
-           WEATHER
-        ===================================================== */
-
-        .weather-icon {
-
-            width: 70px;
-
-            height: 70px;
-        }
-
-        .weather-temp {
-
-            font-size: 2.5rem;
-
-            font-weight: bold;
-
-            color: #f39c12;
-
-            margin: 5px 0;
-        }
-
-        .weather-desc {
-
-            color: #2c3e50;
-
-            font-size: 1rem;
-
-            text-transform: capitalize;
-        }
-
-        .location {
-
-            color: #7f8c8d;
-
-            font-size: 0.9rem;
-
-            margin-bottom: 8px;
-        }
-
-        /* =====================================================
-           SENSOR GRID
-        ===================================================== */
 
         .sensor-grid {
 
-            display: grid;
-
             grid-template-columns:
                 repeat(3, 1fr);
-
-            gap: 12px;
-
-            margin-top: 15px;
         }
-
-        .sensor-box {
-
-            background: #f8fafc;
-
-            border-radius: 16px;
-
-            padding: 15px 10px;
-        }
-
-        .sensor-title {
-
-            color: #7f8c8d;
-
-            font-size: 0.8rem;
-
-            margin-bottom: 8px;
-        }
-
-        .sensor-value {
-
-            font-size: 1.3rem;
-
-            font-weight: bold;
-        }
-
-        .temp-color {
-
-            color: #2ecc71;
-        }
-
-        .hum-color {
-
-            color: #3498db;
-        }
-
-        .press-color {
-
-            color: #e67e22;
-        }
-
-        .updated {
-
-            margin-top: 15px;
-
-            color: #7f8c8d;
-
-            font-size: 0.85rem;
-        }
-
-        /* =====================================================
-           BUTTONS
-        ===================================================== */
 
         .nav-buttons {
 
-            display: grid;
-
             grid-template-columns:
                 repeat(2, 1fr);
-
-            gap: 12px;
-
-            margin-top: 10px;
         }
+    }
 
-        .nav-btn {
+</style>
 
-            text-decoration: none;
+<div class="container">
 
-            padding: 14px;
+    <!-- HEADER -->
 
-            border-radius: 14px;
+    <h1 class="main-title">
+        🌦️ Reziot Dashboard
+    </h1>
 
-            background: #2c3e50;
+    <p class="subtitle">
+        Smart Weather Monitoring
+    </p>
 
-            color: white;
+    <!-- PANELS -->
 
-            font-weight: bold;
+    <div class="main-panels">
 
-            font-size: 0.95rem;
+        <!-- INDOOR -->
 
-            transition: 0.2s;
-        }
+        <div class="panel">
 
-        .nav-btn:hover {
+            <h2>
+                🏠 Indoor
+            </h2>
 
-            transform: translateY(-2px);
-        }
+            <div class="sensor-grid">
 
-        .grafana-btn {
+                <!-- TEMP -->
 
-            background: #e67e22;
-        }
+                <div class="sensor-box">
 
-        .thingspeak-btn {
-
-            background: #c0392b;
-        }
-
-        .control-btn {
-
-            background: #16a085;
-        }
-
-        @media (max-width: 768px) {
-
-            .main-title {
-
-                font-size: 1.7rem;
-            }
-
-            .sensor-grid {
-
-                grid-template-columns:
-                    repeat(3, 1fr);
-            }
-
-            .nav-buttons {
-
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
-        }
-
-    </style>
-
-</head>
-
-<body>
-
-    <div class="container">
-
-        <!-- HEADER -->
-
-        <h1 class="main-title">
-            🌦️ Reziot Dashboard
-        </h1>
-
-        <p class="subtitle">
-            Smart Weather Monitoring
-        </p>
-
-        <!-- PANELS -->
-
-        <div class="main-panels">
-
-            <!-- INDOOR -->
-
-            <div class="panel">
-
-                <h2>
-                    🏠 Indoor
-                </h2>
-
-                <div class="sensor-grid">
-
-                    <!-- TEMP -->
-
-                    <div class="sensor-box">
-
-                        <div class="sensor-title">
-                            Temp
-                        </div>
-
-                        <div id="sensor-data"
-                             class="sensor-value temp-color">
-
-                            --
-
-                        </div>
-
+                    <div class="sensor-title">
+                        Temp
                     </div>
 
-                    <!-- HUM -->
+                    <div id="sensor-data"
+                         class="sensor-value temp-color">
 
-                    <div class="sensor-box">
-
-                        <div class="sensor-title">
-                            Humidity
-                        </div>
-
-                        <div id="humidity-data"
-                             class="sensor-value hum-color">
-
-                            --
-
-                        </div>
-
-                    </div>
-
-                    <!-- PRESS -->
-
-                    <div class="sensor-box">
-
-                        <div class="sensor-title">
-                            Pressure
-                        </div>
-
-                        <div id="pressure-data"
-                             class="sensor-value press-color">
-
-                            --
-
-                        </div>
+                        --
 
                     </div>
 
                 </div>
 
-                <div id="timestamp"
-                     class="updated">
+                <!-- HUM -->
 
-                    Connecting...
+                <div class="sensor-box">
+
+                    <div class="sensor-title">
+                        Humidity
+                    </div>
+
+                    <div id="humidity-data"
+                         class="sensor-value hum-color">
+
+                        --
+
+                    </div>
+
+                </div>
+
+                <!-- PRESS -->
+
+                <div class="sensor-box">
+
+                    <div class="sensor-title">
+                        Pressure
+                    </div>
+
+                    <div id="pressure-data"
+                         class="sensor-value press-color">
+
+                        --
+
+                    </div>
 
                 </div>
 
             </div>
 
-  <!-- OUTDOOR -->
+            <div id="timestamp"
+                 class="updated">
 
-<div class="panel">
+                Connecting...
 
-    <h2>☀️ Outdoor</h2>
+            </div>
 
-    <div id="location" class="location">
-        Loading...
-    </div>
-
-    <img id="weather-icon"
-         class="weather-icon"
-         src=""
-         alt="Weather">
-
-    <div id="weather-temp"
-         class="weather-temp">
-        --
-    </div>
-
-    <div id="weather-desc"
-         class="weather-desc">
-        Loading...
-    </div>
-
-    <div class="sensor-grid">
-
-        <div class="sensor-box">
-            <div class="sensor-title">Feels Like</div>
-            <div id="feels-like" class="sensor-value temp-color">--</div>
         </div>
 
-        <div class="sensor-box">
-            <div class="sensor-title">Humidity</div>
-            <div id="out-humidity" class="sensor-value hum-color">--</div>
-        </div>
+        <!-- OUTDOOR -->
 
-        <div class="sensor-box">
-            <div class="sensor-title">Pressure</div>
-            <div id="out-pressure" class="sensor-value press-color">--</div>
-        </div>
+        <div class="panel">
 
-        <div class="sensor-box">
-            <div class="sensor-title">Wind</div>
-            <div id="wind-speed" class="sensor-value">--</div>
-        </div>
+            <h2>
+                ☀️ Outdoor
+            </h2>
 
-        <div class="sensor-box">
-            <div class="sensor-title">Wind Dir</div>
-            <div id="wind-dir" class="sensor-value">--</div>
-        </div>
+            <div class="location">
+                Vantaa, Finland
+            </div>
 
-        <div class="sensor-box">
-            <div class="sensor-title">Clouds</div>
-            <div id="cloud-cover" class="sensor-value">--</div>
-        </div>
+            <img id="weather-icon"
+                 class="weather-icon"
+                 src="https://openweathermap.org/img/wn/01d@2x.png"
+                 alt="Weather">
 
-        <div class="sensor-box">
-            <div class="sensor-title">Visibility</div>
-            <div id="visibility" class="sensor-value">--</div>
-        </div>
+            <div id="weather-temp"
+                 class="weather-temp">
 
-        <div class="sensor-box">
-            <div class="sensor-title">Min Temp</div>
-            <div id="temp-min" class="sensor-value">--</div>
-        </div>
+                --
 
-        <div class="sensor-box">
-            <div class="sensor-title">Max Temp</div>
-            <div id="temp-max" class="sensor-value">--</div>
+            </div>
+
+            <div id="weather-desc"
+                 class="weather-desc">
+
+                Loading...
+
+            </div>
+
         </div>
 
     </div>
 
-    <div class="updated">
-        🌅 <span id="sunrise">--</span>
-        |
-        🌇 <span id="sunset">--</span>
+    <!-- BUTTONS -->
+
+    <div class="nav-buttons">
+
+        <a href="./charts.html"
+           class="nav-btn">
+
+            📈 Charts
+
+        </a>
+
+        <a href="#"
+           class="nav-btn control-btn">
+
+            🎛️ Control
+
+        </a>
+
+        <a href="https://rezadehhaghi.grafana.net/public-dashboards/dfaecb5d0c154b94add9ce7e59b20305"
+           target="_blank"
+           class="nav-btn grafana-btn">
+
+            📊 Grafana
+
+        </a>
+
+        <a href="https://thingspeak.mathworks.com/channels/3386022"
+           target="_blank"
+           class="nav-btn thingspeak-btn">
+
+            📡 ThingSpeak
+
+        </a>
+
     </div>
 
 </div>
 
-        <!-- BUTTONS -->
+<script>
 
-        <div class="nav-buttons">
+    // =====================================================
+    // API URLs
+    // =====================================================
 
-            <a href="./charts.html"
-               class="nav-btn">
+    const apiUrl =
+        "https://bms-api.reziot.xyz/latest";
 
-                📈 Charts
+    const weatherUrl =
+        "https://bms-api.reziot.xyz/weather";
 
-            </a>
+    // =====================================================
+    // SENSOR DATA
+    // =====================================================
 
-            <a href="#"
-               class="nav-btn control-btn">
+    async function getLiveValue() {
 
-                🎛️ Control
+        try {
 
-            </a>
+            const response =
+                await fetch(apiUrl);
 
-            <a href="https://rezadehhaghi.grafana.net/public-dashboards/dfaecb5d0c154b94add9ce7e59b20305"
-               target="_blank"
-               class="nav-btn grafana-btn">
+            const data =
+                await response.json();
 
-                📊 Grafana
+            const rawTime =
 
-            </a>
+                new Date(
 
-            <a href="https://thingspeak.mathworks.com/channels/3386022"
-               target="_blank"
-               class="nav-btn thingspeak-btn">
+                    data.created_at
+                        .replace(
+                            " ",
+                            "T"
+                        ) + "Z"
+                );
 
-                📡 ThingSpeak
+            const formattedTime =
 
-            </a>
+                rawTime.toLocaleTimeString(
+                    "fi-FI"
+                );
 
-        </div>
+            const now = new Date();
 
-    </div>
+            const diffMinutes =
 
-    <script>
+                (now - rawTime)
+                / 1000 / 60;
 
-        // =====================================================
-        // API URLs
-        // =====================================================
-
-        const apiUrl =
-            "https://bms-api.reziot.xyz/latest";
-
-        const weatherUrl =
-            "https://bms-api.reziot.xyz/weather";
-
-        // =====================================================
-        // SENSOR DATA
-        // =====================================================
-
-        async function getLiveValue() {
-
-            try {
-
-                const response =
-                    await fetch(apiUrl);
-
-                const data =
-                    await response.json();
-
-                const rawTime =
-
-                    new Date(
-
-                        data.created_at
-                            .replace(
-                                " ",
-                                "T"
-                            ) + "Z"
-                    );
-
-                const formattedTime =
-
-                    rawTime.toLocaleTimeString(
-                        "fi-FI"
-                    );
-
-                const now = new Date();
-
-                const diffMinutes =
-
-                    (now - rawTime)
-                    / 1000 / 60;
-
-                if (diffMinutes > 5) {
-
-                    document.getElementById(
-                        'timestamp'
-                    ).innerText =
-
-                        "⚠️ Sensor Offline";
-
-                    return;
-                }
-
-                document.getElementById(
-                    'sensor-data'
-                ).innerText =
-                    data.temperature + "°C";
-
-                document.getElementById(
-                    'humidity-data'
-                ).innerText =
-                    data.humidity + "%";
-
-                document.getElementById(
-                    'pressure-data'
-                ).innerText =
-                    data.pressure + " hPa";
+            if (diffMinutes > 5) {
 
                 document.getElementById(
                     'timestamp'
                 ).innerText =
-                    "Updated: " +
-                    formattedTime;
+
+                    "⚠️ Sensor Offline";
+
+                return;
             }
 
-            catch(error) {
+            document.getElementById(
+                'sensor-data'
+            ).innerText =
+                data.temperature + "°C";
 
-                console.error(error);
+            document.getElementById(
+                'humidity-data'
+            ).innerText =
+                data.humidity + "%";
 
-                document.getElementById(
-                    'timestamp'
-                ).innerText =
-                    "Connection Error";
-            }
+            document.getElementById(
+                'pressure-data'
+            ).innerText =
+                data.pressure + " hPa";
+
+            document.getElementById(
+                'timestamp'
+            ).innerText =
+                "Updated: " +
+                formattedTime;
         }
 
-        // =====================================================
-        // WEATHER
-        // =====================================================
+        catch(error) {
 
-  async function getWeather() {
+            console.error(error);
 
-    try {
-
-        const response =
-            await fetch(weatherUrl);
-
-        const data =
-            await response.json();
-
-        document.getElementById(
-            "location"
-        ).innerText =
-            `${data.name}, ${data.sys.country}`;
-
-        document.getElementById(
-            "weather-temp"
-        ).innerText =
-            Math.round(data.main.temp) + "°C";
-
-        document.getElementById(
-            "weather-desc"
-        ).innerText =
-            data.weather[0].description;
-
-        document.getElementById(
-            "weather-icon"
-        ).src =
-            `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
-
-        document.getElementById(
-            "feels-like"
-        ).innerText =
-            Math.round(data.main.feels_like) + "°C";
-
-        document.getElementById(
-            "out-humidity"
-        ).innerText =
-            data.main.humidity + "%";
-
-        document.getElementById(
-            "out-pressure"
-        ).innerText =
-            data.main.pressure + " hPa";
-
-        document.getElementById(
-            "wind-speed"
-        ).innerText =
-            data.wind.speed + " m/s";
-
-        document.getElementById(
-            "wind-dir"
-        ).innerText =
-            data.wind.deg + "°";
-
-        document.getElementById(
-            "cloud-cover"
-        ).innerText =
-            data.clouds.all + "%";
-
-        document.getElementById(
-            "visibility"
-        ).innerText =
-            (data.visibility / 1000) + " km";
-
-        document.getElementById(
-            "temp-min"
-        ).innerText =
-            Math.round(data.main.temp_min) + "°C";
-
-        document.getElementById(
-            "temp-max"
-        ).innerText =
-            Math.round(data.main.temp_max) + "°C";
-
-        document.getElementById(
-            "sunrise"
-        ).innerText =
-            new Date(
-                data.sys.sunrise * 1000
-            ).toLocaleTimeString(
-                "fi-FI",
-                {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                }
-            );
-
-        document.getElementById(
-            "sunset"
-        ).innerText =
-            new Date(
-                data.sys.sunset * 1000
-            ).toLocaleTimeString(
-                "fi-FI",
-                {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                }
-            );
-
+            document.getElementById(
+                'timestamp'
+            ).innerText =
+                "Connection Error";
+        }
     }
-    catch(error) {
 
-        console.error(error);
+    // =====================================================
+    // WEATHER
+    // =====================================================
 
-        document.getElementById(
-            "weather-temp"
-        ).innerText = "--";
+    async function getWeather() {
 
-        document.getElementById(
-            "weather-desc"
-        ).innerText = "Unavailable";
-    }
-}
-        // =====================================================
-        // INITIAL LOAD
-        // =====================================================
+        try {
 
-        getLiveValue();
+            const response =
+                await fetch(weatherUrl);
 
-        getWeather();
+            const data =
+                await response.json();
 
-        // =====================================================
-        // AUTO REFRESH
-        // =====================================================
+            document.getElementById(
+                "weather-temp"
+            ).innerText =
 
-        setInterval(
-            getLiveValue,
-            15000
-        );
+                Math.round(
+                    data.main.temp
+                ) + "°C";
 
-        setInterval(
-            getWeather,
-            600000
-        );
+            document.getElementById(
+                "weather-desc"
+            ).innerText =
 
-        // =====================================================
-        // SERVICE WORKER
-        // =====================================================
+                data.weather[0]
+                    .description;
 
-        if (
-            "serviceWorker"
-            in navigator
-        ) {
+            document.getElementById(
+                "weather-icon"
+            ).src =
 
-            navigator
-                .serviceWorker
-                .register("./sw.js");
+                "https://openweathermap.org/img/wn/" +
+                data.weather[0].icon +
+                "@2x.png";
+
         }
 
-    </script>
+        catch(error) {
 
-</body>
+            console.error(error);
 
-</html>
+            document.getElementById(
+                "weather-temp"
+            ).innerText =
+                "--";
+
+            document.getElementById(
+                "weather-desc"
+            ).innerText =
+                "Unavailable";
+        }
+    }
+
+    // =====================================================
+    // INITIAL LOAD
+    // =====================================================
+
+    getLiveValue();
+
+    getWeather();
+
+    // =====================================================
+    // AUTO REFRESH
+    // =====================================================
+
+    setInterval(
+        getLiveValue,
+        15000
+    );
+
+    setInterval(
+        getWeather,
+        600000
+    );
+
+    // =====================================================
+    // SERVICE WORKER
+    // =====================================================
+
+    if (
+        "serviceWorker"
+        in navigator
+    ) {
+
+        navigator
+            .serviceWorker
+            .register("./sw.js");
+    }
+
+</script>

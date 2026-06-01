@@ -384,35 +384,99 @@
         <div class="panel">
 
             <h2>
-                ☀️ Outdoor
-            </h2>
+  <!-- OUTDOOR -->
 
-            <div class="location">
-                Vantaa, Finland
+<div class="panel">
+
+    <h2>☀️ Outdoor</h2>
+
+    <div id="location" class="location">
+        Loading...
+    </div>
+
+    <img id="weather-icon"
+         class="weather-icon"
+         src=""
+         alt="Weather">
+
+    <div id="weather-temp"
+         class="weather-temp">
+        --
+    </div>
+
+    <div id="weather-desc"
+         class="weather-desc">
+        Loading...
+    </div>
+
+    <button
+        onclick="toggleWeatherInfo()"
+        class="nav-btn"
+        style="margin-top:15px;padding:10px 18px;font-size:0.85rem;">
+        More Info
+    </button>
+
+    <div id="weather-details"
+         style="display:none;margin-top:15px;">
+
+        <div class="sensor-grid">
+
+            <div class="sensor-box">
+                <div class="sensor-title">Feels Like</div>
+                <div id="feels-like" class="sensor-value temp-color">--</div>
             </div>
 
-            <img id="weather-icon"
-                 class="weather-icon"
-                 src="https://openweathermap.org/img/wn/01d@2x.png"
-                 alt="Weather">
-
-            <div id="weather-temp"
-                 class="weather-temp">
-
-                --
-
+            <div class="sensor-box">
+                <div class="sensor-title">Humidity</div>
+                <div id="out-humidity" class="sensor-value hum-color">--</div>
             </div>
 
-            <div id="weather-desc"
-                 class="weather-desc">
+            <div class="sensor-box">
+                <div class="sensor-title">Pressure</div>
+                <div id="out-pressure" class="sensor-value press-color">--</div>
+            </div>
 
-                Loading...
+            <div class="sensor-box">
+                <div class="sensor-title">Wind</div>
+                <div id="wind-speed" class="sensor-value">--</div>
+            </div>
 
+            <div class="sensor-box">
+                <div class="sensor-title">Wind Dir</div>
+                <div id="wind-dir" class="sensor-value">--</div>
+            </div>
+
+            <div class="sensor-box">
+                <div class="sensor-title">Clouds</div>
+                <div id="cloud-cover" class="sensor-value">--</div>
+            </div>
+
+            <div class="sensor-box">
+                <div class="sensor-title">Visibility</div>
+                <div id="visibility" class="sensor-value">--</div>
+            </div>
+
+            <div class="sensor-box">
+                <div class="sensor-title">Min Temp</div>
+                <div id="temp-min" class="sensor-value">--</div>
+            </div>
+
+            <div class="sensor-box">
+                <div class="sensor-title">Max Temp</div>
+                <div id="temp-max" class="sensor-value">--</div>
             </div>
 
         </div>
 
+        <div class="updated">
+            🌅 <span id="sunrise">--</span>
+            |
+            🌇 <span id="sunset">--</span>
+        </div>
+
     </div>
+
+</div>
 
     <!-- BUTTONS -->
 
@@ -636,5 +700,26 @@
             .serviceWorker
             .register("./sw.js");
     }
+function toggleWeatherInfo() {
 
+    const details =
+        document.getElementById(
+            "weather-details"
+        );
+
+    if (
+        details.style.display ===
+        "none"
+    ) {
+
+        details.style.display =
+            "block";
+
+    }
+    else {
+
+        details.style.display =
+            "none";
+    }
+}
 </script>

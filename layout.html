@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Reziot Home Layout</title>
 
@@ -14,7 +18,11 @@
 
 body{
     font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-    background:linear-gradient(135deg,#eef2f7,#dbe7f1);
+    background:linear-gradient(
+        135deg,
+        #eef2f7,
+        #dbe7f1
+    );
     margin:0;
     padding:15px;
 }
@@ -25,9 +33,9 @@ body{
 }
 
 .main-title{
+    text-align:center;
     font-size:2rem;
     color:#2c3e50;
-    text-align:center;
     margin-bottom:5px;
 }
 
@@ -51,25 +59,27 @@ body{
 .layout-card{
     background:white;
     border-radius:22px;
-    padding:20px;
-    box-shadow:0 8px 24px rgba(0,0,0,0.08);
+    padding:5px;
+    box-shadow:
+        0 8px 24px rgba(0,0,0,0.08);
 }
 
 svg{
     width:100%;
     height:auto;
+    display:block;
 }
 
 .room{
-    stroke:#ffffff;
-    stroke-width:4;
-    fill:#d1d5db;
+    fill:#d5d9dd;
+    stroke:white;
+    stroke-width:8;
+    transition:0.3s;
     cursor:pointer;
-    transition:.3s;
 }
 
 .room:hover{
-    opacity:.85;
+    opacity:0.9;
 }
 
 .online{
@@ -77,33 +87,38 @@ svg{
 }
 
 .offline{
-    fill:#bdc3c7;
+    fill:#d5d9dd;
 }
 
 .label{
     fill:#2c3e50;
-    font-family:'Segoe UI',sans-serif;
     text-anchor:middle;
+    font-family:'Segoe UI',sans-serif;
 }
 
-.name{
-    font-size:18px;
-    font-weight:bold;
+.room-name{
+    font-size:42px;
+    font-weight:700;
 }
 
-.temp{
-    font-size:26px;
-    font-weight:bold;
+.room-value{
+    font-size:110px;
+    font-weight:700;
 }
 
-.hum{
-    font-size:16px;
+.room-sub{
+    font-size:46px;
+}
+
+.small-room{
+    font-size:34px;
+    font-weight:700;
 }
 
 .legend{
     display:flex;
     justify-content:center;
-    gap:20px;
+    gap:25px;
     margin-top:20px;
     flex-wrap:wrap;
 }
@@ -111,31 +126,36 @@ svg{
 .legend-item{
     display:flex;
     align-items:center;
-    gap:8px;
+    gap:10px;
 }
 
 .legend-color{
-    width:16px;
-    height:16px;
+    width:18px;
+    height:18px;
     border-radius:50%;
 }
 
 @media(max-width:768px){
 
-    .name{
-        font-size:14px;
+    .room-name{
+        font-size:48px;
     }
 
-    .temp{
-        font-size:18px;
+    .room-value{
+        font-size:130px;
     }
 
-    .hum{
-        font-size:13px;
+    .room-sub{
+        font-size:52px;
+    }
+
+    .small-room{
+        font-size:36px;
     }
 }
 
 </style>
+
 </head>
 
 <body>
@@ -150,129 +170,148 @@ svg{
         Apartment Environmental Monitoring
     </p>
 
-    <a href="./index.html" class="back-btn">
+    <a href="./index.html"
+       class="back-btn">
+
         ← Dashboard
+
     </a>
 
     <div class="layout-card">
 
-        <svg viewBox="0 0 1000 700"
+        <svg viewBox="0 0 1000 1400"
              xmlns="http://www.w3.org/2000/svg">
-
-            <!-- Entrance -->
-
-            <polygon id="entrance"
-                     class="room offline"
-                     points="
-                     120,80
-                     320,80
-                     320,200
-                     120,200"/>
-
-            <!-- Bathroom -->
-
-            <polygon id="bathroom"
-                     class="room offline"
-                     points="
-                     120,210
-                     320,210
-                     320,430
-                     120,430"/>
 
             <!-- Living Room -->
 
-            <polygon id="livingRoom"
-                     class="room online"
-                     points="
-                     340,80
-                     850,80
-                     850,390
-                     730,390
-                     730,430
-                     560,430
-                     560,390
-                     340,390"/>
+            <rect id="livingRoom"
+                  class="room online"
+                  x="30"
+                  y="30"
+                  width="940"
+                  height="520"/>
 
-            <!-- Kitchen -->
+            <!-- Entrance -->
 
-            <polygon id="kitchen"
-                     class="room offline"
-                     points="
-                     340,280
-                     550,280
-                     550,430
-                     340,430"/>
+            <rect id="entrance"
+                  class="room offline"
+                  x="30"
+                  y="580"
+                  width="300"
+                  height="190"/>
 
-            <!-- Bedroom -->
+            <!-- Bathroom -->
 
-            <polygon id="bedroom"
-                     class="room offline"
-                     points="
-                     380,450
-                     730,450
-                     730,620
-                     380,620"/>
+            <rect id="bathroom"
+                  class="room offline"
+                  x="350"
+                  y="580"
+                  width="300"
+                  height="190"/>
 
             <!-- Balcony -->
 
-            <polygon id="balcony"
-                     class="room offline"
-                     points="
-                     740,400
-                     860,400
-                     860,640
-                     740,640"/>
+            <rect id="balcony"
+                  class="room offline"
+                  x="670"
+                  y="580"
+                  width="300"
+                  height="190"/>
 
-            <!-- Labels -->
+            <!-- Kitchen -->
 
-            <text x="595"
-                  y="170"
-                  class="label name">
+            <rect id="kitchen"
+                  class="room offline"
+                  x="30"
+                  y="800"
+                  width="940"
+                  height="230"/>
+
+            <!-- Bedroom -->
+
+            <rect id="bedroom"
+                  class="room offline"
+                  x="30"
+                  y="1060"
+                  width="940"
+                  height="300"/>
+
+            <!-- Living Room -->
+
+            <text x="500"
+                  y="140"
+                  class="label room-name">
+
                 Living Room
+
             </text>
 
             <text id="livingTemp"
-                  x="595"
-                  y="235"
-                  class="label temp">
+                  x="500"
+                  y="315"
+                  class="label room-value">
+
                 --
+
             </text>
 
             <text id="livingHum"
-                  x="595"
-                  y="275"
-                  class="label hum">
+                  x="500"
+                  y="430"
+                  class="label room-sub">
+
                 --
+
             </text>
 
-            <text x="220"
-                  y="145"
-                  class="label name">
+            <!-- Entrance -->
+
+            <text x="180"
+                  y="690"
+                  class="label small-room">
+
                 Entrance
+
             </text>
 
-            <text x="220"
-                  y="330"
-                  class="label name">
+            <!-- Bathroom -->
+
+            <text x="500"
+                  y="690"
+                  class="label small-room">
+
                 Bathroom
+
             </text>
 
-            <text x="445"
-                  y="365"
-                  class="label name">
-                Kitchen
-            </text>
+            <!-- Balcony -->
 
-            <text x="570"
-                  y="545"
-                  class="label name">
-                Bedroom
-            </text>
+            <text x="820"
+                  y="690"
+                  class="label small-room">
 
-            <text x="770"
-                  y="525"
-                  class="label name">
                 Balcony
+
+            </text>
+
+            <!-- Kitchen -->
+
+            <text x="500"
+                  y="935"
+                  class="label room-name">
+
+                Kitchen
+
+            </text>
+
+            <!-- Bedroom -->
+
+            <text x="500"
+                  y="1235"
+                  class="label room-name">
+
+                Bedroom
+
             </text>
 
         </svg>
@@ -280,76 +319,19 @@ svg{
         <div class="legend">
 
             <div class="legend-item">
+
                 <div class="legend-color"
-                     style="background:#2ecc71"></div>
+                     style="background:#2ecc71;">
+                </div>
+
                 Sensor Online
+
             </div>
 
             <div class="legend-item">
+
                 <div class="legend-color"
-                     style="background:#bdc3c7"></div>
-                No Sensor Installed
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<script>
-
-const apiUrl =
-    "https://bms-api.reziot.xyz/latest";
-
-async function loadData(){
-
-    try{
-
-        const response =
-            await fetch(apiUrl);
-
-        const data =
-            await response.json();
-
-        document.getElementById(
-            "livingTemp"
-        ).textContent =
-            data.temperature + "°C";
-
-        document.getElementById(
-            "livingHum"
-        ).textContent =
-            data.humidity + "% RH";
-
-    }
-
-    catch(error){
-
-        console.error(
-            "Layout Error:",
-            error
-        );
-    }
-}
-
-loadData();
-
-setInterval(
-    loadData,
-    15000
-);
-
-document
-.getElementById("livingRoom")
-.addEventListener("click",()=>{
-
-    alert(
-        "Living Room\n\nCurrent sensor installed here."
-    );
-
-});
-
+                     style="background:#d5d9dd;">
 </script>
 
 </body>

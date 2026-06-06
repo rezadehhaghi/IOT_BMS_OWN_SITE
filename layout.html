@@ -248,12 +248,38 @@
 
                 <!-- LABELS -->
 
-                <text x="520"
-                      y="150"
-                      class="label"
-                      style="font-size:30px;font-weight:600;">
-                    Bathroom
-                </text>
+<!-- BATHROOM -->
+
+<text x="520"
+      y="150"
+      class="label"
+      style="font-size:30px;font-weight:600;">
+    Bathroom
+</text>
+
+<text id="bathroomTemp"
+      x="520"
+      y="200"
+      class="label"
+      style="font-size:28px;font-weight:700;">
+    --
+</text>
+
+<text id="bathroomHum"
+      x="520"
+      y="235"
+      class="label"
+      style="font-size:16px;">
+    --
+</text>
+
+<text id="bathroomFlag"
+      x="520"
+      y="265"
+      class="label"
+      style="font-size:12px;fill:#64748b;">
+    Simulated
+</text>
 
                 <text x="800"
                       y="150"
@@ -262,19 +288,71 @@
                     Entrance
                 </text>
 
-                <text x="560"
-                      y="350"
-                      class="label"
-                      style="font-size:30px;font-weight:600;">
-                    Kitchen
-                </text>
+<!-- KITCHEN -->
 
-                <text x="250"
-                      y="500"
-                      class="label"
-                      style="font-size:36px;font-weight:600;">
-                    Bedroom
-                </text>
+<text x="560"
+      y="350"
+      class="label"
+      style="font-size:30px;font-weight:600;">
+    Kitchen
+</text>
+
+<text id="kitchenTemp"
+      x="560"
+      y="410"
+      class="label"
+      style="font-size:32px;font-weight:700;">
+    --
+</text>
+
+<text id="kitchenHum"
+      x="560"
+      y="450"
+      class="label"
+      style="font-size:18px;">
+    --
+</text>
+
+<text id="kitchenFlag"
+      x="560"
+      y="485"
+      class="label"
+      style="font-size:14px;fill:#64748b;">
+    Simulated
+</text>
+				
+<!-- BEDROOM -->
+
+<text x="250"
+      y="500"
+      class="label"
+      style="font-size:36px;font-weight:600;">
+    Bedroom
+</text>
+
+<text id="bedroomTemp"
+      x="250"
+      y="570"
+      class="label"
+      style="font-size:34px;font-weight:700;">
+    --
+</text>
+
+<text id="bedroomHum"
+      x="250"
+      y="610"
+      class="label"
+      style="font-size:18px;">
+    --
+</text>
+
+<text id="bedroomFlag"
+      x="250"
+      y="645"
+      class="label"
+      style="font-size:14px;fill:#64748b;">
+    Simulated
+</text>
 
                 <text x="250"
                       y="880"
@@ -344,48 +422,124 @@
 
         const apiUrl =
             "https://bms-api.reziot.xyz/latest";
+		
+		const rooms = {
 
-        async function loadData() {
+    livingRoom: {
+        temp: null,
+        hum: null,
+        simulated: false
+    },
 
-            try {
+    kitchen: {
+        temp: 25.8,
+        hum: 42,
+        simulated: true
+    },
 
-                const response =
-                    await fetch(apiUrl);
+    bedroom: {
+        temp: 23.4,
+        hum: 47,
+        simulated: true
+    },
 
-                const data =
-                    await response.json();
+    bathroom: {
+        temp: 26.7,
+        hum: 61,
+        simulated: true
+    },
 
-                document.getElementById(
-                    "livingTemp"
-                ).textContent =
-                    Number(
-                        data.temperature
-                    ).toFixed(1) + "°C";
+    balcony: {
+        temp: 18.2,
+        hum: 72,
+        simulated: true
+    }
 
-                document.getElementById(
-                    "livingHum"
-                ).textContent =
-                    Number(
-                        data.humidity
-                    ).toFixed(1) + "% RH";
+};
+		function updateVirtualRooms() {
 
-            }
+    rooms.kitchen.temp = 25.8;
+    rooms.kitchen.hum = 42;
 
-            catch(error) {
+    rooms.bedroom.temp = 23.4;
+    rooms.bedroom.hum = 47;
 
-                console.error(error);
+    rooms.bathroom.temp = 26.7;
+    rooms.bathroom.hum = 61;
 
-                document.getElementById(
-                    "livingTemp"
-                ).textContent =
-                    "--°C";
+    rooms.balcony.temp = 18.2;
+    rooms.balcony.hum = 72;
 
-                document.getElementById(
-                    "livingHum"
-                ).textContent =
-                    "--% RH";
-            }
-        }
+}
+
+		function renderRooms() {
+
+    document.getElementById("kitchenTemp")
+        .textContent =
+        rooms.kitchen.temp.toFixed(1) + "°C";
+
+    document.getElementById("kitchenHum")
+        .textContent =
+        rooms.kitchen.hum + "% RH";
+
+    document.getElementById("bedroomTemp")
+        .textContent =
+        rooms.bedroom.temp.toFixed(1) + "°C";
+
+    document.getElementById("bedroomHum")
+        .textContent =
+        rooms.bedroom.hum + "% RH";
+
+    document.getElementById("bathroomTemp")
+        .textContent =
+        rooms.bathroom.temp.toFixed(1) + "°C";
+
+    document.getElementById("bathroomHum")
+        .textContent =
+        rooms.bathroom.hum + "% RH";
+
+    document.getElementById("balconyTemp")
+        .textContent =
+        rooms.balcony.temp.toFixed(1) + "°C";
+
+    document.getElementById("balconyHum")
+        .textContent =
+        rooms.balcony.hum + "% RH";
+
+}
+
+
+async function loadData() {
+
+    try {
+
+        const response =
+            await fetch(apiUrl);
+
+        const data =
+            await response.json();
+
+        rooms.livingRoom.temp =
+            Number(data.temperature);
+
+        rooms.livingRoom.hum =
+            Number(data.humidity);
+
+        document.getElementById(
+            "livingTemp"
+        ).textContent =
+            rooms.livingRoom.temp.toFixed(1) + "°C";
+
+        document.getElementById(
+            "livingHum"
+        ).textContent =
+            rooms.livingRoom.hum.toFixed(1) + "% RH";
+
+        updateVirtualRooms();
+
+        renderRooms();
+
+		
 
         loadData();
 

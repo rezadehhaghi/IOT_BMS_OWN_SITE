@@ -71,7 +71,7 @@
 
         color: #7f8c8d;
 
-        margin-bottom: 20px;
+        margin-bottom: 5px;
 
         font-size: 0.95rem;
     }
@@ -88,9 +88,9 @@
 
         justify-content: center;
 
-        gap: 18px;
+        gap: 5px;
 
-        margin-bottom: 20px;
+        margin-bottom: 5px;
     }
 
     .panel {
@@ -99,7 +99,7 @@
 
         border-radius: 22px;
 
-        padding: 20px;
+        padding: 10px;
 
         box-shadow:
             0 8px 24px rgba(0,0,0,0.08);
@@ -117,14 +117,14 @@
 
     .weather-icon {
 
-        width: 70px;
+        width: 50px;
 
-        height: 70px;
+        height: 50px;
     }
 
     .weather-temp {
 
-        font-size: 2.5rem;
+        font-size: 2rem;
 
         font-weight: bold;
 
@@ -148,19 +148,19 @@
 
         font-size: 0.9rem;
 
-        margin-bottom: 8px;
+        margin-bottom: 0px;
     }
 .panel {
-    padding: 15px;
+    padding: 5px;
 }
 
 .weather-icon {
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
 }
 
 .weather-temp {
-    font-size: 1.8rem;
+    font-size: 2rem;
     margin: 0;
 }
 
@@ -169,7 +169,7 @@
 }
 
 .location {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
 }
 
 .sensor-box {
@@ -185,11 +185,11 @@
 }
 
 #weather-details .sensor-grid {
-    gap: 8px;
+    gap: 5px;
 }
 
 #weather-details {
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 #weather-details .updated {
@@ -206,9 +206,9 @@
         grid-template-columns:
             repeat(3, 1fr);
 
-        gap: 12px;
+        gap: 5px;
 
-        margin-top: 15px;
+        margin-top: 5px;
     }
 
     .sensor-box {
@@ -217,7 +217,7 @@
 
         border-radius: 16px;
 
-        padding: 15px 10px;
+        padding: 10px 10px;
     }
 
     .sensor-title {
@@ -226,7 +226,7 @@
 
         font-size: 0.8rem;
 
-        margin-bottom: 8px;
+        margin-bottom: 5px;
     }
 
     .sensor-value {
@@ -257,7 +257,7 @@
 
         color: #7f8c8d;
 
-        font-size: 0.85rem;
+        font-size: 0.95rem;
     }
 
     /* =====================================================
@@ -341,6 +341,16 @@
         }
     }
 
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* Ensures it stretches the full width */
+    margin-bottom: 5px;
+}
+
+
+
 </style>
 
 <div class="container">
@@ -350,10 +360,6 @@
     <h1 class="main-title">
         🌦️ Reziot Dashboard
     </h1>
-
-    <p class="subtitle">
-        Smart Weather Monitoring
-    </p>
 
     <!-- PANELS -->
 
@@ -423,25 +429,20 @@
 
             </div>
 
-              
-<div style="margin-bottom:20px;">
+             
 
-    <a href="./layout.html"
-       class="nav-btn layout-btn">
-
-        🏠 Home Layout
-
-    </a>
-
+<div class="nav-container">
+    <a href="./layout.html" class="nav-btn layout-btn">🏠 Home Layout</a>
+    <div id="timestamp" class="updated">Connecting...</div>
 </div>
-            <div id="timestamp"
-                 class="updated">
 
-                Connecting...
 
-            </div>
+
+
 
         </div>
+
+
 
         <!-- OUTDOOR -->
 
@@ -452,7 +453,7 @@
 
 <div class="panel">
 
-    <h2> ⛰️ Outdoor</h2>
+    <h3> ⛰️ Outdoor</h3>
 
     <div id="location" class="location">
         Loading...

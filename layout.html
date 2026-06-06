@@ -251,7 +251,7 @@
 <!-- BATHROOM -->
 
 <text x="520"
-      y="150"
+      y="120"
       class="label"
       style="font-size:30px;font-weight:600;">
     Bathroom
@@ -259,23 +259,23 @@
 
 <text id="bathroomTemp"
       x="520"
-      y="200"
+      y="170"
       class="label"
-      style="font-size:28px;font-weight:700;">
+      style="font-size:48px;font-weight:700;">
     --
 </text>
 
 <text id="bathroomHum"
       x="520"
-      y="235"
+      y="220"
       class="label"
-      style="font-size:16px;">
+      style="font-size:42px;">
     --
 </text>
 
 <text id="bathroomFlag"
       x="520"
-      y="265"
+      y="240"
       class="label"
       style="font-size:12px;fill:#64748b;">
     Simulated
@@ -301,7 +301,7 @@
       x="560"
       y="410"
       class="label"
-      style="font-size:32px;font-weight:700;">
+      style="font-size:48px;font-weight:700;">
     --
 </text>
 
@@ -309,7 +309,7 @@
       x="560"
       y="450"
       class="label"
-      style="font-size:18px;">
+      style="font-size:42px;">
     --
 </text>
 
@@ -334,7 +334,7 @@
       x="250"
       y="570"
       class="label"
-      style="font-size:34px;font-weight:700;">
+      style="font-size:48px;font-weight:700;">
     --
 </text>
 
@@ -342,7 +342,7 @@
       x="250"
       y="610"
       class="label"
-      style="font-size:18px;">
+      style="font-size:42px;">
     --
 </text>
 
@@ -361,6 +361,37 @@
                     Balcony
                 </text>
 
+
+<text id="balconyTemp"
+      x="250"
+      y="940"
+      class="label"
+      style="font-size:48px;font-weight:700;">
+
+    --
+
+</text>
+
+<text id="balconyHum"
+      x="250"
+      y="980"
+      class="label"
+      style="font-size:42px;">
+
+    --
+
+</text>
+
+<text id="balconyFlag"
+      x="250"
+      y="1015"
+      class="label"
+      style="font-size:14px;fill:#64748b;">
+
+    Simulated
+
+</text>
+
                 <text x="670"
                       y="600"
                       class="label"
@@ -372,7 +403,7 @@
                       x="670"
                       y="680"
                       class="label"
-                      style="font-size:64px;font-weight:700;">
+                      style="font-size:48px;font-weight:700;">
                     --
                 </text>
 
@@ -507,6 +538,36 @@
         rooms.balcony.hum + "% RH";
 
 }
+function updateSimulationFlags() {
+
+    document.getElementById(
+        "kitchenFlag"
+    ).style.display =
+        rooms.kitchen.simulated
+            ? "block"
+            : "none";
+
+    document.getElementById(
+        "bedroomFlag"
+    ).style.display =
+        rooms.bedroom.simulated
+            ? "block"
+            : "none";
+
+    document.getElementById(
+        "bathroomFlag"
+    ).style.display =
+        rooms.bathroom.simulated
+            ? "block"
+            : "none";
+
+    document.getElementById(
+        "balconyFlag"
+    ).style.display =
+        rooms.balcony.simulated
+            ? "block"
+            : "none";
+}
 
 
 async function loadData() {
@@ -539,14 +600,35 @@ async function loadData() {
 
         renderRooms();
 
-		
+        updateSimulationFlags();
 
-        loadData();
+    }
 
-        setInterval(
-            loadData,
-            15000
-        );
+    catch(error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "livingTemp"
+        ).textContent =
+            "--°C";
+
+        document.getElementById(
+            "livingHum"
+        ).textContent =
+            "--% RH";
+    }
+}
+
+loadData();
+
+setInterval(
+    loadData,
+    15000
+);
+
+
+
 
     </script>
 

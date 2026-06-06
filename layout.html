@@ -1,20 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
 <title>Reziot Home Layout</title>
+
 <style>
-*{box-sizing:border-box;}
+
+*{
+    box-sizing:border-box;
+}
+
 body{
     font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-    background:linear-gradient(135deg,#eef2f7,#dbe7f1);
+    background:linear-gradient(
+        135deg,
+        #eef2f7,
+        #dbe7f1
+    );
     margin:0;
     padding:15px;
 }
-.container{max-width:1100px;margin:auto;}
-.main-title{text-align:center;font-size:2rem;color:#2c3e50;margin-bottom:5px;}
-.subtitle{text-align:center;color:#7f8c8d;margin-bottom:20px;}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+}
+
+.main-title{
+    text-align:center;
+    font-size:2rem;
+    color:#2c3e50;
+    margin-bottom:5px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#7f8c8d;
+    margin-bottom:20px;
+}
+
 .back-btn{
     display:inline-block;
     text-decoration:none;
@@ -25,90 +55,356 @@ body{
     font-weight:bold;
     margin-bottom:20px;
 }
+
 .layout-card{
     background:white;
     border-radius:22px;
     padding:10px;
-    box-shadow:0 8px 24px rgba(0,0,0,0.08);
+    box-shadow:
+        0 8px 24px rgba(0,0,0,0.08);
 }
-svg{width:100%;height:auto;display:block;}
+
+svg{
+    width:100%;
+    height:auto;
+    display:block;
+}
+
 .room{
-    fill:#d5d9dd;
-    stroke:white;
-    stroke-width:8;
+    fill:#f3f4f6;
+    stroke:#111827;
+    stroke-width:12;
     transition:.3s;
     cursor:pointer;
 }
-.online{fill:#2ecc71;}
+
+.room:hover{
+    opacity:.9;
+}
+
+.online{
+    fill:#d7f3d7;
+}
+
+.offline{
+    fill:#f3f4f6;
+}
+
 .label{
-    fill:#2c3e50;
+    fill:#1f2937;
     text-anchor:middle;
     font-family:'Segoe UI',sans-serif;
 }
+
+.legend{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    margin-top:20px;
+    flex-wrap:wrap;
+}
+
+.legend-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.legend-color{
+    width:18px;
+    height:18px;
+    border-radius:50%;
+}
+
+@media(max-width:768px){
+
+    .main-title{
+        font-size:1.8rem;
+    }
+
+}
+
 </style>
+
 </head>
+
 <body>
+
 <div class="container">
-<h1 class="main-title">🏠 Home Layout</h1>
-<p class="subtitle">Apartment Environmental Monitoring</p>
-<a href="./index.html" class="back-btn">← Dashboard</a>
 
-<div class="layout-card">
-<svg viewBox="0 0 1000 1400" xmlns="http://www.w3.org/2000/svg">
+    <h1 class="main-title">
+        🏠 Home Layout
+    </h1>
 
-<polygon id="livingRoom" class="room online"
-points="420,300 930,300 930,1160 420,1160 420,980 360,980 360,420 420,420"/>
+    <p class="subtitle">
+        Apartment Environmental Monitoring
+    </p>
 
-<polygon id="bedroom" class="room"
-points="70,420 360,420 360,980 420,980 420,1160 70,1160"/>
+    <a href="./index.html"
+       class="back-btn">
+        ← Dashboard
+    </a>
 
-<polygon id="bathroom" class="room"
-points="360,60 680,60 680,290 360,290"/>
+    <div class="layout-card">
 
-<polygon id="entrance" class="room"
-points="700,60 930,60 930,290 700,290"/>
+        <svg viewBox="0 0 1000 1400"
+             xmlns="http://www.w3.org/2000/svg">
 
-<polygon id="kitchen" class="room"
-points="420,300 700,300 700,520 420,520"/>
+            <!-- BATHROOM -->
 
-<polygon id="balcony" class="room"
-points="70,1180 390,1180 390,1380 70,1380"/>
+            <polygon id="bathroom"
+                     class="room offline"
+                     points="
+                     340,60
+                     660,60
+                     660,280
+                     340,280" />
 
-<text x="670" y="520" class="label" style="font-size:44px;font-weight:700;">Living Room</text>
-<text id="livingTemp" x="670" y="700" class="label" style="font-size:110px;font-weight:700;">--</text>
-<text id="livingHum" x="670" y="810" class="label" style="font-size:46px;">--</text>
+            <!-- ENTRANCE -->
 
-<text x="210" y="780" class="label" style="font-size:42px;font-weight:700;">Bedroom</text>
-<text x="520" y="190" class="label" style="font-size:32px;font-weight:700;">Bathroom</text>
-<text x="815" y="190" class="label" style="font-size:32px;font-weight:700;">Entrance</text>
-<text x="560" y="430" class="label" style="font-size:34px;font-weight:700;">Kitchen</text>
-<text x="230" y="1295" class="label" style="font-size:34px;font-weight:700;">Balcony</text>
+            <polygon id="entrance"
+                     class="room offline"
+                     points="
+                     680,60
+                     930,60
+                     930,280
+                     680,280" />
 
-</svg>
-</div>
+            <!-- KITCHEN -->
+
+            <polygon id="kitchen"
+                     class="room offline"
+                     points="
+                     80,260
+                     500,260
+                     500,950
+                     80,950" />
+
+            <!-- LIVING ROOM -->
+
+            <polygon id="livingRoom"
+                     class="room online"
+                     points="
+                     500,280
+                     930,280
+                     930,1050
+                     500,1050" />
+
+            <!-- BALCONY -->
+
+            <polygon id="balcony"
+                     class="room offline"
+                     points="
+                     80,950
+                     500,950
+                     500,1260
+                     80,1260" />
+
+            <!-- BEDROOM -->
+
+            <polygon id="bedroom"
+                     class="room offline"
+                     points="
+                     500,1050
+                     930,1050
+                     930,1260
+                     500,1260" />
+
+
+
+            <!-- LIVING ROOM -->
+
+            <text x="715"
+                  y="460"
+                  class="label"
+                  style="
+                      font-size:46px;
+                      font-weight:700;
+                  ">
+                Living Room
+            </text>
+
+            <text id="livingTemp"
+                  x="715"
+                  y="670"
+                  class="label"
+                  style="
+                      font-size:120px;
+                      font-weight:700;
+                  ">
+                --
+            </text>
+
+            <text id="livingHum"
+                  x="715"
+                  y="790"
+                  class="label"
+                  style="
+                      font-size:52px;
+                  ">
+                --
+            </text>
+
+
+
+            <!-- KITCHEN -->
+
+            <text x="290"
+                  y="620"
+                  class="label"
+                  style="
+                      font-size:52px;
+                      font-weight:700;
+                  ">
+                Kitchen
+            </text>
+
+
+
+            <!-- BEDROOM -->
+
+            <text x="715"
+                  y="1175"
+                  class="label"
+                  style="
+                      font-size:40px;
+                      font-weight:700;
+                  ">
+                Bedroom
+            </text>
+
+
+
+            <!-- BALCONY -->
+
+            <text x="290"
+                  y="1120"
+                  class="label"
+                  style="
+                      font-size:40px;
+                      font-weight:700;
+                  ">
+                Balcony
+            </text>
+
+
+
+            <!-- BATHROOM -->
+
+            <text x="500"
+                  y="190"
+                  class="label"
+                  style="
+                      font-size:34px;
+                      font-weight:700;
+                  ">
+                Bathroom
+            </text>
+
+
+
+            <!-- ENTRANCE -->
+
+            <text x="805"
+                  y="190"
+                  class="label"
+                  style="
+                      font-size:34px;
+                      font-weight:700;
+                  ">
+                Entrance
+            </text>
+
+        </svg>
+
+        <div class="legend">
+
+            <div class="legend-item">
+
+                <div class="legend-color"
+                     style="background:#d7f3d7;">
+                </div>
+
+                Sensor Online
+
+            </div>
+
+            <div class="legend-item">
+
+                <div class="legend-color"
+                     style="background:#f3f4f6;border:1px solid #ccc;">
+                </div>
+
+                No Sensor Installed
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 <script>
-const apiUrl = "https://bms-api.reziot.xyz/latest";
+
+const apiUrl =
+    "https://bms-api.reziot.xyz/latest";
 
 async function loadData(){
+
     try{
-        const response = await fetch(apiUrl);
-        const data = await response.json();
 
-        document.getElementById("livingTemp").textContent =
-            Number(data.temperature).toFixed(1) + "°C";
+        const response =
+            await fetch(apiUrl);
 
-        document.getElementById("livingHum").textContent =
-            Number(data.humidity).toFixed(1) + "% RH";
+        const data =
+            await response.json();
+
+        console.log(data);
+
+        document.getElementById(
+            "livingTemp"
+        ).textContent =
+            Number(
+                data.temperature
+            ).toFixed(1) + "°C";
+
+        document.getElementById(
+            "livingHum"
+        ).textContent =
+            Number(
+                data.humidity
+            ).toFixed(1) + "% RH";
+
     }
+
     catch(error){
-        console.error(error);
+
+        console.error(
+            "Layout Error:",
+            error
+        );
+
+        document.getElementById(
+            "livingTemp"
+        ).textContent =
+            "--°C";
+
+        document.getElementById(
+            "livingHum"
+        ).textContent =
+            "--% RH";
     }
 }
 
 loadData();
-setInterval(loadData,15000);
+
+setInterval(
+    loadData,
+    15000
+);
+
 </script>
+
 </body>
 </html>

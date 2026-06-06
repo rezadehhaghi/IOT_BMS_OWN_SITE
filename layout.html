@@ -1,50 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Reziot Home Layout</title>
-
 <style>
-
-*{
-    box-sizing:border-box;
-}
-
+*{box-sizing:border-box;}
 body{
     font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-    background:linear-gradient(
-        135deg,
-        #eef2f7,
-        #dbe7f1
-    );
+    background:linear-gradient(135deg,#eef2f7,#dbe7f1);
     margin:0;
     padding:15px;
 }
-
-.container{
-    max-width:1100px;
-    margin:auto;
-}
-
-.main-title{
-    text-align:center;
-    font-size:2rem;
-    color:#2c3e50;
-    margin-bottom:5px;
-}
-
-.subtitle{
-    text-align:center;
-    color:#7f8c8d;
-    margin-bottom:20px;
-}
-
+.container{max-width:1100px;margin:auto;}
+.main-title{text-align:center;font-size:2rem;color:#2c3e50;margin-bottom:5px;}
+.subtitle{text-align:center;color:#7f8c8d;margin-bottom:20px;}
 .back-btn{
     display:inline-block;
     text-decoration:none;
@@ -55,284 +25,90 @@ body{
     font-weight:bold;
     margin-bottom:20px;
 }
-
 .layout-card{
     background:white;
     border-radius:22px;
-    padding:5px;
-    box-shadow:
-        0 8px 24px rgba(0,0,0,0.08);
+    padding:10px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.08);
 }
-
-svg{
-    width:100%;
-    height:auto;
-    display:block;
-}
-
+svg{width:100%;height:auto;display:block;}
 .room{
     fill:#d5d9dd;
     stroke:white;
     stroke-width:8;
-    transition:0.3s;
+    transition:.3s;
     cursor:pointer;
 }
-
-.room:hover{
-    opacity:0.9;
-}
-
-.online{
-    fill:#2ecc71;
-}
-
-.offline{
-    fill:#d5d9dd;
-}
-
+.online{fill:#2ecc71;}
 .label{
     fill:#2c3e50;
     text-anchor:middle;
     font-family:'Segoe UI',sans-serif;
 }
-
-.room-name{
-    font-size:42px;
-    font-weight:700;
-}
-
-.room-value{
-    font-size:110px;
-    font-weight:700;
-}
-
-.room-sub{
-    font-size:46px;
-}
-
-.small-room{
-    font-size:34px;
-    font-weight:700;
-}
-
-.legend{
-    display:flex;
-    justify-content:center;
-    gap:25px;
-    margin-top:20px;
-    flex-wrap:wrap;
-}
-
-.legend-item{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.legend-color{
-    width:18px;
-    height:18px;
-    border-radius:50%;
-}
-
-@media(max-width:768px){
-
-    .room-name{
-        font-size:48px;
-    }
-
-    .room-value{
-        font-size:130px;
-    }
-
-    .room-sub{
-        font-size:52px;
-    }
-
-    .small-room{
-        font-size:36px;
-    }
-}
-
 </style>
-
 </head>
-
 <body>
-
 <div class="container">
+<h1 class="main-title">🏠 Home Layout</h1>
+<p class="subtitle">Apartment Environmental Monitoring</p>
+<a href="./index.html" class="back-btn">← Dashboard</a>
 
-    <h1 class="main-title">
-        🏠 Home Layout
-    </h1>
+<div class="layout-card">
+<svg viewBox="0 0 1000 1400" xmlns="http://www.w3.org/2000/svg">
 
-    <p class="subtitle">
-        Apartment Environmental Monitoring
-    </p>
+<polygon id="livingRoom" class="room online"
+points="420,300 930,300 930,1160 420,1160 420,980 360,980 360,420 420,420"/>
 
-    <a href="./index.html"
-       class="back-btn">
+<polygon id="bedroom" class="room"
+points="70,420 360,420 360,980 420,980 420,1160 70,1160"/>
 
-        ← Dashboard
+<polygon id="bathroom" class="room"
+points="360,60 680,60 680,290 360,290"/>
 
-    </a>
+<polygon id="entrance" class="room"
+points="700,60 930,60 930,290 700,290"/>
 
-    <div class="layout-card">
+<polygon id="kitchen" class="room"
+points="420,300 700,300 700,520 420,520"/>
 
-        <svg viewBox="0 0 1000 1400"
-             xmlns="http://www.w3.org/2000/svg">
+<polygon id="balcony" class="room"
+points="70,1180 390,1180 390,1380 70,1380"/>
 
-            <!-- Living Room -->
+<text x="670" y="520" class="label" style="font-size:44px;font-weight:700;">Living Room</text>
+<text id="livingTemp" x="670" y="700" class="label" style="font-size:110px;font-weight:700;">--</text>
+<text id="livingHum" x="670" y="810" class="label" style="font-size:46px;">--</text>
 
-            <rect id="livingRoom"
-                  class="room online"
-                  x="30"
-                  y="30"
-                  width="940"
-                  height="520"/>
+<text x="210" y="780" class="label" style="font-size:42px;font-weight:700;">Bedroom</text>
+<text x="520" y="190" class="label" style="font-size:32px;font-weight:700;">Bathroom</text>
+<text x="815" y="190" class="label" style="font-size:32px;font-weight:700;">Entrance</text>
+<text x="560" y="430" class="label" style="font-size:34px;font-weight:700;">Kitchen</text>
+<text x="230" y="1295" class="label" style="font-size:34px;font-weight:700;">Balcony</text>
 
-            <!-- Entrance -->
+</svg>
+</div>
+</div>
 
-            <rect id="entrance"
-                  class="room offline"
-                  x="30"
-                  y="580"
-                  width="300"
-                  height="190"/>
+<script>
+const apiUrl = "https://bms-api.reziot.xyz/latest";
 
-            <!-- Bathroom -->
+async function loadData(){
+    try{
+        const response = await fetch(apiUrl);
+        const data = await response.json();
 
-            <rect id="bathroom"
-                  class="room offline"
-                  x="350"
-                  y="580"
-                  width="300"
-                  height="190"/>
+        document.getElementById("livingTemp").textContent =
+            Number(data.temperature).toFixed(1) + "°C";
 
-            <!-- Balcony -->
+        document.getElementById("livingHum").textContent =
+            Number(data.humidity).toFixed(1) + "% RH";
+    }
+    catch(error){
+        console.error(error);
+    }
+}
 
-            <rect id="balcony"
-                  class="room offline"
-                  x="670"
-                  y="580"
-                  width="300"
-                  height="190"/>
-
-            <!-- Kitchen -->
-
-            <rect id="kitchen"
-                  class="room offline"
-                  x="30"
-                  y="800"
-                  width="940"
-                  height="230"/>
-
-            <!-- Bedroom -->
-
-            <rect id="bedroom"
-                  class="room offline"
-                  x="30"
-                  y="1060"
-                  width="940"
-                  height="300"/>
-
-            <!-- Living Room -->
-
-            <text x="500"
-                  y="140"
-                  class="label room-name">
-
-                Living Room
-
-            </text>
-
-            <text id="livingTemp"
-                  x="500"
-                  y="315"
-                  class="label room-value">
-
-                --
-
-            </text>
-
-            <text id="livingHum"
-                  x="500"
-                  y="430"
-                  class="label room-sub">
-
-                --
-
-            </text>
-
-            <!-- Entrance -->
-
-            <text x="180"
-                  y="690"
-                  class="label small-room">
-
-                Entrance
-
-            </text>
-
-            <!-- Bathroom -->
-
-            <text x="500"
-                  y="690"
-                  class="label small-room">
-
-                Bathroom
-
-            </text>
-
-            <!-- Balcony -->
-
-            <text x="820"
-                  y="690"
-                  class="label small-room">
-
-                Balcony
-
-            </text>
-
-            <!-- Kitchen -->
-
-            <text x="500"
-                  y="935"
-                  class="label room-name">
-
-                Kitchen
-
-            </text>
-
-            <!-- Bedroom -->
-
-            <text x="500"
-                  y="1235"
-                  class="label room-name">
-
-                Bedroom
-
-            </text>
-
-        </svg>
-
-        <div class="legend">
-
-            <div class="legend-item">
-
-                <div class="legend-color"
-                     style="background:#2ecc71;">
-                </div>
-
-                Sensor Online
-
-            </div>
-
-            <div class="legend-item">
-
-                <div class="legend-color"
-                     style="background:#d5d9dd;">
+loadData();
+setInterval(loadData,15000);
 </script>
-
 </body>
 </html>

@@ -193,25 +193,25 @@ body{
     color:#3498db;
 }
 
-.status-grid{
+.status-grid {
 
     display:grid;
 
     grid-template-columns:
-        repeat(auto-fit,minmax(180px,1fr));
+        repeat(2, 1fr);
 
-    gap:12px;
+    gap:15px;
 }
 
-.status-box{
+.status-box {
 
     background:#f8fafc;
 
-    padding:14px;
+    padding:20px;
 
-    border-radius:16px;
+    border-radius:18px;
 
-    font-weight:600;
+    text-align:center;
 }
 
 .online{
@@ -234,6 +234,19 @@ body{
     margin-top:15px;
 
     color:#7f8c8d;
+}
+
+
+      /* MOBILE */
+
+@media (max-width: 768px) {
+
+    .status-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
 }
 
 </style>
@@ -298,34 +311,72 @@ body{
         Building Monitoring System
     </p>
 
-    <div class="card">
+   <div class="card">
 
-        <div class="card-title">
-            🏠 Living Room
+    <div class="status-grid">
+
+        <!-- INDOOR -->
+
+        <div class="status-box">
+
+            <div class="card-title">
+                🏠 Indoor
+            </div>
+
+            <div id="temp"
+                 class="big-temp">
+
+                --°C
+
+            </div>
+
+            <div id="hum"
+                 class="big-hum">
+
+                --% RH
+
+            </div>
+
         </div>
 
-        <div id="temp"
-             class="big-temp">
+        <!-- OUTDOOR -->
 
-            --°C
+        <div class="status-box">
 
-        </div>
+            <div class="card-title">
+                ⛰️ Outdoor
+            </div>
 
-        <div id="hum"
-             class="big-hum">
+            <div id="outdoorTemp"
+                 class="big-temp"
+                 style="color:#f39c12;">
 
-            --% RH
+                --°C
 
-        </div>
+            </div>
 
-        <div id="updated"
-             class="updated">
+            <div id="outdoorDesc"
+                 class="big-hum"
+                 style="
+                    font-size:1.2rem;
+                    color:#2c3e50;">
 
-            Connecting...
+                Loading...
+
+            </div>
 
         </div>
 
     </div>
+
+    <div id="updated"
+         class="updated">
+
+        Connecting...
+
+    </div>
+
+</div>
 
     <div class="card">
 

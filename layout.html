@@ -452,7 +452,7 @@
     <script>
 
         const apiUrl =
-            "https://bms-api.reziot.xyz/latest";
+            "https://bms-api.reziot.xyz/latest-all";
 		
 		const rooms = {
 
@@ -599,11 +599,36 @@ async function loadData() {
         const data =
             await response.json();
 
-        rooms.livingRoom.temp =
-            Number(data.temperature);
+				if (data.living) {
+				
+				  rooms.livingRoom.temp =
+				    Number(
+				      data.living.temperature
+				    );
+				
+				  rooms.livingRoom.hum =
+				    Number(
+				      data.living.humidity
+				    );
+				
+				}
 
-        rooms.livingRoom.hum =
-            Number(data.humidity);
+				if (data.bedroom) {
+				
+				  rooms.bedroom.temp =
+				    Number(
+				      data.bedroom.temperature
+				    );
+				
+				  rooms.bedroom.hum =
+				    Number(
+				      data.bedroom.humidity
+				    );
+				
+				  rooms.bedroom.simulated =
+				    false;
+				
+				}
 
         document.getElementById(
             "livingTemp"

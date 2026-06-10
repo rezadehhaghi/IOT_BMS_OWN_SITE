@@ -1,0 +1,389 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Reziot BMS</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+
+    margin:0;
+
+    font-family:
+        Segoe UI,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef2f7,
+            #dbe7f1
+        );
+
+    padding:20px;
+}
+
+.container{
+
+    max-width:1100px;
+
+    margin:auto;
+}
+
+/* ======================
+   MENU
+====================== */
+
+.menu-container{
+
+    position:fixed;
+
+    top:15px;
+
+    right:15px;
+
+    z-index:1000;
+}
+
+.menu-btn{
+
+    width:50px;
+
+    height:50px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:white;
+
+    font-size:28px;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.15);
+}
+
+.menu-dropdown{
+
+    display:none;
+
+    position:absolute;
+
+    right:0;
+
+    top:55px;
+
+    width:240px;
+
+    background:white;
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.15);
+}
+
+.menu-dropdown.show{
+
+    display:block;
+}
+
+.menu-dropdown a{
+
+    display:block;
+
+    padding:14px 18px;
+
+    text-decoration:none;
+
+    color:#2c3e50;
+
+    font-weight:600;
+}
+
+.menu-dropdown a:hover{
+
+    background:#f4f6f8;
+}
+
+/* ======================
+   HEADER
+====================== */
+
+.main-title{
+
+    text-align:center;
+
+    color:#2c3e50;
+
+    font-size:2.4rem;
+
+    margin-top:10px;
+
+    margin-bottom:5px;
+}
+
+.subtitle{
+
+    text-align:center;
+
+    color:#7f8c8d;
+
+    margin-bottom:25px;
+}
+
+/* ======================
+   CARDS
+====================== */
+
+.card{
+
+    background:white;
+
+    border-radius:24px;
+
+    padding:25px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.08);
+
+    margin-bottom:20px;
+}
+
+.card-title{
+
+    font-size:1.2rem;
+
+    font-weight:700;
+
+    margin-bottom:20px;
+
+    color:#2c3e50;
+}
+
+.big-temp{
+
+    font-size:4rem;
+
+    font-weight:bold;
+
+    color:#27ae60;
+}
+
+.big-hum{
+
+    font-size:2rem;
+
+    color:#3498db;
+}
+
+.status-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(180px,1fr));
+
+    gap:12px;
+}
+
+.status-box{
+
+    background:#f8fafc;
+
+    padding:14px;
+
+    border-radius:16px;
+
+    font-weight:600;
+}
+
+.online{
+
+    color:#27ae60;
+}
+
+.offline{
+
+    color:#e74c3c;
+}
+
+.not-installed{
+
+    color:#95a5a6;
+}
+
+.updated{
+
+    margin-top:15px;
+
+    color:#7f8c8d;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="menu-container">
+
+    <button id="menuBtn"
+            class="menu-btn">
+
+        ⋮
+
+    </button>
+
+    <div id="menuDropdown"
+         class="menu-dropdown">
+
+        <a href="./layout.html">
+            🏡 Home Layout
+        </a>
+
+        <a href="./charts.html">
+            📈 Charts
+        </a>
+
+        <a href="#">
+            🎛️ Control
+        </a>
+
+        <a href="#">
+            ⚙️ Settings
+        </a>
+
+        <a href="#">
+            🤖 Telegram
+        </a>
+
+        <a href="https://rezadehhaghi.grafana.net/public-dashboards/dfaecb5d0c154b94add9ce7e59b20305"
+           target="_blank">
+            📊 Grafana
+        </a>
+
+        <a href="https://thingspeak.mathworks.com/channels/3386022"
+           target="_blank">
+            📡 ThingSpeak
+        </a>
+
+    </div>
+
+</div>
+
+<div class="container">
+
+    <h1 class="main-title">
+        Reziot BMS
+    </h1>
+
+    <p class="subtitle">
+        Building Monitoring System
+    </p>
+
+    <div class="card">
+
+        <div class="card-title">
+            🏠 Living Room
+        </div>
+
+        <div id="temp"
+             class="big-temp">
+
+            --°C
+
+        </div>
+
+        <div id="hum"
+             class="big-hum">
+
+            --% RH
+
+        </div>
+
+        <div id="updated"
+             class="updated">
+
+            Connecting...
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-title">
+            Sensor Status
+        </div>
+
+        <div class="status-grid">
+
+            <div class="status-box online">
+                🟢 Living Room
+            </div>
+
+            <div class="status-box not-installed">
+                ⚪ Bedroom
+            </div>
+
+            <div class="status-box not-installed">
+                ⚪ Bathroom
+            </div>
+
+            <div class="status-box not-installed">
+                ⚪ Balcony
+            </div>
+
+            <div class="status-box not-installed">
+                ⚪ Kitchen
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+document
+.getElementById("menuBtn")
+.addEventListener(
+    "click",
+    () => {
+
+        document
+        .getElementById(
+            "menuDropdown"
+        )
+        .classList
+        .toggle(
+            "show"
+        );
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
+```

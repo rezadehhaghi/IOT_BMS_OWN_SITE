@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -70,7 +70,7 @@ body{
     background:white;
 
     font-size:28px;
-
+    font-weight: bold;
     cursor:pointer;
 
     box-shadow:
@@ -367,7 +367,9 @@ document
 .getElementById("menuBtn")
 .addEventListener(
     "click",
-    () => {
+    function(e){
+
+        e.stopPropagation();
 
         document
         .getElementById(
@@ -375,6 +377,23 @@ document
         )
         .classList
         .toggle(
+            "show"
+        );
+
+    }
+);
+
+document
+.addEventListener(
+    "click",
+    function(){
+
+        document
+        .getElementById(
+            "menuDropdown"
+        )
+        .classList
+        .remove(
             "show"
         );
 

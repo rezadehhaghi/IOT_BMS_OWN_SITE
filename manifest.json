@@ -1,11 +1,10 @@
 {
-  "name": "Reziot Smart Weather Station",
+  "name": "Reziot BMS",
   "short_name": "Reziot",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#eef2f7",
   "theme_color": "#2c3e50",
-  "orientation": "portrait",
   "icons": [
     {
       "src": "icon-192.png",

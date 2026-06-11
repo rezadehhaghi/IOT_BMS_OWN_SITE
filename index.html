@@ -373,6 +373,13 @@ body{
                   
                   </div>
           </div>
+<div id="updated"
+     class="updated">
+
+    Connecting...
+
+</div>
+         
  </div>
           
 
@@ -449,7 +456,7 @@ document
     }
 );
 
-      const apiUrl =
+const apiUrl =
     "https://bms-api.reziot.xyz/latest-all";
 
 const weatherUrl =
@@ -465,30 +472,125 @@ async function loadData() {
         const data =
             await response.json();
 
-        if (data.living) {
+        if (!data.living) {
+            return;
+        }
+
+        const rawTime =
+            new Date(
+                data.living.created_at
+                    .replace(" ", "T") + "Z"
+            );
+
+        const now =
+            new Date();
+
+        const diffMinutes =
+            (now - rawTime) / 60000;
+
+        if (diffMinutes > 5) {
 
             document
             .getElementById("temp")
             .textContent =
-                Number(
-                    data.living.temperature
-                ).toFixed(1) + "°C";
+                "--°C";
 
             document
             .getElementById("hum")
             .textContent =
-                Number(
-                    data.living.humidity
-                ).toFixed(0) + "% RH";
+                "--% RH";
 
             document
             .getElementById("pressure")
             .textContent =
-                Number(
-                    data.living.pressure
-                ).toFixed(0) + " hPa";
+                "-- hPa";
 
+            document
+            .getElementById("updated")
+            .textContent =
+                "🔴 Sensor Offline";
+
+            return;
         }
+
+        document
+        .getElementById("temp")
+        .textContent =
+            Number(
+                data.living.temperature
+            ).toFixed(1) + "°C";
+
+        document
+        .getElementById("hum")
+        .textContent =
+            Number(
+                data.living.humidity
+            ).toFixed(0) + "% RH";
+
+        document
+        .getElementById("pressure")
+        .textContent =
+            Number(
+                data.living.pressure
+            ).toFixed(0) + " hPa";
+
+        document
+        .getElementById("updated")
+        .textContent =
+            "🟢 Updated: " +
+            rawTime.toLocaleTimeString(
+                "fi-FI"
+            );
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        document
+        .getElementById("updated")
+        .textContent =
+            "⚠️ Connection Error";
+
+    }
+
+}
+
+async function loadWeather() {
+
+    try {
+
+        const response =
+            await fetch(weatherUrl);
+
+        const data =
+            await response.json();
+
+        document
+        .getElementById(
+            "outdoorTemp"
+        )
+        .textContent =
+            Math.round(
+                data.main.temp
+            ) + "°C";
+
+        document
+        .getElementById(
+            "outdoorHum"
+        )
+        .textContent =
+            data.main.humidity +
+            "% RH";
+
+        document
+        .getElementById(
+            "outdoorPressure"
+        )
+        .textContent =
+            data.main.pressure +
+            " hPa";
 
     }
 
@@ -500,68 +602,21 @@ async function loadData() {
 
 }
 
-      async function loadWeather() {
-      
-          try {
-      
-              const response =
-                  await fetch(weatherUrl);
-      
-              const data =
-                  await response.json();
-      
-              document
-              .getElementById(
-                  "outdoorTemp"
-              )
-              .textContent =
-                  Math.round(
-                      data.main.temp
-                  ) + "°C";
-      
-              document
-              .getElementById(
-                  "outdoorHum"
-              )
-              .textContent =
-                  data.main.humidity +
-                  "% RH";
-      
-              document
-              .getElementById(
-                  "outdoorPressure"
-              )
-              .textContent =
-                  data.main.pressure +
-                  " hPa";
-      
-          }
-      
-          catch(error) {
-      
-              console.error(error);
-      
-          }
-      
-      }
-      
-      loadData();
-      loadWeather();
-      
-      setInterval(
-          loadData,
-          15000
-      );
-      
-      setInterval(
-          loadWeather,
-          600000
-      );
+loadData();
+loadWeather();
 
-      
+setInterval(
+    loadData,
+    15000
+);
+
+setInterval(
+    loadWeather,
+    600000
+);
+
 </script>
 
 </body>
 
 </html>
-```

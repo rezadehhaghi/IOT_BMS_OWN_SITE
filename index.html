@@ -637,7 +637,7 @@ async function loadWeather() {
             }
 
 
-                                          let deferredPrompt;
+                                    let deferredPrompt;
                                     
                                     window.addEventListener(
                                         "beforeinstallprompt",
@@ -665,13 +665,15 @@ async function loadWeather() {
                                         "click",
                                         async () => {
                                     
-                                            if (
-                                                deferredPrompt
-                                            ) {
-                                    
-                                                deferredPrompt.prompt();
-                                    
+                                            if (!deferredPrompt) {
+                                                return;
                                             }
+                                    
+                                            deferredPrompt.prompt();
+                                    
+                                            await deferredPrompt.userChoice;
+                                    
+                                            deferredPrompt = null;
                                     
                                         }
                                     );

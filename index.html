@@ -304,68 +304,72 @@ body{
 
     <div class="status-grid">
 
-        <!-- INDOOR -->
-
-        <div class="status-box">
-
-            <div class="card-title">
-                🏠 Indoor
-            </div>
-
-            <div id="temp"
-                 class="big-temp">
-
-                --°C
-
-            </div>
-
-            <div id="hum"
-                 class="big-hum">
-
-                --% RH
-
-            </div>
-
-        </div>
+                          <!-- INDOOR -->
+                  
+                         <div class="status-box">
+                  
+                      <div class="card-title">
+                          🏠 Indoor
+                      </div>
+                  
+                      <div id="temp"
+                           class="big-temp">
+                  
+                          --°C
+                  
+                      </div>
+                  
+                      <div id="hum"
+                           class="big-hum">
+                  
+                          --% RH
+                  
+                      </div>
+                  
+                      <div id="pressure"
+                           class="big-hum">
+                  
+                          -- hPa
+                  
+                      </div>
+                  
+                  </div>
 
         <!-- OUTDOOR -->
 
-        <div class="status-box">
 
-            <div class="card-title">
-                ⛰️ Outdoor
-            </div>
-
-            <div id="outdoorTemp"
-                 class="big-temp"
-                 style="color:#f39c12;">
-
-                --°C
-
-            </div>
-
-            <div id="outdoorDesc"
-                 class="big-hum"
-                 style="
-                    font-size:1.2rem;
-                    color:#2c3e50;">
-
-                Loading...
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div id="updated"
-         class="updated">
-
-        Connecting...
-
-    </div>
-
-</div>
+                  <div class="status-box">
+                  
+                      <div class="card-title">
+                          ⛰️ Outdoor
+                      </div>
+                  
+                      <div id="outdoorTemp"
+                           class="big-temp"
+                           style="color:#f39c12;">
+                  
+                          --°C
+                  
+                      </div>
+                  
+                      <div id="outdoorHum"
+                           class="big-hum">
+                  
+                          --% RH
+                  
+                      </div>
+                  
+                      <div id="outdoorPressure"
+                           class="big-hum">
+                  
+                          -- hPa
+                  
+                      </div>
+                  
+                  </div>
+          </div>
+ </div>
+          
 
     <div class="card">
 
@@ -440,6 +444,116 @@ document
     }
 );
 
+      const apiUrl =
+    "https://bms-api.reziot.xyz/latest-all";
+
+const weatherUrl =
+    "https://bms-api.reziot.xyz/weather";
+
+async function loadData() {
+
+    try {
+
+        const response =
+            await fetch(apiUrl);
+
+        const data =
+            await response.json();
+
+        if (data.living) {
+
+            document
+            .getElementById("temp")
+            .textContent =
+                Number(
+                    data.living.temperature
+                ).toFixed(1) + "°C";
+
+            document
+            .getElementById("hum")
+            .textContent =
+                Number(
+                    data.living.humidity
+                ).toFixed(0) + "% RH";
+
+            document
+            .getElementById("pressure")
+            .textContent =
+                Number(
+                    data.living.pressure
+                ).toFixed(0) + " hPa";
+
+        }
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+    }
+
+}
+
+      async function loadWeather() {
+      
+          try {
+      
+              const response =
+                  await fetch(weatherUrl);
+      
+              const data =
+                  await response.json();
+      
+              document
+              .getElementById(
+                  "outdoorTemp"
+              )
+              .textContent =
+                  Math.round(
+                      data.main.temp
+                  ) + "°C";
+      
+              document
+              .getElementById(
+                  "outdoorHum"
+              )
+              .textContent =
+                  data.main.humidity +
+                  "% RH";
+      
+              document
+              .getElementById(
+                  "outdoorPressure"
+              )
+              .textContent =
+                  data.main.pressure +
+                  " hPa";
+      
+          }
+      
+          catch(error) {
+      
+              console.error(error);
+      
+          }
+      
+      }
+      
+      loadData();
+      loadWeather();
+      
+      setInterval(
+          loadData,
+          15000
+      );
+      
+      setInterval(
+          loadWeather,
+          600000
+      );
+
+      
 </script>
 
 </body>

@@ -163,7 +163,7 @@ body {
 
         <div id="weatherIcon">
 
-            ☀️
+            ⛰️
 
         </div>
 
@@ -288,6 +288,55 @@ async function loadWeather() {
         const data =
             await response.json();
 
+                  const weatherMain =
+                      data.weather[0].main;
+                  
+                  let icon = "☀️";
+                  
+                  if (weatherMain === "Clouds") {
+                  
+                      icon = "☁️";
+                  
+                  }
+                  else if (weatherMain === "Rain") {
+                  
+                      icon = "🌧️";
+                  
+                  }
+                  else if (weatherMain === "Drizzle") {
+                  
+                      icon = "🌦️";
+                  
+                  }
+                  else if (weatherMain === "Thunderstorm") {
+                  
+                      icon = "⛈️";
+                  
+                  }
+                  else if (weatherMain === "Snow") {
+                  
+                      icon = "❄️";
+                  
+                  }
+                  else if (weatherMain === "Mist") {
+                  
+                      icon = "🌫️";
+                  
+                  }
+                  else if (weatherMain === "Fog") {
+                  
+                      icon = "🌫️";
+                  
+                  }
+                  
+                  document
+                  .getElementById(
+                      "weatherIcon"
+                  )
+                  .textContent =
+                      icon;
+
+          
         document
         .getElementById(
             "temp"

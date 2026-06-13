@@ -382,6 +382,13 @@ body{
                           -- hPa
                   
                       </div>
+
+<div id="updated"
+     class="updated">
+
+    Connecting...
+
+</div>
                   
                   </div>
 
@@ -415,15 +422,17 @@ body{
                           -- hPa
                   
                       </div>
+
+<div id="weatherStatus"
+     class="updated">
+
+    Detecting location...
+
+</div>
                   
                   </div>
           </div>
-<div id="updated"
-     class="updated">
 
-    Connecting...
-
-</div>
          
  </div>
           
@@ -695,15 +704,32 @@ async function loadData() {
 
 }
 
-async function loadWeather() {
-
+async function loadWeather(
+    lat,
+    lon
+) {
     try {
 
-        const response =
-            await fetch(weatherUrl);
+const response =
+    await fetch(
+
+`https://bms-api.reziot.xyz/weather?lat=${lat}&lon=${lon}`
+
+    );
 
         const data =
             await response.json();
+
+document
+.getElementById(
+    "weatherStatus"
+)
+.textContent =
+
+    "🟢 " +
+    data.name +
+    ", " +
+    data.sys.country;
 
         document
         .getElementById(
@@ -734,7 +760,17 @@ async function loadWeather() {
 
     catch(error) {
 
-        console.error(error);
+        console.error(
+    error
+);
+
+document
+.getElementById(
+    "weatherStatus"
+)
+.textContent =
+
+    "🔴 Weather Offline";
 
     }
 
@@ -825,7 +861,32 @@ async function loadWeather() {
 
       
 loadData();
-loadWeather();
+navigator.geolocation.getCurrentPosition(
+
+    position => {
+
+        loadWeather(
+
+            position.coords.latitude,
+
+            position.coords.longitude
+
+        );
+
+    },
+
+    () => {
+
+        loadWeather(
+
+            38.9067,
+            1.4206
+
+        );
+
+    }
+
+);
 
 setInterval(
     loadData,
@@ -833,9 +894,43 @@ setInterval(
 );
 
 setInterval(
-    loadWeather,
+
+    () => {
+
+        navigator.geolocation
+        .getCurrentPosition(
+
+            position => {
+
+                loadWeather(
+
+                    position.coords.latitude,
+
+                    position.coords.longitude
+
+                );
+
+            },
+
+            () => {
+
+                loadWeather(
+
+                    38.9067,
+                    1.4206
+
+                );
+
+            }
+
+        );
+
+    },
+
     600000
+
 );
+
 
 </script>
 

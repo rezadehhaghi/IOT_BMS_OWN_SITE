@@ -1,285 +1,159 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-<link rel="manifest"
-      href="manifest.json">
-
-<meta name="theme-color" content="#2c3e50">
-
-<meta name="mobile-web-app-capable" content="yes">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-
-<meta name="apple-mobile-web-app-status-bar-style"
-      content="default">
-
-<meta name="apple-mobile-web-app-title"
-      content="Reziot">
-      
 <meta charset="UTF-8">
 
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>Reziot BMS</title>
+<title>Reziot Weather</title>
 
 <style>
 
-*{
-    box-sizing:border-box;
-}
-
-body{
+body {
 
     margin:0;
+
+    background:#eef2f7;
 
     font-family:
         Segoe UI,
         sans-serif;
 
-    background:
-        linear-gradient(
-            135deg,
-            #eef2f7,
-            #dbe7f1
-        );
-
-    padding:10px;
 }
 
-.container{
+.container {
 
-    max-width:1100px;
+    max-width:500px;
 
     margin:auto;
+
+    padding:12px;
+
 }
 
-/* ======================
-   MENU
-====================== */
+.header {
 
-.menu-container{
+    display:flex;
 
-    position:fixed;
+    align-items:center;
 
-    top:15px;
-
-    right:15px;
-
-    z-index:1000;
-}
-
-.menu-btn{
-
-    width:50px;
-
-    height:50px;
-
-    border:none;
-
-    border-radius:14px;
-
-    background:white;
-
-    font-size:28px;
-    font-weight: bold;
-    cursor:pointer;
-
-    box-shadow:
-        0 4px 12px rgba(0,0,0,.15);
-}
-
-.menu-dropdown{
-
-    display:none;
-
-    position:absolute;
-
-    right:0;
-
-    top:55px;
-
-    width:240px;
-
-    background:white;
-
-    border-radius:16px;
-
-    overflow:hidden;
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,.15);
-}
-
-.menu-dropdown.show{
-
-    display:block;
-}
-
-.menu-dropdown a{
-
-    display:block;
-
-    padding:11px 10px;
-
-    text-decoration:none;
-
-    color:#2c3e50;
-
-    font-weight:600;
-}
-
-.menu-dropdown a:hover{
-
-    background:#f4f6f8;
-}
-
-/* ======================
-   HEADER
-====================== */
-
-.main-title{
-
-    text-align:center;
-
-    color:#2c3e50;
-
-    font-size:2.4rem;
-
-    margin-top:10px;
-
-    margin-bottom:5px;
-}
-
-.subtitle{
-
-    text-align:center;
-
-    color:#7f8c8d;
-
-    margin-bottom:25px;
-}
-
-/* ======================
-   CARDS
-====================== */
-
-.card{
-
-    background:white;
-
-    border-radius:24px;
-
-    padding:15px;
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,.08);
-
-    margin-bottom:20px;
-}
-
-.card-title{
+    gap:15px;
 
     font-size:1.2rem;
 
     font-weight:700;
 
-    margin-bottom:20px;
+    margin-bottom:10px;
 
-    color:#2c3e50;
 }
 
-.big-temp{
+.header a {
 
-    font-size:2.5rem;
+    text-decoration:none;
+
+    color:#2c3e50;
+
+}
+
+.main-card {
+
+    background:white;
+
+    border-radius:24px;
+
+    padding:20px;
+
+    text-align:center;
+
+    margin-bottom:10px;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.08);
+
+}
+
+#weatherIcon {
+
+    font-size:4rem;
+
+}
+
+#temp {
+
+    font-size:4rem;
 
     font-weight:bold;
 
-    color:#27ae60;
+    color:#f39c12;
+
 }
 
-.big-hum{
+#description {
 
-    font-size:1.7rem;
+    font-size:1.1rem;
 
-    color:#3498db;
+    color:#666;
+
 }
-.big-pres{
 
-    font-size:1.3rem;
+.location {
 
-    color:#191970;
+    margin-top:6px;
+
+    color:#777;
+
 }
-.status-grid {
+
+.info-grid {
 
     display:grid;
 
     grid-template-columns:
         1fr 1fr;
 
-    gap:10px;
+    gap:6px;
+
 }
 
-.status-box {
+.info-box {
 
-    background:#f8fafc;
+    background:white;
 
-    padding:10px;
+    border-radius:12px;
 
-    border-radius:18px;
+    padding:8px;
 
     text-align:center;
-}
-
-.online{
-
-    color:#27ae60;
-}
-
-.offline{
-
-    color:#e74c3c;
-}
-
-.not-installed{
-
-    color:#95a5a6;
-}
-
-.updated{
-
-    margin-top:15px;
-
-    color:#7f8c8d;
-}
-
-      .status-box {
-
-    background:#f8fafc;
-
-    padding:20px;
-
-    border-radius:18px;
-
-    text-align:center;
-
-    transition:
-        transform .2s,
-        box-shadow .2s;
-}
-
-.status-box:hover {
-
-    transform:
-        translateY(-3px);
 
     box-shadow:
-        0 6px 18px rgba(0,0,0,.12);
+        0 2px 6px rgba(0,0,0,.06);
+
 }
 
+.info-box span {
+
+    display:block;
+
+    color:#888;
+
+    font-size:.7rem;
+
+}
+
+.info-box strong {
+
+    display:block;
+
+    margin-top:2px;
+
+    font-size:.9rem;
+
+    color:#2c3e50;
+
+}
 
 </style>
 
@@ -287,181 +161,98 @@ body{
 
 <body>
 
-<div class="menu-container">
-
-    <button id="menuBtn"
-            class="menu-btn">
-
-        ⋮
-
-    </button>
-
-    <div id="menuDropdown"
-         class="menu-dropdown">
-
-        <a href="./layout.html">
-            🏡 Home Layout
-        </a>
-
-        <a href="./charts.html">
-            📈 Charts
-        </a>
-
-        <a href="#">
-            🎛️ Control
-        </a>
-
-        <a href="#">
-            ⚙️ Settings
-        </a>
-
-        <a href="#">
-            🤖 Telegram
-        </a>
-
-        <a href="https://rezadehhaghi.grafana.net/public-dashboards/dfaecb5d0c154b94add9ce7e59b20305"
-           target="_blank">
-            📊 Grafana
-        </a>
-
-        <a href="https://thingspeak.mathworks.com/channels/3386022"
-           target="_blank">
-            📡 ThingSpeak
-        </a>
-
-                      <a href="#"
-               id="installBtn">
-            
-               📱 Install App
-            
-            </a>
-          
-    </div>
-
-</div>
-
 <div class="container">
 
-    <h1 class="main-title">
-        Reziot BMS
-    </h1>
+    <div class="header">
 
-    <p class="subtitle">
-        Building Monitoring System
-    </p>
+        <a href="./index.html">
+            ←
+        </a>
 
-   <div class="card">
+        <span>
+            Weather
+        </span>
 
-    <div class="status-grid">
+    </div>
 
-                          <!-- INDOOR -->
-                  
-                         <div class="status-box" id="indoorCard" style="cursor:pointer;">
-                  
-                      <div class="card-title">
-                          🏠 Indoor
-                      </div>
-                  
-                      <div id="temp"
-                           class="big-temp">
-                  
-                          --°C
-                  
-                      </div>
-                  
-                      <div id="hum"
-                           class="big-hum">
-                  
-                          --% RH
-                  
-                      </div>
-                  
-                      <div id="pressure"
-                           class="big-pres">
-                  
-                          -- hPa
-                  
-                      </div>
+    <div class="main-card">
 
-<div id="updated"
-     class="updated">
-
-    Connecting...
-
-</div>
-                  
-                  </div>
-
-        <!-- OUTDOOR -->
-
-
-                  <div class="status-box" id="outdoorCard" style="cursor:pointer;">
-                  
-                      <div class="card-title">
-                          ⛰️ Outdoor
-                      </div>
-                  
-                      <div id="outdoorTemp"
-                           class="big-temp"
-                           style="color:#f39c12;">
-                  
-                          --°C
-                  
-                      </div>
-                  
-                      <div id="outdoorHum"
-                           class="big-hum">
-                  
-                          --% RH
-                  
-                      </div>
-                  
-                      <div id="outdoorPressure"
-                           class="big-pres">
-                  
-                          -- hPa
-                  
-                      </div>
-
-<div id="weatherStatus"
-     class="updated">
-
-    Detecting location...
-
-</div>
-                  
-                  </div>
-          </div>
-
-         
- </div>
-          
-
-    <div class="card">
-
-        <div class="card-title">
-            Sensor Status
+        <div id="weatherIcon">
+            ☀️
         </div>
 
-        <div class="status-grid">
+        <div id="temp">
+            --°C
+        </div>
 
-                  <div id="livingStatus"
-                       class="status-box online">
-                      🟢 Living Room
-                  </div><div id="bedroomStatus"
-                       class="status-box not-installed">
-                      ⚪ Bedroom
-                  </div><div id="bathroomStatus"
-                       class="status-box not-installed">
-                      ⚪ Bathroom
-                  </div><div id="balconyStatus"
-                       class="status-box not-installed">
-                      ⚪ Balcony
-                  </div><div id="kitchenStatus"
-                       class="status-box not-installed">
-                      ⚪ Kitchen
-                  </div>
+        <div id="description">
+            Loading...
+        </div>
 
+        <div class="location">
+
+            <span id="city">
+                --
+            </span>,
+
+            <span id="country">
+                --
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="info-grid">
+
+        <div class="info-box">
+            <span>Feels Like</span>
+            <strong id="feelsLike">--</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Humidity</span>
+            <strong id="humidity">--</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Pressure</span>
+            <strong id="pressure">--</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Visibility</span>
+            <strong id="visibility">--</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Wind</span>
+            <strong id="windSpeed">--</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Clouds</span>
+            <strong id="clouds">--</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Rain</span>
+            <strong id="rain1h">--</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Sunrise</span>
+            <strong id="sunrise">--</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Sunset</span>
+            <strong id="sunset">--</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Updated</span>
+            <strong id="updated">--</strong>
         </div>
 
     </div>
@@ -470,397 +261,6 @@ body{
 
 <script>
 
-document
-.getElementById("menuBtn")
-.addEventListener(
-    "click",
-    function(e){
-
-        e.stopPropagation();
-
-        document
-        .getElementById(
-            "menuDropdown"
-        )
-        .classList
-        .toggle(
-            "show"
-        );
-
-    }
-);
-
-document
-.addEventListener(
-    "click",
-    function(){
-
-        document
-        .getElementById(
-            "menuDropdown"
-        )
-        .classList
-        .remove(
-            "show"
-        );
-
-    }
-);
-
-const apiUrl =
-    "https://bms-api.reziot.xyz/latest-all";
-
-const weatherUrl =
-    "https://bms-api.reziot.xyz/weather";
-
-
-
-                       function updateSensorStatus(
-                              sensorId,
-                              elementId,
-                              label,
-                              data
-                              ) {
-                              
-                              const el =
-                                  document.getElementById(
-                                      elementId
-                                  );
-                              
-                              if (!data[sensorId]) {
-                              
-                                  el.className =
-                                      "status-box not-installed";
-                              
-                                  el.textContent =
-                                      "⚪ " + label;
-                              
-                                  return;
-                              }
-                              
-                              const sensorTime =
-                                  new Date(
-                                      data[sensorId]
-                                      .created_at
-                                      .replace(" ", "T") + "Z"
-                                  );
-                              
-                              const ageMinutes =
-                                  (
-                                      Date.now() -
-                                      sensorTime.getTime()
-                                  ) / 60000;
-                              
-                              if (ageMinutes > 5) {
-                              
-                                  el.className =
-                                      "status-box offline";
-                              
-                                  el.textContent =
-                                      "🔴 " +
-                                      label +
-                                      " Offline";
-                              
-                              } else {
-                              
-                                  el.className =
-                                      "status-box online";
-                              
-                                  el.textContent =
-                                      "🟢 " +
-                                      label;
-                              
-                              }
-                              
-                              }
-                                    
-async function loadData() {
-
-    try {
-
-        const response =
-            await fetch(apiUrl);
-
-        const data =
-            await response.json();
-
-                           updateSensorStatus(
-                              "living",
-                              "livingStatus",
-                              "Living Room",
-                              data
-                              );
-                              
-                              updateSensorStatus(
-                              "bedroom",
-                              "bedroomStatus",
-                              "Bedroom",
-                              data
-                              );
-                              
-                              updateSensorStatus(
-                              "bathroom",
-                              "bathroomStatus",
-                              "Bathroom",
-                              data
-                              );
-                              
-                              updateSensorStatus(
-                              "balcony",
-                              "balconyStatus",
-                              "Balcony",
-                              data
-                              );
-                              
-                              updateSensorStatus(
-                              "kitchen",
-                              "kitchenStatus",
-                              "Kitchen",
-                              data
-                              );
-
-        if (!data.living) {
-            return;
-        }
-
-        const rawTime =
-            new Date(
-                data.living.created_at
-                    .replace(" ", "T") + "Z"
-            );
-
-        const now =
-            new Date();
-
-        const diffMinutes =
-            (now - rawTime) / 60000;
-
-        if (diffMinutes > 5) {
-
-            document
-            .getElementById("temp")
-            .textContent =
-                "--°C";
-
-            document
-            .getElementById("hum")
-            .textContent =
-                "--% RH";
-
-            document
-            .getElementById("pressure")
-            .textContent =
-                "-- hPa";
-
-            document
-            .getElementById("updated")
-            .textContent =
-                "🔴 Sensor Offline";
-
-            return;
-        }
-
-        document
-        .getElementById("temp")
-        .textContent =
-            Number(
-                data.living.temperature
-            ).toFixed(1) + "°C";
-
-        document
-        .getElementById("hum")
-        .textContent =
-            Number(
-                data.living.humidity
-            ).toFixed(0) + "% RH";
-
-        document
-        .getElementById("pressure")
-        .textContent =
-            Number(
-                data.living.pressure
-            ).toFixed(0) + " hPa";
-
-        document
-        .getElementById("updated")
-        .textContent =
-            "🟢 Updated: " +
-            rawTime.toLocaleTimeString(
-                "fi-FI"
-            );
-
-    }
-
-    catch(error) {
-
-        console.error(error);
-
-        document
-        .getElementById("updated")
-        .textContent =
-            "⚠️ Connection Error";
-
-    }
-
-}
-
-async function loadWeather(
-    lat,
-    lon
-) {
-    try {
-
-const response =
-    await fetch(
-
-`https://bms-api.reziot.xyz/weather?lat=${lat}&lon=${lon}`
-
-    );
-
-        const data =
-            await response.json();
-
-document
-.getElementById(
-    "weatherStatus"
-)
-.textContent =
-
-    "🟢 " +
-    data.name +
-    ", " +
-    data.sys.country;
-
-        document
-        .getElementById(
-            "outdoorTemp"
-        )
-        .textContent =
-            Math.round(
-                data.main.temp
-            ) + "°C";
-
-        document
-        .getElementById(
-            "outdoorHum"
-        )
-        .textContent =
-            data.main.humidity +
-            "% RH";
-
-        document
-        .getElementById(
-            "outdoorPressure"
-        )
-        .textContent =
-            data.main.pressure +
-            " hPa";
-
-    }
-
-    catch(error) {
-
-        console.error(
-    error
-);
-
-document
-.getElementById(
-    "weatherStatus"
-)
-.textContent =
-
-    "🔴 Weather Offline";
-
-    }
-
-}
-
-                  if (
-                "serviceWorker"
-                in navigator
-            ) {
-            
-                navigator
-                    .serviceWorker
-                    .register(
-                        "./sw.js"
-                    );
-            }
-
-
-                                    let deferredPrompt;
-                                    
-                                    window.addEventListener(
-                                        "beforeinstallprompt",
-                                        (e) => {
-                                    
-                                            e.preventDefault();
-                                    
-                                            deferredPrompt = e;
-                                    
-                                            document
-                                            .getElementById(
-                                                "installBtn"
-                                            )
-                                            .style.display =
-                                                "block";
-                                    
-                                        }
-                                    );
-                                    
-                                    document
-                                    .getElementById(
-                                        "installBtn"
-                                    )
-                                    .addEventListener(
-                                        "click",
-                                        async () => {
-                                    
-                                            if (!deferredPrompt) {
-                                                return;
-                                            }
-                                    
-                                            deferredPrompt.prompt();
-                                    
-                                            await deferredPrompt.userChoice;
-                                    
-                                            deferredPrompt = null;
-                                    
-                                        }
-                                    );
-
-
-                                                      document
-                                                      .getElementById(
-                                                          "indoorCard"
-                                                      )
-                                                      .addEventListener(
-                                                          "click",
-                                                          () => {
-                                                      
-                                                              window.location.href =
-                                                                  "./layout.html";
-                                                      
-                                                          }
-                                                      );
-                                                      
-                                                      document
-                                                      .getElementById(
-                                                          "outdoorCard"
-                                                      )
-                                                      .addEventListener(
-                                                          "click",
-                                                          () => {
-                                                      
-                                                              window.location.href =
-                                                                  "./weather.html";
-                                                      
-                                                          }
-                                                      );
-
-      
-loadData();
 navigator.geolocation.getCurrentPosition(
 
     position => {
@@ -888,10 +288,191 @@ navigator.geolocation.getCurrentPosition(
 
 );
 
-setInterval(
-    loadData,
-    15000
-);
+async function loadWeather(
+    lat,
+    lon
+) {
+
+    try {
+
+        const response =
+            await fetch(
+
+`https://bms-api.reziot.xyz/weather?lat=${lat}&lon=${lon}`
+
+            );
+
+        const data =
+            await response.json();
+
+        const weatherMain =
+            data.weather[0].main;
+
+        let icon = "☀️";
+
+        if (weatherMain === "Clouds") {
+
+            icon = "☁️";
+
+        }
+        else if (weatherMain === "Rain") {
+
+            icon = "🌧️";
+
+        }
+        else if (weatherMain === "Drizzle") {
+
+            icon = "🌦️";
+
+        }
+        else if (weatherMain === "Thunderstorm") {
+
+            icon = "⛈️";
+
+        }
+        else if (weatherMain === "Snow") {
+
+            icon = "❄️";
+
+        }
+        else if (
+            weatherMain === "Mist" ||
+            weatherMain === "Fog"
+        ) {
+
+            icon = "🌫️";
+
+        }
+
+        document.getElementById(
+            "weatherIcon"
+        ).textContent =
+            icon;
+
+        document.getElementById(
+            "temp"
+        ).textContent =
+            Math.round(
+                data.main.temp
+            ) + "°C";
+
+        document.getElementById(
+            "description"
+        ).textContent =
+            data.weather[0]
+            .description;
+
+        document.getElementById(
+            "city"
+        ).textContent =
+            data.name;
+
+        document.getElementById(
+            "country"
+        ).textContent =
+            data.sys.country;
+
+        document.getElementById(
+            "feelsLike"
+        ).textContent =
+            Math.round(
+                data.main.feels_like
+            ) + "°C";
+
+        document.getElementById(
+            "humidity"
+        ).textContent =
+            data.main.humidity +
+            "%";
+
+        document.getElementById(
+            "pressure"
+        ).textContent =
+            data.main.pressure +
+            " hPa";
+
+        document.getElementById(
+            "visibility"
+        ).textContent =
+            (
+                data.visibility /
+                1000
+            ).toFixed(1) +
+            " km";
+
+        document.getElementById(
+            "windSpeed"
+        ).textContent =
+            data.wind.speed +
+            " m/s";
+
+        document.getElementById(
+            "clouds"
+        ).textContent =
+            data.clouds.all +
+            "%";
+
+        document.getElementById(
+            "rain1h"
+        ).textContent =
+            data.rain?.["1h"]
+            ? data.rain["1h"] +
+              " mm"
+            : "0 mm";
+
+        document.getElementById(
+            "sunrise"
+        ).textContent =
+            new Date(
+                data.sys.sunrise *
+                1000
+            ).toLocaleTimeString(
+                "fi-FI",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit"
+                }
+            );
+
+        document.getElementById(
+            "sunset"
+        ).textContent =
+            new Date(
+                data.sys.sunset *
+                1000
+            ).toLocaleTimeString(
+                "fi-FI",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit"
+                }
+            );
+
+        document.getElementById(
+            "updated"
+        ).textContent =
+            new Date(
+                data.dt *
+                1000
+            ).toLocaleTimeString(
+                "fi-FI",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit"
+                }
+            );
+
+    }
+
+    catch(error) {
+
+        console.error(
+            error
+        );
+
+    }
+
+}
 
 setInterval(
 
@@ -930,7 +511,6 @@ setInterval(
     600000
 
 );
-
 
 </script>
 

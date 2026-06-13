@@ -261,16 +261,45 @@ body {
 
 <script>
 
-const weatherUrl =
-    "https://bms-api.reziot.xyz/weather";
+navigator.geolocation.getCurrentPosition(
 
-async function loadWeather() {
+    position => {
+
+        loadWeather(
+
+            position.coords.latitude,
+
+            position.coords.longitude
+
+        );
+
+    },
+
+    () => {
+
+        loadWeather(
+
+            38.9067,
+            1.4206
+
+        );
+
+    }
+
+);
+
+async function loadWeather(
+    lat,
+    lon
+) {
 
     try {
 
         const response =
             await fetch(
-                weatherUrl
+
+`https://bms-api.reziot.xyz/weather?lat=${lat}&lon=${lon}`
+
             );
 
         const data =
@@ -423,7 +452,8 @@ async function loadWeather() {
             "updated"
         ).textContent =
             new Date(
-                data.dt * 1000
+                data.dt *
+                1000
             ).toLocaleTimeString(
                 "fi-FI",
                 {
@@ -444,11 +474,42 @@ async function loadWeather() {
 
 }
 
-loadWeather();
-
 setInterval(
-    loadWeather,
+
+    () => {
+
+        navigator.geolocation
+        .getCurrentPosition(
+
+            position => {
+
+                loadWeather(
+
+                    position.coords.latitude,
+
+                    position.coords.longitude
+
+                );
+
+            },
+
+            () => {
+
+                loadWeather(
+
+                    38.9067,
+                    1.4206
+
+                );
+
+            }
+
+        );
+
+    },
+
     600000
+
 );
 
 </script>

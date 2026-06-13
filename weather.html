@@ -21,15 +21,17 @@ body {
     font-family:
         Segoe UI,
         sans-serif;
+
 }
 
 .container {
 
-    padding:15px;
-
     max-width:500px;
 
     margin:auto;
+
+    padding:12px;
+
 }
 
 .header {
@@ -40,11 +42,12 @@ body {
 
     gap:15px;
 
-    font-size:1.3rem;
+    font-size:1.2rem;
 
     font-weight:700;
 
-    margin-bottom:15px;
+    margin-bottom:10px;
+
 }
 
 .header a {
@@ -52,6 +55,7 @@ body {
     text-decoration:none;
 
     color:#2c3e50;
+
 }
 
 .main-card {
@@ -64,15 +68,17 @@ body {
 
     text-align:center;
 
-    margin-bottom:15px;
+    margin-bottom:10px;
 
     box-shadow:
         0 4px 15px rgba(0,0,0,.08);
+
 }
 
 #weatherIcon {
 
     font-size:4rem;
+
 }
 
 #temp {
@@ -82,13 +88,23 @@ body {
     font-weight:bold;
 
     color:#f39c12;
+
 }
 
 #description {
 
-    font-size:1.2rem;
+    font-size:1.1rem;
 
     color:#666;
+
+}
+
+.location {
+
+    margin-top:6px;
+
+    color:#777;
+
 }
 
 .info-grid {
@@ -98,21 +114,23 @@ body {
     grid-template-columns:
         1fr 1fr;
 
-    gap:10px;
+    gap:6px;
+
 }
 
 .info-box {
 
     background:white;
 
-    border-radius:18px;
+    border-radius:12px;
 
-    padding:15px;
+    padding:8px;
 
     text-align:center;
 
     box-shadow:
-        0 4px 15px rgba(0,0,0,.08);
+        0 2px 6px rgba(0,0,0,.06);
+
 }
 
 .info-box span {
@@ -121,18 +139,20 @@ body {
 
     color:#888;
 
-    font-size:.9rem;
+    font-size:.7rem;
+
 }
 
 .info-box strong {
 
     display:block;
 
-    margin-top:5px;
+    margin-top:2px;
 
-    font-size:1.2rem;
+    font-size:.9rem;
 
     color:#2c3e50;
+
 }
 
 </style>
@@ -146,15 +166,11 @@ body {
     <div class="header">
 
         <a href="./index.html">
-
             ←
-
         </a>
 
         <span>
-
             Weather
-
         </span>
 
     </div>
@@ -162,20 +178,26 @@ body {
     <div class="main-card">
 
         <div id="weatherIcon">
-
-            ⛰️
-
+            ☀️
         </div>
 
         <div id="temp">
-
             --°C
-
         </div>
 
         <div id="description">
-
             Loading...
+        </div>
+
+        <div class="location">
+
+            <span id="city">
+                --
+            </span>,
+
+            <span id="country">
+                --
+            </span>
 
         </div>
 
@@ -184,87 +206,53 @@ body {
     <div class="info-grid">
 
         <div class="info-box">
-
-            <span>
-                Feels Like
-            </span>
-
-            <strong id="feelsLike">
-
-                --
-
-            </strong>
-
+            <span>Feels Like</span>
+            <strong id="feelsLike">--</strong>
         </div>
 
         <div class="info-box">
-
-            <span>
-                Humidity
-            </span>
-
-            <strong id="humidity">
-
-                --
-
-            </strong>
-
+            <span>Humidity</span>
+            <strong id="humidity">--</strong>
         </div>
 
         <div class="info-box">
-
-            <span>
-                Pressure
-            </span>
-
-            <strong id="pressure">
-
-                --
-
-            </strong>
-
+            <span>Pressure</span>
+            <strong id="pressure">--</strong>
         </div>
 
         <div class="info-box">
-
-            <span>
-                Wind
-            </span>
-
-            <strong id="wind">
-
-                --
-
-            </strong>
-
+            <span>Visibility</span>
+            <strong id="visibility">--</strong>
         </div>
 
         <div class="info-box">
-
-            <span>
-                Sunrise
-            </span>
-
-            <strong id="sunrise">
-
-                --
-
-            </strong>
-
+            <span>Wind</span>
+            <strong id="windSpeed">--</strong>
         </div>
 
         <div class="info-box">
+            <span>Clouds</span>
+            <strong id="clouds">--</strong>
+        </div>
 
-            <span>
-                Sunset
-            </span>
+        <div class="info-box">
+            <span>Rain</span>
+            <strong id="rain1h">--</strong>
+        </div>
 
-            <strong id="sunset">
+        <div class="info-box">
+            <span>Sunrise</span>
+            <strong id="sunrise">--</strong>
+        </div>
 
-                --
+        <div class="info-box">
+            <span>Sunset</span>
+            <strong id="sunset">--</strong>
+        </div>
 
-            </strong>
-
+        <div class="info-box">
+            <span>Updated</span>
+            <strong id="updated">--</strong>
         </div>
 
     </div>
@@ -288,114 +276,128 @@ async function loadWeather() {
         const data =
             await response.json();
 
-                  const weatherMain =
-                      data.weather[0].main;
-                  
-                  let icon = "☀️";
-                  
-                  if (weatherMain === "Clouds") {
-                  
-                      icon = "☁️";
-                  
-                  }
-                  else if (weatherMain === "Rain") {
-                  
-                      icon = "🌧️";
-                  
-                  }
-                  else if (weatherMain === "Drizzle") {
-                  
-                      icon = "🌦️";
-                  
-                  }
-                  else if (weatherMain === "Thunderstorm") {
-                  
-                      icon = "⛈️";
-                  
-                  }
-                  else if (weatherMain === "Snow") {
-                  
-                      icon = "❄️";
-                  
-                  }
-                  else if (weatherMain === "Mist") {
-                  
-                      icon = "🌫️";
-                  
-                  }
-                  else if (weatherMain === "Fog") {
-                  
-                      icon = "🌫️";
-                  
-                  }
-                  
-                  document
-                  .getElementById(
-                      "weatherIcon"
-                  )
-                  .textContent =
-                      icon;
+        const weatherMain =
+            data.weather[0].main;
 
-          
-        document
-        .getElementById(
+        let icon = "☀️";
+
+        if (weatherMain === "Clouds") {
+
+            icon = "☁️";
+
+        }
+        else if (weatherMain === "Rain") {
+
+            icon = "🌧️";
+
+        }
+        else if (weatherMain === "Drizzle") {
+
+            icon = "🌦️";
+
+        }
+        else if (weatherMain === "Thunderstorm") {
+
+            icon = "⛈️";
+
+        }
+        else if (weatherMain === "Snow") {
+
+            icon = "❄️";
+
+        }
+        else if (
+            weatherMain === "Mist" ||
+            weatherMain === "Fog"
+        ) {
+
+            icon = "🌫️";
+
+        }
+
+        document.getElementById(
+            "weatherIcon"
+        ).textContent =
+            icon;
+
+        document.getElementById(
             "temp"
-        )
-        .textContent =
+        ).textContent =
             Math.round(
                 data.main.temp
             ) + "°C";
 
-        document
-        .getElementById(
+        document.getElementById(
             "description"
-        )
-        .textContent =
+        ).textContent =
             data.weather[0]
-                .description;
+            .description;
 
-        document
-        .getElementById(
+        document.getElementById(
+            "city"
+        ).textContent =
+            data.name;
+
+        document.getElementById(
+            "country"
+        ).textContent =
+            data.sys.country;
+
+        document.getElementById(
             "feelsLike"
-        )
-        .textContent =
+        ).textContent =
             Math.round(
                 data.main.feels_like
             ) + "°C";
 
-        document
-        .getElementById(
+        document.getElementById(
             "humidity"
-        )
-        .textContent =
+        ).textContent =
             data.main.humidity +
             "%";
 
-        document
-        .getElementById(
+        document.getElementById(
             "pressure"
-        )
-        .textContent =
+        ).textContent =
             data.main.pressure +
             " hPa";
 
-        document
-        .getElementById(
-            "wind"
-        )
-        .textContent =
+        document.getElementById(
+            "visibility"
+        ).textContent =
+            (
+                data.visibility /
+                1000
+            ).toFixed(1) +
+            " km";
+
+        document.getElementById(
+            "windSpeed"
+        ).textContent =
             data.wind.speed +
             " m/s";
 
-        document
-        .getElementById(
+        document.getElementById(
+            "clouds"
+        ).textContent =
+            data.clouds.all +
+            "%";
+
+        document.getElementById(
+            "rain1h"
+        ).textContent =
+            data.rain?.["1h"]
+            ? data.rain["1h"] +
+              " mm"
+            : "0 mm";
+
+        document.getElementById(
             "sunrise"
-        )
-        .textContent =
+        ).textContent =
             new Date(
-                data.sys.sunrise * 1000
-            )
-            .toLocaleTimeString(
+                data.sys.sunrise *
+                1000
+            ).toLocaleTimeString(
                 "fi-FI",
                 {
                     hour:"2-digit",
@@ -403,15 +405,26 @@ async function loadWeather() {
                 }
             );
 
-        document
-        .getElementById(
+        document.getElementById(
             "sunset"
-        )
-        .textContent =
+        ).textContent =
             new Date(
-                data.sys.sunset * 1000
-            )
-            .toLocaleTimeString(
+                data.sys.sunset *
+                1000
+            ).toLocaleTimeString(
+                "fi-FI",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit"
+                }
+            );
+
+        document.getElementById(
+            "updated"
+        ).textContent =
+            new Date(
+                data.dt * 1000
+            ).toLocaleTimeString(
                 "fi-FI",
                 {
                     hour:"2-digit",

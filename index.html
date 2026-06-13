@@ -256,6 +256,29 @@ body{
     color:#7f8c8d;
 }
 
+      .status-box {
+
+    background:#f8fafc;
+
+    padding:20px;
+
+    border-radius:18px;
+
+    text-align:center;
+
+    transition:
+        transform .2s,
+        box-shadow .2s;
+}
+
+.status-box:hover {
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,.12);
+}
 
 
 </style>
@@ -333,7 +356,7 @@ body{
 
                           <!-- INDOOR -->
                   
-                         <div class="status-box">
+                         <div class="status-box" id="indoorCard" style="cursor:pointer;">
                   
                       <div class="card-title">
                           🏠 Indoor
@@ -365,7 +388,7 @@ body{
         <!-- OUTDOOR -->
 
 
-                  <div class="status-box">
+                  <div class="status-box" id="outdoorCard" style="cursor:pointer;">
                   
                       <div class="card-title">
                           ⛰️ Outdoor
@@ -413,25 +436,22 @@ body{
 
         <div class="status-grid">
 
-            <div class="status-box online">
-                🟢 Living Room
-            </div>
-
-            <div class="status-box not-installed">
-                ⚪ Bedroom
-            </div>
-
-            <div class="status-box not-installed">
-                ⚪ Bathroom
-            </div>
-
-            <div class="status-box not-installed">
-                ⚪ Balcony
-            </div>
-
-            <div class="status-box not-installed">
-                ⚪ Kitchen
-            </div>
+                  <div id="livingStatus"
+                       class="status-box online">
+                      🟢 Living Room
+                  </div><div id="bedroomStatus"
+                       class="status-box not-installed">
+                      ⚪ Bedroom
+                  </div><div id="bathroomStatus"
+                       class="status-box not-installed">
+                      ⚪ Bathroom
+                  </div><div id="balconyStatus"
+                       class="status-box not-installed">
+                      ⚪ Balcony
+                  </div><div id="kitchenStatus"
+                       class="status-box not-installed">
+                      ⚪ Kitchen
+                  </div>
 
         </div>
 
@@ -484,6 +504,67 @@ const apiUrl =
 const weatherUrl =
     "https://bms-api.reziot.xyz/weather";
 
+
+
+                       function updateSensorStatus(
+                              sensorId,
+                              elementId,
+                              label,
+                              data
+                              ) {
+                              
+                              const el =
+                                  document.getElementById(
+                                      elementId
+                                  );
+                              
+                              if (!data[sensorId]) {
+                              
+                                  el.className =
+                                      "status-box not-installed";
+                              
+                                  el.textContent =
+                                      "⚪ " + label;
+                              
+                                  return;
+                              }
+                              
+                              const sensorTime =
+                                  new Date(
+                                      data[sensorId]
+                                      .created_at
+                                      .replace(" ", "T") + "Z"
+                                  );
+                              
+                              const ageMinutes =
+                                  (
+                                      Date.now() -
+                                      sensorTime.getTime()
+                                  ) / 60000;
+                              
+                              if (ageMinutes > 5) {
+                              
+                                  el.className =
+                                      "status-box offline";
+                              
+                                  el.textContent =
+                                      "🔴 " +
+                                      label +
+                                      " Offline";
+                              
+                              } else {
+                              
+                                  el.className =
+                                      "status-box online";
+                              
+                                  el.textContent =
+                                      "🟢 " +
+                                      label;
+                              
+                              }
+                              
+                              }
+                                    
 async function loadData() {
 
     try {
@@ -493,6 +574,41 @@ async function loadData() {
 
         const data =
             await response.json();
+
+                           updateSensorStatus(
+                              "living",
+                              "livingStatus",
+                              "Living Room",
+                              data
+                              );
+                              
+                              updateSensorStatus(
+                              "bedroom",
+                              "bedroomStatus",
+                              "Bedroom",
+                              data
+                              );
+                              
+                              updateSensorStatus(
+                              "bathroom",
+                              "bathroomStatus",
+                              "Bathroom",
+                              data
+                              );
+                              
+                              updateSensorStatus(
+                              "balcony",
+                              "balconyStatus",
+                              "Balcony",
+                              data
+                              );
+                              
+                              updateSensorStatus(
+                              "kitchen",
+                              "kitchenStatus",
+                              "Kitchen",
+                              data
+                              );
 
         if (!data.living) {
             return;
@@ -678,6 +794,36 @@ async function loadWeather() {
                                         }
                                     );
 
+
+                                                      document
+                                                      .getElementById(
+                                                          "indoorCard"
+                                                      )
+                                                      .addEventListener(
+                                                          "click",
+                                                          () => {
+                                                      
+                                                              window.location.href =
+                                                                  "./layout.html";
+                                                      
+                                                          }
+                                                      );
+                                                      
+                                                      document
+                                                      .getElementById(
+                                                          "outdoorCard"
+                                                      )
+                                                      .addEventListener(
+                                                          "click",
+                                                          () => {
+                                                      
+                                                              window.location.href =
+                                                                  "./weather.html";
+                                                      
+                                                          }
+                                                      );
+
+      
 loadData();
 loadWeather();
 

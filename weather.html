@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Reziot Weather</title>
+
+<style>
+
+body {
+
+    margin:0;
+
+    background:#eef2f7;
+
+    font-family:
+        Segoe UI,
+        sans-serif;
+}
+
+.container {
+
+    padding:15px;
+
+    max-width:500px;
+
+    margin:auto;
+}
+
+.header {
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    font-size:1.3rem;
+
+    font-weight:700;
+
+    margin-bottom:15px;
+}
+
+.header a {
+
+    text-decoration:none;
+
+    color:#2c3e50;
+}
+
+.main-card {
+
+    background:white;
+
+    border-radius:24px;
+
+    padding:20px;
+
+    text-align:center;
+
+    margin-bottom:15px;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.08);
+}
+
+#weatherIcon {
+
+    font-size:4rem;
+}
+
+#temp {
+
+    font-size:4rem;
+
+    font-weight:bold;
+
+    color:#f39c12;
+}
+
+#description {
+
+    font-size:1.2rem;
+
+    color:#666;
+}
+
+.info-grid {
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:10px;
+}
+
+.info-box {
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:15px;
+
+    text-align:center;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.08);
+}
+
+.info-box span {
+
+    display:block;
+
+    color:#888;
+
+    font-size:.9rem;
+}
+
+.info-box strong {
+
+    display:block;
+
+    margin-top:5px;
+
+    font-size:1.2rem;
+
+    color:#2c3e50;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <a href="./index.html">
+
+            ←
+
+        </a>
+
+        <span>
+
+            Weather
+
+        </span>
+
+    </div>
+
+    <div class="main-card">
+
+        <div id="weatherIcon">
+
+            ☀️
+
+        </div>
+
+        <div id="temp">
+
+            --°C
+
+        </div>
+
+        <div id="description">
+
+            Loading...
+
+        </div>
+
+    </div>
+
+    <div class="info-grid">
+
+        <div class="info-box">
+
+            <span>
+                Feels Like
+            </span>
+
+            <strong id="feelsLike">
+
+                --
+
+            </strong>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+                Humidity
+            </span>
+
+            <strong id="humidity">
+
+                --
+
+            </strong>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+                Pressure
+            </span>
+
+            <strong id="pressure">
+
+                --
+
+            </strong>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+                Wind
+            </span>
+
+            <strong id="wind">
+
+                --
+
+            </strong>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+                Sunrise
+            </span>
+
+            <strong id="sunrise">
+
+                --
+
+            </strong>
+
+        </div>
+
+        <div class="info-box">
+
+            <span>
+                Sunset
+            </span>
+
+            <strong id="sunset">
+
+                --
+
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const weatherUrl =
+    "https://bms-api.reziot.xyz/weather";
+
+async function loadWeather() {
+
+    try {
+
+        const response =
+            await fetch(
+                weatherUrl
+            );
+
+        const data =
+            await response.json();
+
+        document
+        .getElementById(
+            "temp"
+        )
+        .textContent =
+            Math.round(
+                data.main.temp
+            ) + "°C";
+
+        document
+        .getElementById(
+            "description"
+        )
+        .textContent =
+            data.weather[0]
+                .description;
+
+        document
+        .getElementById(
+            "feelsLike"
+        )
+        .textContent =
+            Math.round(
+                data.main.feels_like
+            ) + "°C";
+
+        document
+        .getElementById(
+            "humidity"
+        )
+        .textContent =
+            data.main.humidity +
+            "%";
+
+        document
+        .getElementById(
+            "pressure"
+        )
+        .textContent =
+            data.main.pressure +
+            " hPa";
+
+        document
+        .getElementById(
+            "wind"
+        )
+        .textContent =
+            data.wind.speed +
+            " m/s";
+
+        document
+        .getElementById(
+            "sunrise"
+        )
+        .textContent =
+            new Date(
+                data.sys.sunrise * 1000
+            )
+            .toLocaleTimeString(
+                "fi-FI",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit"
+                }
+            );
+
+        document
+        .getElementById(
+            "sunset"
+        )
+        .textContent =
+            new Date(
+                data.sys.sunset * 1000
+            )
+            .toLocaleTimeString(
+                "fi-FI",
+                {
+                    hour:"2-digit",
+                    minute:"2-digit"
+                }
+            );
+
+    }
+
+    catch(error) {
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+loadWeather();
+
+setInterval(
+    loadWeather,
+    600000
+);
+
+</script>
+
+</body>
+
+</html>

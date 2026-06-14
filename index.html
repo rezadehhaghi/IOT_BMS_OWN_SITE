@@ -337,11 +337,13 @@ body{
     <div id="menuDropdown"
          class="menu-dropdown">
 
-        <a href="./layout.html">
+        <a href="layout.html"
+   onclick="window.location.replace('layout.html'); return false;">
             🏡 Home Layout
         </a>
 
-        <a href="./charts.html">
+        <a href="charts.html"
+   onclick="window.location.replace('charts.html'); return false;">
             📈 Charts
         </a>
 
@@ -349,7 +351,8 @@ body{
             🎛️ Control
         </a>
 
-        <a href="#">
+        <a href="settings.html"
+               onclick="window.location.replace('settings.html'); return false;">
             ⚙️ Settings
         </a>
 
@@ -898,7 +901,7 @@ document
                                                           "click",
                                                           () => {
                                                       
-                                                              window.location.href =
+                                                              window.location.replace =
                                                                   "./layout.html";
                                                       
                                                           }
@@ -912,7 +915,7 @@ document
                                                           "click",
                                                           () => {
                                                       
-                                                              window.location.href =
+                                                              window.location.replace =
                                                                   "./weather.html";
                                                       
                                                           }
@@ -1066,23 +1069,8 @@ document.addEventListener(
 
 );
 
-history.pushState(
-    null,
-    "",
-    location.href
-);
 
-window.addEventListener(
 
-    "popstate",
-
-    () => {
-
-        window.close();
-
-    }
-
-);
 
 document.addEventListener( "visibilitychange", () => { if ( !document.hidden ) { loadData(); loadWeather(); } } );
 

@@ -36,6 +36,32 @@
 }
 
 
+
+html,
+body {
+
+    overscroll-behavior:
+        none;
+
+}
+
+
+html,
+body {
+
+    margin:0;
+
+    touch-action:
+        manipulation;
+
+    overscroll-behavior:
+        none;
+
+}
+
+
+
+
       html,
 body {
 
@@ -732,6 +758,27 @@ const response =
         const data =
             await response.json();
 
+if (
+
+    !data.coord ||
+
+    !data.name
+
+) {
+
+    document
+    .getElementById(
+        "weatherStatus"
+    )
+    .textContent =
+
+        "📍 Enable location access";
+
+    return;
+
+}
+
+
 document
 .getElementById(
     "weatherStatus"
@@ -873,6 +920,8 @@ document
 
       
 loadData();
+
+
 navigator.geolocation.getCurrentPosition(
 
     position => {
@@ -889,16 +938,40 @@ navigator.geolocation.getCurrentPosition(
 
     () => {
 
-        loadWeather(
+        document
+        .getElementById(
+            "outdoorTemp"
+        )
+        .textContent =
+            "--";
 
-            38.9067,
-            1.4206
+        document
+        .getElementById(
+            "outdoorHum"
+        )
+        .textContent =
+            "--";
 
-        );
+        document
+        .getElementById(
+            "outdoorPressure"
+        )
+        .textContent =
+            "--";
+
+        document
+        .getElementById(
+            "weatherStatus"
+        )
+        .textContent =
+
+            "📍 Enable location access";
 
     }
 
 );
+
+
 
 setInterval(
     loadData,
@@ -940,6 +1013,56 @@ setInterval(
     },
 
     600000
+
+);
+
+let startY = 0;
+
+document.addEventListener(
+
+    "touchstart",
+
+    e => {
+
+        startY =
+            e.touches[0]
+            .clientY;
+
+    },
+
+    {
+        passive:false
+    }
+
+);
+
+document.addEventListener(
+
+    "touchmove",
+
+    e => {
+
+        const currentY =
+            e.touches[0]
+            .clientY;
+
+        if (
+
+            window.scrollY === 0 &&
+
+            currentY > startY
+
+        ) {
+
+            e.preventDefault();
+
+        }
+
+    },
+
+    {
+        passive:false
+    }
 
 );
 

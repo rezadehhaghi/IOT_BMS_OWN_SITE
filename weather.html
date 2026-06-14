@@ -572,6 +572,8 @@ navigator.geolocation.getCurrentPosition(
 
 );
 
+document.addEventListener( "visibilitychange", () => { if ( !document.hidden ) { loadData(); loadWeather(); } } );
+
 </script>
 
 </body>

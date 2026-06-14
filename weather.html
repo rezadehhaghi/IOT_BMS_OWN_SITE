@@ -280,16 +280,58 @@ navigator.geolocation.getCurrentPosition(
 
     () => {
 
-        loadWeather(
-
-            38.9067,
-            1.4206
-
-        );
+showLocationError();
 
     }
 
 );
+
+
+
+
+function showLocationError() {
+
+    document
+    .getElementById(
+        "weatherIcon"
+    )
+    .textContent =
+        "📍";
+
+    document
+    .getElementById(
+        "temp"
+    )
+    .textContent =
+        "--";
+
+    document
+    .getElementById(
+        "description"
+    )
+    .textContent =
+
+        "Location access required";
+
+    document
+    .getElementById(
+        "city"
+    )
+    .textContent =
+
+        "Enable location";
+
+    document
+    .getElementById(
+        "country"
+    )
+    .textContent =
+
+        "";
+
+}
+
+
 
 async function loadWeather(
     lat,
@@ -307,6 +349,27 @@ async function loadWeather(
 
         const data =
             await response.json();
+
+
+
+if (
+
+    !data ||
+
+    !data.coord ||
+
+    !data.name
+
+) {
+
+    showLocationError();
+
+    return;
+
+}
+
+
+
 
         const weatherMain =
             data.weather[0].main;
@@ -467,13 +530,15 @@ async function loadWeather(
 
     }
 
-    catch(error) {
+catch(error) {
 
-        console.error(
-            error
-        );
+    console.error(
+        error
+    );
 
-    }
+    showLocationError();
+
+}
 
 }
 
@@ -481,35 +546,27 @@ setInterval(
 
     () => {
 
-        navigator.geolocation
-        .getCurrentPosition(
+navigator.geolocation.getCurrentPosition(
 
-            position => {
+    position => {
 
-                loadWeather(
+        loadWeather(
 
-                    position.coords.latitude,
+            position.coords.latitude,
 
-                    position.coords.longitude
-
-                );
-
-            },
-
-            () => {
-
-                loadWeather(
-
-                    38.9067,
-                    1.4206
-
-                );
-
-            }
+            position.coords.longitude
 
         );
 
     },
+
+    () => {
+
+        showLocationError();
+
+    }
+
+);
 
     600000
 

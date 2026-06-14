@@ -1067,6 +1067,9 @@ document.addEventListener(
 );
 
 
+
+document.addEventListener( "visibilitychange", () => { if ( !document.hidden ) { loadData(); loadWeather(); } } );
+
 </script>
 
 </body>

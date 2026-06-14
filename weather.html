@@ -181,7 +181,7 @@ body {
     <div class="main-card">
 
         <div id="weatherIcon">
-            ☀️
+           
         </div>
 
         <div id="temp">
@@ -546,33 +546,37 @@ setInterval(
 
     () => {
 
-navigator.geolocation.getCurrentPosition(
+        navigator.geolocation
+        .getCurrentPosition(
 
-    position => {
+            position => {
 
-        loadWeather(
+                loadWeather(
 
-            position.coords.latitude,
+                    position.coords.latitude,
 
-            position.coords.longitude
+                    position.coords.longitude
+
+                );
+
+            },
+
+            () => {
+  			showLocationError();
+
+            }
 
         );
 
     },
 
-    () => {
-
-        showLocationError();
-
-    }
-
-);
-
     600000
 
 );
 
+
 document.addEventListener( "visibilitychange", () => { if ( !document.hidden ) { loadData(); loadWeather(); } } );
+
 
 </script>
 

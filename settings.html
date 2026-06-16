@@ -1,0 +1,112 @@
+<!-- ======================================
+SETTINGS PAGE
+Loads settings from API
+====================================== -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Reziot Settings</title>
+</head>
+
+<body>
+
+  <h1>⚙️ Reziot Settings</h1>
+
+  <div>
+    <label>
+      Telegram Alerts
+    </label>
+    <input
+      type="checkbox"
+      id="telegramEnabled">
+  </div>
+
+  <br>
+
+  <div>
+    <label>
+      Offline Minutes
+    </label>
+    <input
+      type="number"
+      id="offlineMinutes">
+  </div>
+
+  <br>
+
+  <div>
+    <label>
+      Temperature Threshold
+    </label>
+    <input
+      type="number"
+      id="tempThreshold">
+  </div>
+
+  <br>
+
+  <div>
+    <label>
+      Humidity Threshold
+    </label>
+    <input
+      type="number"
+      id="humidityThreshold">
+  </div>
+
+  <br>
+
+  <button id="saveBtn">
+    Save Settings
+  </button>
+
+<script>
+
+// ======================================
+// LOAD SETTINGS FROM API
+// ======================================
+
+async function loadSettings() {
+
+  const response =
+    await fetch(
+      "https://bms-api.reziot.xyz/settings"
+    );
+
+  const settings =
+    await response.json();
+
+  document.getElementById(
+    "telegramEnabled"
+  ).checked =
+    settings.telegram_enabled === "true";
+
+  document.getElementById(
+    "offlineMinutes"
+  ).value =
+    settings.offline_minutes;
+
+  document.getElementById(
+    "tempThreshold"
+  ).value =
+    settings.temp_threshold;
+
+  document.getElementById(
+    "humidityThreshold"
+  ).value =
+    settings.humidity_threshold;
+
+}
+
+loadSettings();
+
+// ======================================
+// END LOAD SETTINGS
+// ======================================
+
+</script>
+
+</body>
+</html>

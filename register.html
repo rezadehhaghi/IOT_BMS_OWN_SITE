@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>REZIOT Register</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+
+            width: 350px;
+
+            background: #1e293b;
+
+            padding: 30px;
+
+            border-radius: 15px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input {
+
+            width: 100%;
+
+            box-sizing: border-box;
+
+            padding: 12px;
+
+            margin-bottom: 15px;
+
+            border: none;
+
+            border-radius: 8px;
+        }
+
+        button {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            color: white;
+
+            background: #2563eb;
+        }
+
+        #status {
+
+            margin-top: 15px;
+
+            text-align: center;
+        }
+
+        a {
+            color: #38bdf8;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>REZIOT BMS</h1>
+
+    <input
+        type="email"
+        id="email"
+        placeholder="Email">
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Password">
+
+    <input
+        type="password"
+        id="confirmPassword"
+        placeholder="Confirm Password">
+
+    <button id="registerBtn">
+        Create Account
+    </button>
+
+    <div id="status"></div>
+
+    <br>
+
+    <div style="text-align:center">
+
+        <a href="./login.html">
+            Already have an account?
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+
+// ======================================
+// REGISTER BUTTON
+// ======================================
+
+document
+.getElementById("registerBtn")
+.addEventListener(
+"click",
+async () => {
+
+    const email =
+        document.getElementById(
+            "email"
+        ).value.trim();
+
+    const password =
+        document.getElementById(
+            "password"
+        ).value;
+
+    const confirmPassword =
+        document.getElementById(
+            "confirmPassword"
+        ).value;
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+    if (
+        password !==
+        confirmPassword
+    ) {
+
+        status.textContent =
+            "Passwords do not match";
+
+        return;
+
+    }
+
+    if (
+        password.length < 6
+    ) {
+
+        status.textContent =
+            "Password too short";
+
+        return;
+
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                "https://auth.reziot.xyz/register",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                        "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        email,
+                        password
+                    })
+                }
+            );
+
+        const result =
+            await response.json();
+
+        if (
+            result.success
+        ) {
+
+            status.textContent =
+                "Account created";
+
+            setTimeout(
+                () => {
+
+                    window.location.href =
+                    "./login.html";
+
+                },
+                1500
+            );
+
+        }
+
+        else {
+
+            status.textContent =
+                result.message;
+
+        }
+
+    }
+
+    catch(error){
+
+        status.textContent =
+            "Connection error";
+
+    }
+
+}
+);
+
+// ======================================
+// END REGISTER BUTTON
+// ======================================
+
+</script>
+
+</body>
+
+</html>

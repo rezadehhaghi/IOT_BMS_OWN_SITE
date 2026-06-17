@@ -334,6 +334,10 @@ input[type="checkbox"] {
         Save Settings
     </button>
 
+    <button id="logoutBtn">
+    Logout
+    </button>
+
     <div id="status"></div>
 
 </div>
@@ -344,6 +348,27 @@ input[type="checkbox"] {
 
 <script>
 
+// ======================================
+// LOGIN CHECK
+// ======================================
+
+const token =
+  localStorage.getItem(
+    "token"
+  );
+
+if (!token) {
+
+  window.location.href =
+    "./login.html";
+
+}
+
+// ======================================
+// END LOGIN CHECK
+// ======================================
+
+    
 // ======================================
 // LOAD SETTINGS FROM API
 // ======================================
@@ -486,6 +511,30 @@ document
 
 // ======================================
 // END SAVE SETTINGS BUTTON
+// ======================================
+
+// ======================================
+// LOGOUT
+// ======================================
+
+document
+.getElementById("logoutBtn")
+.addEventListener(
+"click",
+() => {
+
+    localStorage.removeItem(
+        "token"
+    );
+
+    window.location.href =
+        "./login.html";
+
+}
+);
+
+// ======================================
+// END LOGOUT
 // ======================================
 
 </script>

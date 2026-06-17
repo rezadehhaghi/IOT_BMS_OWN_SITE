@@ -526,24 +526,42 @@ document
       const result =
         await response.json();
 
-      if (result.success) {
+ // ======================================
+// SHOW SAVE SUCCESS MESSAGE
+// ======================================
 
-        document.getElementById(
-          "status"
-        ).textContent =
-          "✅ Settings saved";
+if (result.success) {
 
-      }
+  document.getElementById(
+    "status"
+  ).textContent =
+    "✅ Settings saved";
 
-      else {
+  setTimeout(
+    () => {
 
-        document.getElementById(
-          "status"
-        ).textContent =
-          "❌ " +
-          result.message;
+      document.getElementById(
+        "status"
+      ).textContent = "";
 
-      }
+    },
+    3000
+  );
+
+}
+
+// ======================================
+// SHOW ERROR MESSAGE
+// ======================================
+
+else {
+
+  document.getElementById(
+    "status"
+  ).textContent =
+    "❌ " + result.message;
+
+}
 
     }
   );

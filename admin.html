@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no">
+
+<title>REZIOT Admin</title>
+
+<style>
+
+/* ======================================
+   GLOBAL
+====================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+body{
+
+    background:
+    linear-gradient(
+        135deg,
+        #020617,
+        #0f172a,
+        #1e293b
+    );
+
+    color:white;
+
+    min-height:100vh;
+
+    padding:30px;
+}
+
+/* ======================================
+   HEADER
+====================================== */
+
+.header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+}
+
+.logo h1{
+
+    font-size:34px;
+
+    letter-spacing:3px;
+}
+
+.logo p{
+
+    color:#94a3b8;
+}
+
+/* ======================================
+   BUTTONS
+====================================== */
+
+button{
+
+    border:none;
+
+    border-radius:10px;
+
+    padding:10px 15px;
+
+    cursor:pointer;
+
+    color:white;
+
+    font-weight:600;
+}
+
+.logoutBtn{
+
+    background:#ef4444;
+}
+
+.promoteBtn{
+
+    background:#2563eb;
+}
+
+.demoteBtn{
+
+    background:#d97706;
+}
+
+.deleteBtn{
+
+    background:#dc2626;
+}
+
+/* ======================================
+   STATS
+====================================== */
+
+.stats{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
+
+    gap:20px;
+
+    margin-bottom:30px;
+}
+
+.card{
+
+    background:
+    rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(12px);
+
+    border-radius:16px;
+
+    padding:20px;
+}
+
+.card h2{
+
+    font-size:32px;
+
+    margin-top:10px;
+}
+
+/* ======================================
+   TABLE
+====================================== */
+
+.tableCard{
+
+    background:
+    rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(12px);
+
+    border-radius:16px;
+
+    padding:20px;
+
+    overflow:auto;
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+th,
+td{
+
+    padding:12px;
+
+    text-align:left;
+}
+
+th{
+
+    color:#94a3b8;
+}
+
+tr{
+
+    border-bottom:
+    1px solid rgba(255,255,255,0.1);
+}
+
+/* ======================================
+   BADGES
+====================================== */
+
+.badgeAdmin{
+
+    background:#16a34a;
+
+    padding:5px 10px;
+
+    border-radius:20px;
+}
+
+.badgeUser{
+
+    background:#475569;
+
+    padding:5px 10px;
+
+    border-radius:20px;
+}
+
+#status{
+
+    margin-top:15px;
+
+    color:#38bdf8;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ======================================
+     HEADER
+====================================== -->
+
+<div class="header">
+
+    <div class="logo">
+
+        <h1>REZIOT</h1>
+
+        <p>Admin Control Center</p>
+
+    </div>
+
+    <button
+        class="logoutBtn"
+        id="logoutBtn">
+
+        Logout
+
+    </button>
+
+</div>
+
+<!-- ======================================
+     STATS
+====================================== -->
+
+<div class="stats">
+
+    <div class="card">
+
+        <p>Total Users</p>
+
+        <h2 id="userCount">0</h2>
+
+    </div>
+
+    <div class="card">
+
+        <p>Admins</p>
+
+        <h2 id="adminCount">0</h2>
+
+    </div>
+
+</div>
+
+<!-- ======================================
+     USERS TABLE
+====================================== -->
+
+<div class="tableCard">
+
+    <h2>Users</h2>
+
+    <br>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>ID</th>
+
+                <th>Email</th>
+
+                <th>Role</th>
+
+                <th>Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody id="userTable">
+
+        </tbody>
+
+    </table>
+
+    <div id="status"></div>
+
+</div>
+
+<script>
+
+// ======================================
+// LOGIN CHECK
+// ======================================
+
+const token =
+  localStorage.getItem(
+    "token"
+  );
+
+if (!token) {
+
+  window.location.href =
+    "./login.html";
+
+}
+
+// ======================================
+// END LOGIN CHECK
+// ======================================
+
+
+// ======================================
+// LOAD USERS
+// ======================================
+
+async function loadUsers() {
+
+  try {
+
+    const response =
+      await fetch(
+        "https://auth.reziot.xyz/admin/users",
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`
+          }
+        }
+      );
+
+    const result =
+      await response.json();
+
+    if (!result.success) {
+
+      document.getElementById(
+        "status"
+      ).textContent =
+        result.message;
+
+      return;
+
+    }
+
+    const users =
+      result.users;
+
+    document.getElementById(
+      "userCount"
+    ).textContent =
+      users.length;
+
+    document.getElementById(
+      "adminCount"
+    ).textContent =
+      users.filter(
+        u => u.role === "admin"
+      ).length;
+
+    const table =
+      document.getElementById(
+        "userTable"
+      );
+
+    table.innerHTML = "";
+
+    users.forEach(user => {
+
+      table.innerHTML += `
+
+      <tr>
+
+        <td>${user.id}</td>
+
+        <td>${user.email}</td>
+
+        <td>
+
+          <span class="${
+            user.role === "admin"
+              ? "badgeAdmin"
+              : "badgeUser"
+          }">
+
+            ${user.role}
+
+          </span>
+
+        </td>
+
+        <td>
+
+          ${
+            user.role === "admin"
+
+            ?
+
+            `<button
+                class="demoteBtn"
+                onclick="
+                changeRole(
+                  ${user.id},
+                  'user'
+                )">
+                Demote
+             </button>`
+
+            :
+
+            `<button
+                class="promoteBtn"
+                onclick="
+                changeRole(
+                  ${user.id},
+                  'admin'
+                )">
+                Promote
+             </button>`
+
+          }
+
+          <button
+            class="deleteBtn"
+            onclick="
+            deleteUser(
+              ${user.id}
+            )">
+
+            Delete
+
+          </button>
+
+        </td>
+
+      </tr>
+
+      `;
+
+    });
+
+  }
+
+  catch(error){
+
+    document.getElementById(
+      "status"
+    ).textContent =
+      error.message;
+
+  }
+
+}
+
+// ======================================
+// END LOAD USERS
+// ======================================
+
+
+// ======================================
+// CHANGE ROLE
+// ======================================
+
+async function changeRole(
+  userId,
+  role
+) {
+
+  await fetch(
+    "https://auth.reziot.xyz/admin/user-role",
+    {
+      method:"POST",
+
+      headers:{
+        "Content-Type":
+          "application/json",
+
+        Authorization:
+          `Bearer ${token}`
+      },
+
+      body:JSON.stringify({
+        userId,
+        role
+      })
+    }
+  );
+
+  loadUsers();
+
+}
+
+// ======================================
+// END CHANGE ROLE
+// ======================================
+
+
+// ======================================
+// DELETE USER
+// ======================================
+
+async function deleteUser(
+  userId
+) {
+
+  if (
+    !confirm(
+      "Delete user?"
+    )
+  ) {
+    return;
+  }
+
+  await fetch(
+    "https://auth.reziot.xyz/admin/delete-user",
+    {
+      method:"POST",
+
+      headers:{
+        "Content-Type":
+          "application/json",
+
+        Authorization:
+          `Bearer ${token}`
+      },
+
+      body:JSON.stringify({
+        userId
+      })
+    }
+  );
+
+  loadUsers();
+
+}
+
+// ======================================
+// END DELETE USER
+// ======================================
+
+
+// ======================================
+// LOGOUT
+// ======================================
+
+document
+.getElementById(
+  "logoutBtn"
+)
+.addEventListener(
+  "click",
+  () => {
+
+    localStorage.removeItem(
+      "token"
+    );
+
+    window.location.href =
+      "./login.html";
+
+  }
+);
+
+// ======================================
+// END LOGOUT
+// ======================================
+
+
+// ======================================
+// INITIAL LOAD
+// ======================================
+
+loadUsers();
+
+// ======================================
+// END INITIAL LOAD
+// ======================================
+
+</script>
+
+</body>
+
+</html>

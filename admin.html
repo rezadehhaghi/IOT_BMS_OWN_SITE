@@ -406,8 +406,11 @@ async function loadUsers() {
 
             ${user.role}         
             </span>
-
-        </td>
+              </td>
+        
+            <td>
+              ${user.last_login || "Never"}
+            </td>
             <!-- Last successful login timestamp -->
             <td>
               ${

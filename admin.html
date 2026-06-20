@@ -287,15 +287,12 @@ tr{
 
             <tr>
 
-                <th>ID</th>
-
-                <th>Email</th>
-
-                <th>Role</th>
-                 
-                <th>Last Login</th>
-
-                <th>Actions</th>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Last Login</th>
+            <th>Status</th>
+            <th>Actions</th>
 
             </tr>
 
@@ -410,7 +407,11 @@ async function loadUsers() {
             ${user.role}
             <!-- Last successful login timestamp -->
             <td>
-              ${user.last_login || "Never"}
+              ${
+                user.active_sessions > 0
+                  ? "🟢 Online"
+                  : "⚫ Offline"
+              }
             </td>
           </span>
 

@@ -292,6 +292,8 @@ tr{
                 <th>Email</th>
 
                 <th>Role</th>
+                 
+                <th>Last Login</th>
 
                 <th>Actions</th>
 
@@ -396,7 +398,10 @@ async function loadUsers() {
         <td>${user.id}</td>
 
         <td>${user.email}</td>
-
+            <!-- Last successful login timestamp -->
+            <td>
+              ${user.last_login || "Never"}
+            </td>
         <td>
 
           <span class="${

@@ -416,7 +416,7 @@ async function loadUsers() {
               ${
                 user.active_sessions > 0
                   ? "🟢 Online"
-                  : "⚫ Offline"
+                  : "🟠 Offline"
               }
             </td>
 
@@ -576,23 +576,47 @@ async function deleteUser(
 // ======================================
 
 document
-.getElementById(
-  "logoutBtn"
-)
-.addEventListener(
-  "click",
-  () => {
+  .getElementById(
+    "logoutBtn"
+  )
+  .addEventListener(
+    "click",
+    async () => {
 
-    localStorage.removeItem(
-      "token"
-    );
+      const token =
+        localStorage.getItem(
+          "token"
+        );
 
-    window.location.href =
-      "./login.html";
+      // ======================================
+      // LOGOUT API
+      // Remove current session from AUTH_DB
+      // ======================================
 
-  }
-);
+      await fetch(
+        "https://auth.reziot.xyz/logout",
+        {
+          method: "POST",
+          headers: {
+            Authorization:
+              `Bearer ${token}`
+          }
+        }
+      );
 
+      // ======================================
+      // REMOVE LOCAL TOKEN
+      // ======================================
+
+      localStorage.removeItem(
+        "token"
+      );
+
+      window.location.href =
+        "./login.html";
+
+    }
+  );
 // ======================================
 // END LOGOUT
 // ======================================

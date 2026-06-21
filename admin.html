@@ -456,7 +456,18 @@ async function loadUsers() {
              </button>`
 
           }
-
+          <!-- Assign device to user -->
+                  <button
+                    class="assignBtn"
+                    onclick="
+                      assignDevice(
+                        ${user.id}
+                      )
+                    ">
+                  
+                    Assign Device
+                  
+                  </button>
           <button
             class="deleteBtn"
             onclick="

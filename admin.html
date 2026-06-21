@@ -292,6 +292,7 @@ tr{
             <th>Role</th>
             <th>Last Login</th>
             <th>Status</th>
+             <th>Devices</th>
             <th>Actions</th>
 
             </tr>
@@ -419,7 +420,11 @@ async function loadUsers() {
                   : "🟠 Offline"
               }
             </td>
-
+            <!-- Assigned devices -->
+            
+            <td>
+              ${user.devices || "-"}
+            </td>
 
         <td>
 

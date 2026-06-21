@@ -447,11 +447,64 @@ async function loadUsers() {
             </td>
             <!-- Assigned devices -->
             
-            <td>
-              ${user.devices || "-"}
-            </td>
+                                    <td>
 
-        <td>
+                                      ${
+                                        user.devices
+                                          ? user.devices
+                                              .split(", ")
+                                              .map(device => {
+                                    
+                                                const parts =
+                                                  device.split(":");
+                                    
+                                                const assignmentId =
+                                                  parts[0];
+                                    
+                                                const deviceId =
+                                                  parts[1];
+                                    
+                                                return `
+                                                  <div
+                                                    style="
+                                                      display:flex;
+                                                      justify-content:space-between;
+                                                      align-items:center;
+                                                      margin-bottom:4px;
+                                                    "
+                                                  >
+                                    
+                                                    <span>
+                                                      ${deviceId}
+                                                    </span>
+                                    
+                                                    <button
+                                                      class="deleteBtn"
+                                                      style="
+                                                        width:30px;
+                                                        height:30px;
+                                                        padding:0;
+                                                      "
+                                                      onclick="
+                                                        removeDevice(
+                                                          ${assignmentId}
+                                                        )
+                                                      "
+                                                    >
+                                                      ✕
+                                                    </button>
+                                    
+                                                  </div>
+                                                `;
+                                    
+                                              })
+                                              .join("")
+                                          : "-"
+                                      }
+                                    
+                                    </td>
+
+              <td>
 
           ${
             user.role === "admin"

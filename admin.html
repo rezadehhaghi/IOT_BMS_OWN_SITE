@@ -610,7 +610,81 @@ async function deleteUser(
 // ======================================
 // END DELETE USER
 // ======================================
+// ======================================
+// ASSIGN DEVICE
+// Assign device to selected user
+// ======================================
 
+async function assignDevice(
+  userId
+) {
+
+  const siteId =
+    prompt(
+      "Enter Site ID"
+    );
+
+  if (!siteId) {
+    return;
+  }
+
+  const deviceId =
+    prompt(
+      "Enter Device ID"
+    );
+
+  if (!deviceId) {
+    return;
+  }
+
+  const response =
+    await fetch(
+      "https://auth.reziot.xyz/admin/assign-device",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+
+          Authorization:
+            `Bearer ${token}`
+        },
+
+        body: JSON.stringify({
+          userId,
+          siteId,
+          deviceId
+        })
+      }
+    );
+
+  const result =
+    await response.json();
+
+  if (
+    result.success
+  ) {
+
+    alert(
+      "Device assigned"
+    );
+
+    loadUsers();
+
+  } else {
+
+    alert(
+      result.message
+    );
+
+  }
+
+}
+
+// ======================================
+// END ASSIGN DEVICE
+// ======================================
 
 // ======================================
 // LOGOUT

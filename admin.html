@@ -504,66 +504,7 @@ async function loadUsers() {
                                     
                                     </td>
 
-// ======================================
-// REMOVE DEVICE
-// Removes device assignment
-// ======================================
 
-async function removeDevice(
-  assignmentId
-) {
-
-  if (
-    !confirm(
-      "Remove this device?"
-    )
-  ) {
-    return;
-  }
-
-  const response =
-    await fetch(
-      "https://auth.reziot.xyz/admin/remove-device",
-      {
-        method: "POST",
-
-        headers: {
-          "Content-Type":
-            "application/json",
-
-          Authorization:
-            `Bearer ${token}`
-        },
-
-        body: JSON.stringify({
-          assignmentId
-        })
-      }
-    );
-
-  const result =
-    await response.json();
-
-  if (
-    result.success
-  ) {
-
-    // Reload user table
-    loadUsers();
-
-  } else {
-
-    alert(
-      result.message
-    );
-
-  }
-
-}
-
-// ======================================
-// END REMOVE DEVICE
-// ======================================
 
               <td>
 
@@ -849,7 +790,66 @@ document
 // ======================================
 // END LOGOUT
 // ======================================
+// ======================================
+// REMOVE DEVICE
+// Removes device assignment
+// ======================================
 
+async function removeDevice(
+  assignmentId
+) {
+
+  if (
+    !confirm(
+      "Remove this device?"
+    )
+  ) {
+    return;
+  }
+
+  const response =
+    await fetch(
+      "https://auth.reziot.xyz/admin/remove-device",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+
+          Authorization:
+            `Bearer ${token}`
+        },
+
+        body: JSON.stringify({
+          assignmentId
+        })
+      }
+    );
+
+  const result =
+    await response.json();
+
+  if (
+    result.success
+  ) {
+
+    // Reload user table
+    loadUsers();
+
+  } else {
+
+    alert(
+      result.message
+    );
+
+  }
+
+}
+
+// ======================================
+// END REMOVE DEVICE
+// ======================================
 
 // ======================================
 // INITIAL LOAD

@@ -673,20 +673,23 @@ async function deleteUser(
 async function assignDevice(
   userId
 ) {
+// Device ID example:
+// ESP1001-3
 
-  const siteId =
-    prompt(
-      "Enter Site ID"
-    );
+const deviceId =
+  prompt(
+    "Enter Device ID"
+  );
 
-  if (!siteId) {
-    return;
-  }
+if (!deviceId) {
+  return;
+}
 
-  const deviceId =
-    prompt(
-      "Enter Device ID"
-    );
+// Automatically extract site ID
+// ESP1001-3 -> ESP1001
+
+const siteId =
+  deviceId.split("-")[0];
 
   if (!deviceId) {
     return;

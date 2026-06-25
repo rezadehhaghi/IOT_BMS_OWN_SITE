@@ -930,13 +930,26 @@ navigator.geolocation.getCurrentPosition(
 
     position => {
 
-        loadWeather(
+const lat =
+    position.coords.latitude;
 
-            position.coords.latitude,
+const lon =
+    position.coords.longitude;
 
-            position.coords.longitude
+localStorage.setItem(
+    "lastLat",
+    lat
+);
 
-        );
+localStorage.setItem(
+    "lastLon",
+    lon
+);
+
+loadWeather(
+    lat,
+    lon
+);
 
     },
 
@@ -991,26 +1004,64 @@ setInterval(
 
             position => {
 
-                loadWeather(
+const lat =
+    position.coords.latitude;
 
-                    position.coords.latitude,
+const lon =
+    position.coords.longitude;
 
-                    position.coords.longitude
+localStorage.setItem(
+    "lastLat",
+    lat
+);
 
-                );
+localStorage.setItem(
+    "lastLon",
+    lon
+);
+
+loadWeather(
+    lat,
+    lon
+);
 
             },
 
-            () => {
+() => {
 
-                loadWeather(
+    const lastLat =
+        localStorage.getItem(
+            "lastLat"
+        );
 
-                    38.9067,
-                    1.4206
+    const lastLon =
+        localStorage.getItem(
+            "lastLon"
+        );
 
-                );
+    if (
 
-            }
+        lastLat &&
+        lastLon
+
+    ) {
+
+        loadWeather(
+
+            lastLat,
+            lastLon
+
+        );
+
+    }
+
+    else {
+
+        showLocationError();
+
+    }
+
+}
 
         );
 
